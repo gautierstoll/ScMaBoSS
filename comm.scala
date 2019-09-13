@@ -135,7 +135,7 @@ object DataStreamer {
             }
           }
         }
-        ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
+         ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
       }
     }
   }
