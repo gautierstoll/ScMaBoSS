@@ -7,9 +7,9 @@ object GlCst {
   val MABOSS_MAGIC = "MaBoSS-2.0"
   val PROTOCOL_VERSION = "Protocol-Version:"
   val FLAGS = "Flags:"
-  val HEXFLOAT_FLAG : Int = 0x1
-  val OVERRIDE_FLAG : Int = 0x2
-  val AUGMENT_FLAG : Int = 0x4
+  val HEXFLOAT_FLAG: Int = 0x1
+  val OVERRIDE_FLAG: Int = 0x2
+  val AUGMENT_FLAG: Int = 0x4
   val COMMAND = "Command:"
   val RUN_COMMAND = "run"
   val CHECK_COMMAND = "check"
@@ -26,18 +26,15 @@ object GlCst {
   val TRAJECTORIES = "Trajectories:"
   val FIXED_POINTS = "Fixed-Points:"
   val RUN_LOG = "Run-Log:"
- // val SERVER_NUM = 1 // for now
 }
-//case class HeaderItem(directive : String, from : String = null, to : String = null, value : String = null) {}
-
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
 object DataStreamer {
-  def buildStreamData(client_data: ClientData, hints: Map[String, Boolean] = null): String = {
 
+  def buildStreamData(client_data: ClientData, hints: Map[String, Boolean] = null): String = {
     val hexFloat: Boolean = if (hints != null) {hints.getOrElse("hexFloat", false)} else false
     val overRide: Boolean = if (hints != null) {hints.getOrElse("overRide", false)} else false
     val augument: Boolean = if (hints != null) {hints.getOrElse("augument", false)} else false
@@ -135,7 +132,7 @@ object DataStreamer {
             }
           }
         }
-        ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
+         ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
       }
     }
   }
@@ -143,4 +140,30 @@ object DataStreamer {
     header + (if (o_offset != offset) {directive + o_offset.toString +"-" + (offset - 1).toString + "\n"} else{""})
   }
 }
+
+class MaBoSSClient (host : String = null, port : String = null, maboss_serverInput : String = null) {
+  var SERVER_NUM = 1
+  val maboss_server = if (maboss_serverInput == null) {
+    try {
+      sys.env("MABOSS-SERVER")
+    } catch {
+      case _: Throwable => "MaBoSS-server"
+    }
+  }
+  else maboss_serverInput
+
+  if (host == null) {
+    if (port == None) {
+      val newPort = "tmp/MaBoSS_pipe_" +
+        java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
+        "_" + SERVER_NUM.toString
+    }
+    val pidfile = "/tmp/MaBoSS_pidfile_" +
+       java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
+      "_" + SERVER_NUM.toString
+    SERVER_NUM += 1
+}
+
+
+
 
