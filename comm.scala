@@ -1,4 +1,8 @@
 import java.security.KeyStore.TrustedCertificateEntry
+import Runtime._
+import java.net.Socket
+
+import scala.sys.process
 
 //import com.sun.org.apache.bcel.internal.generic.RETURN
 //import Simulation
@@ -141,28 +145,48 @@ object DataStreamer {
   }
 }
 
-class MaBoSSClient (host : String = null, port : String = null, maboss_serverInput : String = null) {
+class MaBoSSClient (host : String = null, inputPort : String = null, inputMaboss_server : String = null) {
   var SERVER_NUM = 1
-  val maboss_server = if (maboss_serverInput == null) {
+  val maboss_server : String = if (inputMaboss_server == null) {
     try {
       sys.env("MABOSS-SERVER")
     } catch {
       case _: Throwable => "MaBoSS-server"
     }
   }
-  else maboss_serverInput
+  else inputMaboss_server
 
-  if (host == null) {
-    if (port == None) {
-      val newPort = "tmp/MaBoSS_pipe_" +
-        java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
-        "_" + SERVER_NUM.toString
-    }
-    val pidfile = "/tmp/MaBoSS_pidfile_" +
-       java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
+  val port : String= if (host == null) {
+    if (inputPort == null) {"tmp/MaBoSS_pipe_" +
+      java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
+      "_" + SERVER_NUM.toString} else {inputPort}
+  } else {inputPort}
+
+  val process : Process = if (host == null) {
+    val pidfile : String = "/tmp/MaBoSS_pidfile_" +
+      java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
       "_" + SERVER_NUM.toString
     SERVER_NUM += 1
-}
+    val args : Array[String] = Array(maboss_server, "--host", "localhost", "-q", "--port", port, "--pidfile", pidfile)
+    val runtime : Runtime = Runtime.getRuntime()
+    try {
+      runtime.exec(args)
+    }
+    catch {
+      case e: Throwable => {System.err.print("error while launching '" + maboss_server + "'"+ e);sys.exit(1)}
+    }
+  }
+  else {null}
+
+  //val socket : Socket = new Socket(Socket.AF_UNIX)
+
+
+  def close() = {
+    if (process != null ) {process.destroy()}
+  }
+
+  }
+
 
 
 
