@@ -1,6 +1,10 @@
 import java.security.KeyStore.TrustedCertificateEntry
 import Runtime._
 import java.net.Socket
+import java.io._
+import java.net._
+import java.io.InterruptedIOException
+
 
 import scala.sys.process
 
@@ -145,45 +149,24 @@ object DataStreamer {
   }
 }
 
-class MaBoSSClient (host : String = null, inputPort : String = null, inputMaboss_server : String = null) {
-  var SERVER_NUM = 1
-  val maboss_server : String = if (inputMaboss_server == null) {
+class MaBoSSClient (host : String = "localhost", port : Int) {
+    val socket : Socket =
     try {
-      sys.env("MABOSS-SERVER")
-    } catch {
-      case _: Throwable => "MaBoSS-server"
-    }
-  }
-  else inputMaboss_server
-
-  val port : String= if (host == null) {
-    if (inputPort == null) {"tmp/MaBoSS_pipe_" +
-      java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
-      "_" + SERVER_NUM.toString} else {inputPort}
-  } else {inputPort}
-
-  val process : Process = if (host == null) {
-    val pidfile : String = "/tmp/MaBoSS_pidfile_" +
-      java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")(0) +
-      "_" + SERVER_NUM.toString
-    SERVER_NUM += 1
-    val args : Array[String] = Array(maboss_server, "--host", "localhost", "-q", "--port", port, "--pidfile", pidfile)
-    val runtime : Runtime = Runtime.getRuntime()
-    try {
-      runtime.exec(args)
+      new Socket("localhost",)
     }
     catch {
-      case e: Throwable => {System.err.print("error while launching '" + maboss_server + "'"+ e);sys.exit(1)}
+      case e: Throwable => {System.err.print("error trying to connecto to port " + port + " and host "+ host);sys.exit(1)}
     }
+  def send(inputData : String,delay : Int):String =  {
+    val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream)), true)
+    val plec : BufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream))
+    pred.print(inputData)
+    plec.readLine()
   }
-  else {null}
-
-  //val socket : Socket = new Socket(Socket.AF_UNIX)
-
-
+  def run(simulation : Simulation,hints : Map[String,Boolean] = null) : Result =
+      {new Result(this,simulation,hints)}
   def close() = {
-    if (process != null ) {process.destroy()}
-  }
+    socket.close()}
 
   }
 
