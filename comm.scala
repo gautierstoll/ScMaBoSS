@@ -157,7 +157,7 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     catch {
       case e: Throwable => {System.err.print("error trying to connecto to port " + port + " and host "+ host);sys.exit(1)}
     }
-  def send(inputData : String,delay : Int):String =  {
+  def send(inputData : String):String =  {
     val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream)), true)
     val plec : BufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream))
     pred.print(inputData)

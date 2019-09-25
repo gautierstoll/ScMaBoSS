@@ -2,7 +2,8 @@ import java.io.FileNotFoundException
 import java.nio.file.{Paths, Files}
 import scala.io.Source
 
-class Simulation(bndFile: String, cfgFile: String = null, cfgFiles: List[String] = null) {
+class Simulation(bndFile : String, cfgFile : String = null, cfgFiles: List[String] = null) {
+  val network = file_get_content(bndFile)
   val config : String = {
     if (cfgFile != null) {file_get_content(cfgFile)}
     else if (cfgFiles !=null) {cfgFiles.map(x => file_get_content(x)).mkString}
