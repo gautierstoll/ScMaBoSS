@@ -13,8 +13,8 @@ val hint : Hints = Hints(check = false,hexfloat = true,augment = true,overRide =
 val clienData : ClientData = ClientData(network = simulation.network,config = simulation.config,command = command)
 val data = DataStreamer.buildStreamData(clienData,hint)
 
-val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mcli.socket.getOutputStream)), true)
-val plec : BufferedReader = new BufferedReader(new InputStreamReader(mcli.socket.getInputStream))
+var pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mcli.socket.getOutputStream)), true)
+var plec : BufferedReader = new BufferedReader(new InputStreamReader(mcli.socket.getInputStream))
 
 pred.print(data)
 pred.print(0.toChar)
