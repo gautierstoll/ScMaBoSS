@@ -37,33 +37,39 @@ object GlCst {
 }
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
+case class Hints(check : Boolean = false,
+                 hexfloat : Boolean = false,
+                 augment : Boolean =  true,
+              overRide : Boolean = false ,
+              verbose : Boolean = false) {}
+
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
 object DataStreamer {
 
-  def buildStreamData(client_data: ClientData, hints: Map[String, Boolean] = null): String = {
-    val hexFloat: Boolean = if (hints != null) {hints.getOrElse("hexFloat", false)} else false
-    val overRide: Boolean = if (hints != null) {hints.getOrElse("overRide", false)} else false
-    val augument: Boolean = if (hints != null) {hints.getOrElse("augument", false)} else false
-    val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
-    val flags: Int = 0 | (if (hexFloat) GlCst.HEXFLOAT_FLAG else 0) |
-      (if (overRide) GlCst.OVERRIDE_FLAG else 0) | (if (augument) GlCst.AUGMENT_FLAG else 0)
+  def buildStreamData(client_data: ClientData, hints: Hints = null): String = {
+    //val hexFloat: Boolean = if (hints != null) {hints.hexfloat
+    //val overRide: Boolean = if (hints != null) {hints.getOrElse("overRide", false)} else false
+    //val augument: Boolean = if (hints != null) {hints.getOrElse("augument", false)} else false
+    //val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
+    val flags: Int = 0 | (if (hints.hexfloat) GlCst.HEXFLOAT_FLAG else 0) |
+      (if (hints.overRide) GlCst.OVERRIDE_FLAG else 0) | (if (hints.augment) GlCst.AUGMENT_FLAG else 0)
 
     val header: String = GlCst.MABOSS_MAGIC + "\n" +
       GlCst.PROTOCOL_VERSION + GlCst.PROTOCOL_VERSION_NUMBER + "\n" +
       GlCst.FLAGS + flags.toString + "\n" +
       GlCst.COMMAND + client_data.command + "\n"
 
-    val offsetConfig = client_data.config.length()
+    val offsetConfig = client_data.config.length()+1
     val dataConfig = client_data.config
     val headerConfig  = DataStreamer.add_header(header, GlCst.CONFIGURATION, 0, offsetConfig)
 
-    val offsetConfigNetwork = offsetConfig + client_data.network.length
+    val offsetConfigNetwork = offsetConfig + client_data.network.length+1
     val dataConfigNetwork =  dataConfig + client_data.network
     val headerConfigNetwork = DataStreamer.add_header(headerConfig, GlCst.NETWORK, offsetConfig, offsetConfigNetwork)
 
-    if (verbose) {
+    if (hints.verbose) {
       print("======= sending header\n"+headerConfigNetwork)
       print("======= sending data[0:200]\n"+ dataConfigNetwork.substring(0, 200), "\n[...]\n"
       )
@@ -71,8 +77,8 @@ object DataStreamer {
     headerConfigNetwork + "\n" + dataConfigNetwork
   }
 
-  def parseStreamData(ret_data : String, hints : Map[String,Boolean] = null): ResultData = {
-    val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
+  def parseStreamData(ret_data : String, hints : Hints): ResultData = {
+    //val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
     val magic : String = GlCst.RETURN + " " + GlCst.MABOSS_MAGIC
     val magic_len : Int = magic.length
     if (ret_data.substring(0,magic_len) != magic) {
@@ -86,7 +92,7 @@ object DataStreamer {
         //offset += 1
         val header = ret_data.substring(magic_len+1,pos+1)
         val data  = ret_data.substring(pos+2)
-        if (verbose) {
+        if (hints.verbose) {
           print("======= receiving header \n" + header)
           print("======= receiving data[0:200]\n" + data.substring(0, 200) + "\n[...]\n")
         }
@@ -140,7 +146,7 @@ object DataStreamer {
             }
           }
         }
-         ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
+        ResultData(resStatus,resErrmsg,resStat_dist,resProb_traj,resTraj,resFP,resRunlog)
       }
     }
   }
@@ -150,9 +156,9 @@ object DataStreamer {
 }
 
 class MaBoSSClient (host : String = "localhost", port : Int) {
-    val socket : Socket =
+  val socket : Socket =
     try {
-      new Socket("localhost",)
+      new Socket("localhost",port)
     }
     catch {
       case e: Throwable => {System.err.print("error trying to connecto to port " + port + " and host "+ host);sys.exit(1)}
@@ -161,14 +167,15 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream)), true)
     val plec : BufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream))
     pred.print(inputData)
+    pred.print(0.toChar)
     plec.readLine()
   }
-  def run(simulation : Simulation,hints : Map[String,Boolean] = null) : Result =
-      {new Result(this,simulation,hints)}
+  def run(simulation : Simulation,hints : Hints ) : Result =
+  {new Result(this,simulation,hints)}
   def close() = {
     socket.close()}
 
-  }
+}
 
 
 

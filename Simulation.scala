@@ -17,7 +17,7 @@ class Simulation(bndFile : String, cfgFile : String = null, cfgFiles: List[Strin
     } catch {
       case _: Throwable => throw new FileNotFoundException(filename + "is not readable")
     }
-    val content = bufferedSource.getLines.mkString
+    val content = bufferedSource.getLines.mkString("\n")
     bufferedSource.close()
     content
   }

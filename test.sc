@@ -17,5 +17,5 @@ val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWrit
 val plec : BufferedReader = new BufferedReader(new InputStreamReader(mcli.socket.getInputStream))
 
 pred.print(data)
-// pred.print(0.toChar)
+pred.print(0.toChar)
 // val resData = plec.readLine()
