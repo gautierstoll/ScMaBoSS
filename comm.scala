@@ -4,12 +4,8 @@ import java.net.Socket
 import java.io._
 import java.net._
 import java.io.InterruptedIOException
-
-
 import scala.sys.process
 
-//import com.sun.org.apache.bcel.internal.generic.RETURN
-//import Simulation
 object GlCst {
   val PROTOCOL_VERSION_NUMBER = "1.0"
   val MABOSS_MAGIC = "MaBoSS-2.0"
@@ -37,11 +33,8 @@ object GlCst {
 }
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
-case class Hints(check : Boolean = false,
-                 hexfloat : Boolean = false,
-                 augment : Boolean =  true,
-              overRide : Boolean = false ,
-              verbose : Boolean = false) {}
+case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : Boolean =  true,
+                 overRide : Boolean = false , verbose : Boolean = false) {}
 
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
@@ -49,47 +42,36 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
 object DataStreamer {
 
   def buildStreamData(client_data: ClientData, hints: Hints = null): String = {
-    //val hexFloat: Boolean = if (hints != null) {hints.hexfloat
-    //val overRide: Boolean = if (hints != null) {hints.getOrElse("overRide", false)} else false
-    //val augument: Boolean = if (hints != null) {hints.getOrElse("augument", false)} else false
-    //val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
+
     val flags: Int = 0 | (if (hints.hexfloat) GlCst.HEXFLOAT_FLAG else 0) |
       (if (hints.overRide) GlCst.OVERRIDE_FLAG else 0) | (if (hints.augment) GlCst.AUGMENT_FLAG else 0)
 
-    val header: String = GlCst.MABOSS_MAGIC + "\n" +
-      GlCst.PROTOCOL_VERSION + GlCst.PROTOCOL_VERSION_NUMBER + "\n" +
-      GlCst.FLAGS + flags.toString + "\n" +
-      GlCst.COMMAND + client_data.command + "\n"
+    val header: String = GlCst.MABOSS_MAGIC + "\n" + GlCst.PROTOCOL_VERSION + GlCst.PROTOCOL_VERSION_NUMBER + "\n" +
+      GlCst.FLAGS + flags.toString + "\n" + GlCst.COMMAND + client_data.command + "\n"
 
     val offsetConfig = client_data.config.length()+1
     val dataConfig = client_data.config
     val headerConfig  = DataStreamer.add_header(header, GlCst.CONFIGURATION, 0, offsetConfig)
-
     val offsetConfigNetwork = offsetConfig + client_data.network.length+1
     val dataConfigNetwork =  dataConfig + client_data.network
     val headerConfigNetwork = DataStreamer.add_header(headerConfig, GlCst.NETWORK, offsetConfig, offsetConfigNetwork)
 
     if (hints.verbose) {
       print("======= sending header\n"+headerConfigNetwork)
-      print("======= sending data[0:200]\n"+ dataConfigNetwork.substring(0, 200), "\n[...]\n"
-      )
+      print("======= sending data[0:200]\n"+ dataConfigNetwork.substring(0, 200), "\n[...]\n")
     }
     headerConfigNetwork + "\n" + dataConfigNetwork
   }
 
   def parseStreamData(ret_data : String, hints : Hints): ResultData = {
-    //val verbose: Boolean = if (hints != null) {hints.getOrElse("verbose", false)} else false
     val magic : String = GlCst.RETURN + " " + GlCst.MABOSS_MAGIC
     val magic_len : Int = magic.length
     if (ret_data.substring(0,magic_len) != magic) {
-      ResultData(status = 1,errmsg = "magic " + magic + " not found in header")
-    }
+      ResultData(status = 1,errmsg = "magic " + magic + " not found in header")}
     else {
-      //offset = magic_len
       val pos = ret_data.indexOf("\n\n", magic_len)
       if (pos < 0) {ResultData(status = 2,errmsg = "separator double nl found in header")}
       else {
-        //offset += 1
         val header = ret_data.substring(magic_len+1,pos+1)
         val data  = ret_data.substring(pos+2)
         if (hints.verbose) {
@@ -103,7 +85,6 @@ object DataStreamer {
         var resTraj : String = null
         var resFP : String = null
         var resRunlog : String = null
-
         var oposLoop : Int = 0
         var posLoop : Int = 0
         var loop : Boolean = true
@@ -161,7 +142,7 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
       new Socket("localhost",port)
     }
     catch {
-      case e: Throwable => {System.err.print("error trying to connecto to port " + port + " and host "+ host);sys.exit(1)}
+      case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
   def send(inputData : String):String =  {
     val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream)), true)
@@ -172,12 +153,4 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
   }
   def run(simulation : Simulation,hints : Hints ) : Result =
   {new Result(this,simulation,hints)}
-  def close() = {
-    socket.close()}
-
-}
-
-
-
-
-
+  def close() = {socket.close()}}
