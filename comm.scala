@@ -2,6 +2,7 @@ import java.security.KeyStore.TrustedCertificateEntry
 import Runtime._
 import java.net.Socket
 import java.io._
+import java.util._
 import java.net._
 import java.io.InterruptedIOException
 import scala.sys.process
@@ -53,7 +54,7 @@ object DataStreamer {
     val dataConfig = client_data.config
     val headerConfig  = DataStreamer.add_header(header, GlCst.CONFIGURATION, 0, offsetConfig)
     val offsetConfigNetwork = offsetConfig + client_data.network.length+1
-    val dataConfigNetwork =  dataConfig + client_data.network
+    val dataConfigNetwork =  dataConfig + "\n"+client_data.network
     val headerConfigNetwork = DataStreamer.add_header(headerConfig, GlCst.NETWORK, offsetConfig, offsetConfigNetwork)
 
     if (hints.verbose) {
@@ -145,11 +146,12 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
       case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
   def send(inputData : String):String =  {
-    val pred : PrintWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream)), true)
-    val plec : BufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream))
-    pred.print(inputData)
-    pred.print(0.toChar)
-    plec.readLine()
+    val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
+    bos.write(inputData.getBytes())
+    bos.write(0.toChar)
+    bos.flush()
+    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
+      scannerBis.next()
   }
   def run(simulation : Simulation,hints : Hints ) : Result =
   {new Result(this,simulation,hints)}
