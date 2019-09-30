@@ -56,7 +56,6 @@ object DataStreamer {
     val offsetConfigNetwork = offsetConfig + client_data.network.length+1
     val dataConfigNetwork =  dataConfig + "\n"+client_data.network
     val headerConfigNetwork = DataStreamer.add_header(headerConfig, GlCst.NETWORK, offsetConfig, offsetConfigNetwork)
-
     if (hints.verbose) {
       print("======= sending header\n"+headerConfigNetwork)
       print("======= sending data[0:200]\n"+ dataConfigNetwork.substring(0, 200), "\n[...]\n")
@@ -149,7 +148,9 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
-    bos.flush()
+    try (bos.flush()) catch {
+      case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server");sys.exit(1)}
+    }
     val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
       scannerBis.next()
   }
