@@ -20,7 +20,7 @@ object BndMbssFromFile {
   def apply(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
 }
 class BndMbss(val bnd : String) {
-  val nodes : List[String] = bnd.split("\n").toList
+  val nodes : List[String] = bnd.split("\n").filter()
   def mutateBnd(mutNodes : List[String]) : (BndMbss,List[String]) = {}
 }
 
