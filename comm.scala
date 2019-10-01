@@ -154,6 +154,7 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
       scannerBis.next()
   }
-  def run(simulation : Simulation,hints : Hints ) : Result =
+  def run(simulation : CfgMbss,hints : Hints ) : Result =
   {new Result(this,simulation,hints)}
-  def close() = {socket.close()}}
+  def close() = {socket.close()}
+}

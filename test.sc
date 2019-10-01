@@ -8,7 +8,7 @@ import java.io.InterruptedIOException
 
 
 val mcli = new MaBoSSClient(port=4291)
-val simulation : Simulation = new Simulation(bndFile = "p53_Mdm2.bnd",cfgFile = "p53_Mdm2_runcfg.cfg")
+val simulation : CfgMbss = CfgMbss.fromFile("p53_Mdm2_runcfg.cfg", BndMbss.fromFile("p53_Mdm2.bnd"))
 val command = GlCst.RUN_COMMAND
 val hints : Hints = Hints(check = false,hexfloat = true,augment = true,overRide = false,verbose = false)
 

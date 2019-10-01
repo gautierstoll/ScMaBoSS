@@ -1,5 +1,9 @@
 import java.io.FileNotFoundException
-import java.nio.file.{Paths, Files}
+import java.nio.file.{Files, Paths}
+import scala.util.matching.Regex
+
+import jdk.nashorn.internal.runtime.regexp.RegExp
+
 import scala.io.Source
 
 object ManageInputFile {
@@ -16,40 +20,48 @@ object ManageInputFile {
   }
 }
 
-object BndMbssFromFile {
-  def apply(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
+object BndMbss{
+  def fromFile(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
 }
+
 class BndMbss(val bnd : String) {
-  val nodes : List[String] = bnd.split("\n").filter()
-  def mutateBnd(mutNodes : List[String]) : (BndMbss,List[String]) = {}
-}
-
-object CfgMbssFromFile {
-  def apply(filename : String,bndMbss : BndMbss) : CfgMbss = {
-    new CfgMbss(ManageInputFile.file_get_content(filename),bndMbss)}
-}
-class CfgMbss(val cfg : String,val bndMbss : BndMbss) {
-  def mutatedCfg(mutNodes : List[String]) : CfgMbss = {
-    val mutatedBnd = bndMbss.mutateBnd(mutNodes)
-    new CfgMbss(cfg + "\n"+mutatedBnd._2.mkString("\n"),mutatedBnd._1)
+  val nodeFields : List[String] = bnd.split("[n|N][o|O][d|D][e|E]\\s+").toList.tail.
+    map("//.*".r.replaceAllIn(_,"")).map("/\\*[\\s\\S]*\\*/".r.replaceAllIn(_,""))
+  val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
+    case Some(node) => node ; case None => null}}).toList
+  def mutateBnd(mutNodes : List[String]) : BndMbss = {
+    val mutNodeFields: String = "node "+ nodeFields.map(field => {
+      val node = "[^\\s]+".r.findFirstIn(field) match {case Some(node) => node ; case None => null}
+      if (mutNodes.contains(node)) {
+      val rup_field =  if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
+            "rate_up\\s*=([^;]+);".r.
+              replaceAllIn(field,"rate_up = ( \\$Low_"+node+" ? 0.0 : ( \\$High_"+node+" ? @max_rate : ($1 ) ) );")
+          } else {
+            "\\}".r.replaceAllIn(field,"  rate_up = ( \\$Low_"+node+
+              " ? 0.0 : ( \\$High_"+node+" ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")}
+      if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {"rate_down\\s*=([^;]+);".r.
+            replaceAllIn(rup_field,"rate_down = ( \\$Low_"+node+
+              " ? @max_rate : ( \\$High_"+node+" ? 0.0 : ($1 ) ) );\n" +
+              "  max_rate = "+mutNodes.length.toString+";")
+          } else {"\\}".r.replaceAllIn(rup_field,"  rate_down = ( \\$Low_"+node+
+            " ? @max_rate : ( \\$High_"+node+" ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n"+
+            "  max_rate = "+mutNodes.length.toString+";\n}")}
+      } else field }).mkString("node ")
+    new BndMbss(mutNodeFields)
   }
 }
 
-object Simulation {
-  def fromFiles(bndFile : String, cfgFile : String = null, cfgFiles: List[String] = null) : CfgMbss = {
-    val network = ManageInputFile.file_get_content(bndFile)
-    val config : String = {
-      if (cfgFile != null) {ManageInputFile.file_get_content(cfgFile)}
-      else if (cfgFiles !=null) {cfgFiles.map(x => ManageInputFile.file_get_content(x)).mkString("\n")}
-      else throw new Exception("Simulation: cfgfile or cfgfiles must be set")
-    }
-    new CfgMbss(config,new BndMbss(network))
+object CfgMbss {
+  def fromFile(filename : String,bndMbss : BndMbss) : CfgMbss = {
+    new CfgMbss(bndMbss,ManageInputFile.file_get_content(filename))}
+  def fromFiles(bndMbss : BndMbss,filenames : List[String]) : CfgMbss = {
+  new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))
   }
 }
-class Simulation(val cfgMbss : CfgMbss) {
-  def this(bndFile : String, cfgFile : String = null, cfgFiles: List[String] = null) =
-    this(Simulation.fromFiles(bndFile, cfgFile, cfgFiles))
-  val network = cfgMbss.bndMbss.bnd
-  val config = cfgMbss.cfg
-  }
 
+class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
+  def mutatedCfg(mutNodes: List[String]): CfgMbss = {
+    new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
+      "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))
+  }
+}
