@@ -144,14 +144,15 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     catch {
       case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
-  def send(inputData : String):String =  {
     val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
+    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
+  def send(inputData : String):String =  {
+    //val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try (bos.flush()) catch {
       case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server");sys.exit(1)}
     }
-    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
       scannerBis.next()
   }
   def run(simulation : CfgMbss,hints : Hints ) : Result =

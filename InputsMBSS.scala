@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 import scala.util.matching.Regex
+import java.io._
 
 import jdk.nashorn.internal.runtime.regexp.RegExp
 
@@ -22,11 +23,27 @@ object ManageInputFile {
 
 object BndMbss{
   def fromFile(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
+  val glConfVar : String = "// global configuration variables\ntime_tick = 0.5;" +
+    "\nmax_time = 1000;\nsample_count = 10000;\ndiscrete_time = 0;\nuse_physrandgen = 0;" +
+    "\nseed_pseudorandom = 0;\ndisplay_traj = 0;\nstatdist_traj_count = 0;\n" +
+    "statdist_cluster_threshold = 1;\nthread_count = 1;\nstatdist_similarity_cache_max_size = 20000;\n"
+  val varSet : String = "\n// variables to be set in the configuration file or by using the --config-vars option\n"
+  val setInternal : String = "\n// set is_internal attribute value to 1 if node is an internal node\n"
+  val setRefState : String = "\n// if node is a reference node, set refstate attribute value to 0 or 1 " +
+    "according to its reference state\n" +
+    "\n// if node is not a reference node, skip its refstate declaration or set value to -1\n"
+  val setIstate : String = "\n// if NODE initial state is: " +
+  "\n// - equals to 1: NODE.istate = 1;"+
+  "\n// - equals to 0: NODE.istate = 0;"+
+  "\n// - random: NODE.istate = -1; OR [NODE].istate = 0.5 [0], 0.5 [1]; OR skip NODE.istate declaration"+
+  "\n// - weighted random: [NODE].istate = P0 [0], P1 [1]; where P0 and P1 are arithmetic expressions\n"
 }
 
 class BndMbss(val bnd : String) {
-  val nodeFields : List[String] = bnd.split("[n|N][o|O][d|D][e|E]\\s+").toList.tail.
-    map("//.*".r.replaceAllIn(_,"")).map("/\\*[\\s\\S]*\\*/".r.replaceAllIn(_,""))
+  private val noCommentBnd = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
+  val extVarList : List[String] = "\\$[a-zA-Z_0-9]+".r.findAllIn(noCommentBnd).toList.distinct
+  private val nodeFields : List[String] = noCommentBnd.split("[n|N][o|O][d|D][e|E]\\s+").toList.tail.distinct
+    //map("//.*".r.replaceAllIn(_,"")).map("/\\*[\\s\\S]*\\*/".r.replaceAllIn(_,""))
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
     case Some(node) => node ; case None => null}}).toList
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
@@ -49,6 +66,17 @@ class BndMbss(val bnd : String) {
       } else field }).mkString("node ")
     new BndMbss(mutNodeFields)
   }
+  def configTemplate() : String = {
+    BndMbss.glConfVar + BndMbss.varSet + extVarList.mkString(" = 0 ; \n") + " = 0 ; \n" +
+    BndMbss.setInternal + nodeList.mkString(".is_internal = 0;\n") + ".is_internal = 0;\n" +
+    BndMbss.setRefState + nodeList.mkString(".refstate = -1;\n") + ".refstate = -1;\n" +
+    BndMbss.setIstate + "[" + nodeList.mkString("].istate = 0.5 [0], 0.5 [1];\n[") + "].istate = 0.5 [0], 0.5 [1];\n"
+  }
+  def writeToFile(filename : String) = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(bnd)
+    pw.close
+  }
 }
 
 object CfgMbss {
@@ -60,8 +88,27 @@ object CfgMbss {
 }
 
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
+  private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))
   }
+  def update(newParam : Map[String,String]) : CfgMbss = {
+    def newCfg(cfg:String, listParam : List[(String,String)]) : String = {
+      listParam match {
+        case Nil => cfg
+        case (extV,extVarVal) :: extVVTail => {
+          val extV4Regex = if (extV.substring(0, 1) == "$") ("\\" + extV) else extV
+          newCfg((extV4Regex + "\\s*=[^;]+;").r.replaceAllIn(cfg, extV4Regex + " = " + extVarVal + ";"), extVVTail)
+        }
+      }
+    }
+      new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
+    }
+  def writeCfgToFile(filename : String) = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(cfg)
+    pw.close
+  }
 }
+
