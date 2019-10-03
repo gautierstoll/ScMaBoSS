@@ -32,13 +32,6 @@ object GlCst {
   val FIXED_POINTS = "Fixed-Points:"
   val RUN_LOG = "Run-Log:"
 }
-case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
-
-case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : Boolean =  true,
-                 overRide : Boolean = false , verbose : Boolean = false) {}
-
-case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
-                      prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
 object DataStreamer {
 
@@ -144,18 +137,17 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     catch {
       case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
-    val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
-    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream())).useDelimiter(0.toChar.toString)
+    val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
+    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData : String):String =  {
-    //val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
-    try (bos.flush()) catch {
+    try bos.flush() catch {
       case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server");sys.exit(1)}
     }
       scannerBis.next()
   }
   def run(simulation : CfgMbss,hints : Hints ) : Result =
   {new Result(this,simulation,hints)}
-  def close() = {socket.close()}
+  def close(): Unit = {socket.close()}
 }

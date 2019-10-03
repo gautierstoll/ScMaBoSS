@@ -2,6 +2,7 @@ import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 import scala.util.matching.Regex
 import java.io._
+import scala.collection.immutable._
 
 import jdk.nashorn.internal.runtime.regexp.RegExp
 
@@ -12,16 +13,32 @@ object ManageInputFile {
     if (!Files.exists(Paths.get(filename))) throw new FileNotFoundException(filename + "is not valid")
     val bufferedSource = try {
       Source.fromFile(filename)
-    } catch {
-      case _: Throwable => throw new FileNotFoundException(filename + "is not readable")
-    }
+    } catch {case _: Throwable => throw new FileNotFoundException(filename + "is not readable")}
     val content = bufferedSource.getLines.mkString("\n")
     bufferedSource.close()
     content
   }
 }
 
-object BndMbss{
+object netState { // to be tested
+  private def stringtoBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
+    val activeNodeList = stateString.split(" -- ")
+    nodeList.map(node => (node,activeNodeList.contains(node))).toMap
+  }
+}
+
+class netState private (val state: Map[String,Boolean],val nodeList : List[String]) { //to be tested
+   def this(state : Map[String,Boolean],bndMbss : BndMbss) = this(state,bndMbss.nodeList)
+  def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
+  def this(stateString : String,bndMbSS : BndMbss) =
+    this(netState.stringtoBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
+  def this(stateString : String,cfgMbSS : CfgMbss) =
+    this(netState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
+  if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
+}
+
+
+object BndMbss {
   def fromFile(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
   val glConfVar : String = "// global configuration variables\ntime_tick = 0.5;" +
     "\nmax_time = 1000;\nsample_count = 10000;\ndiscrete_time = 0;\nuse_physrandgen = 0;" +
@@ -33,46 +50,48 @@ object BndMbss{
     "according to its reference state\n" +
     "\n// if node is not a reference node, skip its refstate declaration or set value to -1\n"
   val setIstate : String = "\n// if NODE initial state is: " +
-  "\n// - equals to 1: NODE.istate = 1;"+
-  "\n// - equals to 0: NODE.istate = 0;"+
-  "\n// - random: NODE.istate = -1; OR [NODE].istate = 0.5 [0], 0.5 [1]; OR skip NODE.istate declaration"+
-  "\n// - weighted random: [NODE].istate = P0 [0], P1 [1]; where P0 and P1 are arithmetic expressions\n"
+    "\n// - equals to 1: NODE.istate = 1;"+
+    "\n// - equals to 0: NODE.istate = 0;"+
+    "\n// - random: NODE.istate = -1; OR [NODE].istate = 0.5 [0], 0.5 [1]; OR skip NODE.istate declaration"+
+    "\n// - weighted random: [NODE].istate = P0 [0], P1 [1]; where P0 and P1 are arithmetic expressions\n"
 }
 
 class BndMbss(val bnd : String) {
   private val noCommentBnd = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
-  val extVarList : List[String] = "\\$[a-zA-Z_0-9]+".r.findAllIn(noCommentBnd).toList.distinct
+  private val extVarList : List[String] = "\\$[a-zA-Z_0-9]+".r.findAllIn(noCommentBnd).toList.distinct
   private val nodeFields : List[String] = noCommentBnd.split("[n|N][o|O][d|D][e|E]\\s+").toList.tail.distinct
-    //map("//.*".r.replaceAllIn(_,"")).map("/\\*[\\s\\S]*\\*/".r.replaceAllIn(_,""))
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
     case Some(node) => node ; case None => null}}).toList
+
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
     val mutNodeFields: String = "node "+ nodeFields.map(field => {
       val node = "[^\\s]+".r.findFirstIn(field) match {case Some(node) => node ; case None => null}
       if (mutNodes.contains(node)) {
-      val rup_field =  if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
-            "rate_up\\s*=([^;]+);".r.
-              replaceAllIn(field,"rate_up = ( \\$Low_"+node+" ? 0.0 : ( \\$High_"+node+" ? @max_rate : ($1 ) ) );")
-          } else {
-            "\\}".r.replaceAllIn(field,"  rate_up = ( \\$Low_"+node+
-              " ? 0.0 : ( \\$High_"+node+" ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")}
-      if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {"rate_down\\s*=([^;]+);".r.
-            replaceAllIn(rup_field,"rate_down = ( \\$Low_"+node+
-              " ? @max_rate : ( \\$High_"+node+" ? 0.0 : ($1 ) ) );\n" +
-              "  max_rate = "+mutNodes.length.toString+";")
-          } else {"\\}".r.replaceAllIn(rup_field,"  rate_down = ( \\$Low_"+node+
-            " ? @max_rate : ( \\$High_"+node+" ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n"+
-            "  max_rate = "+mutNodes.length.toString+";\n}")}
+        val rup_field =  if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
+          "rate_up\\s*=([^;]+);".r.
+            replaceAllIn(field,"rate_up = ( \\$Low_"+node+" ? 0.0 : ( \\$High_"+node+" ? @max_rate : ($1 ) ) );")
+        } else {
+          "\\}".r.replaceAllIn(field,"  rate_up = ( \\$Low_"+node+
+            " ? 0.0 : ( \\$High_"+node+" ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")}
+        if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {"rate_down\\s*=([^;]+);".r.
+          replaceAllIn(rup_field,"rate_down = ( \\$Low_"+node+
+            " ? @max_rate : ( \\$High_"+node+" ? 0.0 : ($1 ) ) );\n" +
+            "  max_rate = "+mutNodes.length.toString+";")
+        } else {"\\}".r.replaceAllIn(rup_field,"  rate_down = ( \\$Low_"+node+
+          " ? @max_rate : ( \\$High_"+node+" ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n"+
+          "  max_rate = "+mutNodes.length.toString+";\n}")}
       } else field }).mkString("node ")
     new BndMbss(mutNodeFields)
   }
+
   def configTemplate() : String = {
     BndMbss.glConfVar + BndMbss.varSet + extVarList.mkString(" = 0 ; \n") + " = 0 ; \n" +
-    BndMbss.setInternal + nodeList.mkString(".is_internal = 0;\n") + ".is_internal = 0;\n" +
-    BndMbss.setRefState + nodeList.mkString(".refstate = -1;\n") + ".refstate = -1;\n" +
-    BndMbss.setIstate + "[" + nodeList.mkString("].istate = 0.5 [0], 0.5 [1];\n[") + "].istate = 0.5 [0], 0.5 [1];\n"
+      BndMbss.setInternal + nodeList.mkString(".is_internal = 0;\n") + ".is_internal = 0;\n" +
+      BndMbss.setRefState + nodeList.mkString(".refstate = -1;\n") + ".refstate = -1;\n" +
+      BndMbss.setIstate + "[" + nodeList.mkString("].istate = 0.5 [0], 0.5 [1];\n[") + "].istate = 0.5 [0], 0.5 [1];\n"
   }
-  def writeToFile(filename : String) = {
+
+  def writeToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(bnd)
     pw.close
@@ -82,18 +101,21 @@ class BndMbss(val bnd : String) {
 object CfgMbss {
   def fromFile(filename : String,bndMbss : BndMbss) : CfgMbss = {
     new CfgMbss(bndMbss,ManageInputFile.file_get_content(filename))}
+
   def fromFiles(bndMbss : BndMbss,filenames : List[String]) : CfgMbss = {
-  new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))
-  }
+    new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))}
 }
 
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
+  val extNodeList : List[String] = bndMbss.nodeList.
+    filter(node => !("[//s//S]*"+node+"\\.is_internal").r.matches(noCommentCfg)) // to be tested
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
-      "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))
-  }
+      "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
+
   def update(newParam : Map[String,String]) : CfgMbss = {
+
     def newCfg(cfg:String, listParam : List[(String,String)]) : String = {
       listParam match {
         case Nil => cfg
@@ -103,12 +125,11 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
         }
       }
     }
-      new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
-    }
-  def writeCfgToFile(filename : String) = {
+    new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
+  }
+  def writeCfgToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(cfg)
-    pw.close
+    pw.close()
   }
 }
-
