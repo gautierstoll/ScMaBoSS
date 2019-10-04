@@ -20,20 +20,20 @@ object ManageInputFile {
   }
 }
 
-object netState { // to be tested
+object NetState {
   private def stringtoBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
 }
 
-class netState private (val state: Map[String,Boolean],val nodeList : List[String]) { //to be tested
+class NetState private (val state: Map[String,Boolean],val nodeList : List[String]) {
    def this(state : Map[String,Boolean],bndMbss : BndMbss) = this(state,bndMbss.nodeList)
   def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
   def this(stateString : String,bndMbSS : BndMbss) =
-    this(netState.stringtoBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
+    this(NetState.stringtoBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
   def this(stateString : String,cfgMbSS : CfgMbss) =
-    this(netState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
+    this(NetState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
   if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
 }
 
@@ -64,23 +64,31 @@ class BndMbss(val bnd : String) {
     case Some(node) => node ; case None => null}}).toList
 
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
-    val mutNodeFields: String = "node "+ nodeFields.map(field => {
-      val node = "[^\\s]+".r.findFirstIn(field) match {case Some(node) => node ; case None => null}
+    val mutNodeFields: String = "node " + nodeFields.map(field => {
+      val node = "[^\\s]+".r.findFirstIn(field) match {
+        case Some(node) => node;
+        case None => null
+      }
       if (mutNodes.contains(node)) {
-        val rup_field =  if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
+        val rup_field = if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
           "rate_up\\s*=([^;]+);".r.
-            replaceAllIn(field,"rate_up = ( \\$Low_"+node+" ? 0.0 : ( \\$High_"+node+" ? @max_rate : ($1 ) ) );")
+            replaceAllIn(field, "rate_up = ( \\$Low_" + node + " ? 0.0 : ( \\$High_" + node + " ? @max_rate : ($1 ) ) );")
         } else {
-          "\\}".r.replaceAllIn(field,"  rate_up = ( \\$Low_"+node+
-            " ? 0.0 : ( \\$High_"+node+" ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")}
-        if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {"rate_down\\s*=([^;]+);".r.
-          replaceAllIn(rup_field,"rate_down = ( \\$Low_"+node+
-            " ? @max_rate : ( \\$High_"+node+" ? 0.0 : ($1 ) ) );\n" +
-            "  max_rate = "+mutNodes.length.toString+";")
-        } else {"\\}".r.replaceAllIn(rup_field,"  rate_down = ( \\$Low_"+node+
-          " ? @max_rate : ( \\$High_"+node+" ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n"+
-          "  max_rate = "+mutNodes.length.toString+";\n}")}
-      } else field }).mkString("node ")
+          "\\}".r.replaceAllIn(field, "  rate_up = ( \\$Low_" + node +
+            " ? 0.0 : ( \\$High_" + node + " ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")
+        }
+        if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {
+          "rate_down\\s*=([^;]+);".r.
+            replaceAllIn(rup_field, "rate_down = ( \\$Low_" + node +
+              " ? @max_rate : ( \\$High_" + node + " ? 0.0 : ($1 ) ) );\n" +
+              "  max_rate = " + mutNodes.length.toString + ";")
+        } else {
+          "\\}".r.replaceAllIn(rup_field, "  rate_down = ( \\$Low_" + node +
+            " ? @max_rate : ( \\$High_" + node + " ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n" +
+            "  max_rate = " + mutNodes.length.toString + ";\n}")
+        }
+      } else field
+    }).mkString("node ")
     new BndMbss(mutNodeFields)
   }
 
@@ -109,7 +117,8 @@ object CfgMbss {
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   val extNodeList : List[String] = bndMbss.nodeList.
-    filter(node => !("[//s//S]*"+node+"\\.is_internal").r.matches(noCommentCfg)) // to be tested
+    filter(node => !("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*TRUE[\\S\\s]*").r.matches(noCommentCfg)).
+    filter(node => !("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*1[\\S\\s]*").r.matches(noCommentCfg))
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
