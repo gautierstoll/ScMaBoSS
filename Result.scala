@@ -19,72 +19,79 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     if (hints.hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
 
-  val command : String = if (hints.check) {GlCst.CHECK_COMMAND} else GlCst.RUN_COMMAND
-  val clientData : ClientData = ClientData(simulation.bndMbss.bnd,simulation.cfg,command)
-  val data : String = DataStreamer.buildStreamData(clientData,hints)
-  val outputData : String= mbcli.send(data)
-  val parsedResultData : ResultData = DataStreamer.parseStreamData(outputData,hints)
+  val command: String = if (hints.check) {
+    GlCst.CHECK_COMMAND
+  } else GlCst.RUN_COMMAND
+  val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
+  val data: String = DataStreamer.buildStreamData(clientData, hints)
+  val outputData: String = mbcli.send(data)
+  val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, hints)
 
   /**
     * update last probability distribution for UPMaBoSS
-     * @param divNode division node
+    *
+    * @param divNode   division node
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode : String,deathNode : String) : (Map[String,Double],Double) = {
+  def updateLastLine(divNode: String, deathNode: String): (Map[String, Double], Double) = { // to be tested
     val nonNormDist = parsedResultData.prob_traj.split("\n").toList.last.
-      split("\t").dropWhile("[0-9].*".r.matches(_)).
-      sliding(3,3).map(x=>(x(0)->x(1).toDouble)).
-      filter(x=> !(x._1.split(" -- ").contains(deathNode))).
-      map(x=> {if (x._1.split(" -- ").contains(divNode)) {
-        (divNode.r.replaceAllIn((" -- "+divNode).r.replaceAllIn((divNode+" -- ").r.replaceAllIn(x._1,""),""),"<nil>") ->
-          x._2*2)} else (x._1->x._2)}).toList
-    val normFactor = nonNormDist.map(x=> x._2).sum
-    (nonNormDist.map(x=>(x._1, (x._2/normFactor))).toMap,normFactor)
+      split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
+      sliding(3, 3).map(x => (x(0) -> x(1).toDouble)).
+      filter(x => !(x._1.split(" -- ").contains(deathNode))).
+      map(x => {
+        if (x._1.split(" -- ").contains(divNode)) {
+          (divNode.r.replaceAllIn((" -- " + divNode).r.replaceAllIn((divNode + " -- ").r.replaceAllIn(x._1, ""), ""), "<nil>") ->
+            x._2 * 2)
+        } else (x._1 -> x._2)
+      }).toList
+    val normFactor = nonNormDist.map(x => x._2).sum
+    (nonNormDist.map(x => (x._1, (x._2 / normFactor))).toMap, normFactor)
   }
-  def writeProbTraj2File(filename : String): Unit = {
+
+  def writeProbTraj2File(filename: String): Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(parsedResultData.prob_traj)
     pw.close()
   }
-  def writeFP2File(filename : String): Unit = {
+
+  def writeFP2File(filename: String): Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(parsedResultData.FP)
     pw.close()
   }
-  def writeStatDist2File(filename : String): Unit = {
+
+  def writeStatDist2File(filename: String): Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(parsedResultData.stat_dist)
     pw.close()
   }
 
 
-  def stateTrajectory(netState: NetState ) : List[(Double,Double)] = {
+  def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested
     parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
-      val splitProbTL  = probTL.split("\t")
-      val stateProb : List[(String,Double)] = splitProbTL.dropWhile("[0-9].*".r.matches(_)).
-        sliding(3,3).map(x=>(x(0),x(1).toDouble)).toList
-      def filterNode(probList : List[(String,Double)], nodeBool : List[(String,Boolean)] ) : List[(String,Double)] = {
+      val splitProbTL = probTL.split("\t")
+      val stateProb: List[(String, Double)] = splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_) != None).
+        sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
+
+      def filterNode(probList: List[(String, Double)], nodeBool: List[(String, Boolean)]): List[(String, Double)] = {
         nodeBool.length match {
           case 0 => probList
-          case _ => filterNode(probList.filter(ndProb => !(nodeBool.head._2 ^ ndProb._1.split(" -- ").contains(nodeBool.head._1))),nodeBool.tail)
+          case _ => filterNode(probList.filter(ndProb => !(nodeBool.head._2 ^ ndProb._1.split(" -- ").contains(nodeBool.head._1))), nodeBool.tail)
         }
       }
-      (splitProbTL.toList.head.toDouble,filterNode(stateProb,netState.state.toList).map(_._2).sum)
+
+      (splitProbTL.toList.head.toDouble, filterNode(stateProb, netState.state.toList).map(_._2).sum)
     })
   }
 
-  def nodeTrajectory(node : String) : List[(Double,Double)] =
+  def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested
   {
     parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
-      val splitProbTL  = probTL.split("\t")
+      val splitProbTL = probTL.split("\t")
       (splitProbTL.head.toDouble,
-        splitProbTL.dropWhile("[0-9].*".r.matches(_)).
-        sliding(3,3).map(x=>(x(0),x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
+        splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_) != None).
+          sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
     })
   }
-//  def plotTrajectories(netStates : List[NetState],filename : String) : Unit = {
-//
-//  }
 }
-

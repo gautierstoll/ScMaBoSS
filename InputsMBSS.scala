@@ -70,19 +70,18 @@ class BndMbss(val bnd : String) {
         case None => null
       }
       if (mutNodes.contains(node)) {
-        val rup_field = if ("[\\s\\S]*rate_up[\\s\\S]*".r.matches(field)) {
-          "rate_up\\s*=([^;]+);".r.
+        val rup_field = ("[\\s\\S]*rate_up[\\s\\S]*".r.findFirstIn(field)) match {
+          case Some(c) => "rate_up\\s*=([^;]+);".r.
             replaceAllIn(field, "rate_up = ( \\$Low_" + node + " ? 0.0 : ( \\$High_" + node + " ? @max_rate : ($1 ) ) );")
-        } else {
-          "\\}".r.replaceAllIn(field, "  rate_up = ( \\$Low_" + node +
+          case None => "\\}".r.replaceAllIn(field, "  rate_up = ( \\$Low_" + node +
             " ? 0.0 : ( \\$High_" + node + " ? @max_rate : (@logic ? 1.0 : 0.0 ) ) );\n}")
         }
-        if ("[\\s\\S]*rate_down[\\s\\S]*".r.matches(field)) {
-          "rate_down\\s*=([^;]+);".r.
+        ("[\\s\\S]*rate_down[\\s\\S]*".r.findFirstIn(field)) match {
+          case  Some(c) => "rate_down\\s*=([^;]+);".r.
             replaceAllIn(rup_field, "rate_down = ( \\$Low_" + node +
               " ? @max_rate : ( \\$High_" + node + " ? 0.0 : ($1 ) ) );\n" +
               "  max_rate = " + mutNodes.length.toString + ";")
-        } else {
+          case None =>
           "\\}".r.replaceAllIn(rup_field, "  rate_down = ( \\$Low_" + node +
             " ? @max_rate : ( \\$High_" + node + " ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n" +
             "  max_rate = " + mutNodes.length.toString + ";\n}")
@@ -117,8 +116,8 @@ object CfgMbss {
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   val extNodeList : List[String] = bndMbss.nodeList.
-    filter(node => !("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*TRUE[\\S\\s]*").r.matches(noCommentCfg)).
-    filter(node => !("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*1[\\S\\s]*").r.matches(noCommentCfg))
+    filter(node => (("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*TRUE[\\S\\s]*").r.findFirstIn(noCommentCfg) == None)).
+    filter(node => (("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*1[\\S\\s]*").r.findFirstIn(noCommentCfg)) == None)
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
