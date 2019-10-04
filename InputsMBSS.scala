@@ -124,7 +124,6 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
   def update(newParam : Map[String,String]) : CfgMbss = {
-
     def newCfg(cfg:String, listParam : List[(String,String)]) : String = {
       listParam match {
         case Nil => cfg

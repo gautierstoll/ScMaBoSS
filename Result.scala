@@ -1,3 +1,5 @@
+import java.io.PrintWriter
+import java.io._
 
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
@@ -40,5 +42,49 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     val normFactor = nonNormDist.map(x=> x._2).sum
     (nonNormDist.map(x=>(x._1, (x._2/normFactor))).toMap,normFactor)
   }
+  def writeProbTraj2File(filename : String): Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(parsedResultData.prob_traj)
+    pw.close()
+  }
+  def writeFP2File(filename : String): Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(parsedResultData.FP)
+    pw.close()
+  }
+  def writeStatDist2File(filename : String): Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(parsedResultData.stat_dist)
+    pw.close()
+  }
+
+
+  def stateTrajectory(netState: NetState ) : List[(Double,Double)] = {
+    parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
+      val splitProbTL  = probTL.split("\t")
+      val stateProb : List[(String,Double)] = splitProbTL.dropWhile("[0-9].*".r.matches(_)).
+        sliding(3,3).map(x=>(x(0),x(1).toDouble)).toList
+      def filterNode(probList : List[(String,Double)], nodeBool : List[(String,Boolean)] ) : List[(String,Double)] = {
+        nodeBool.length match {
+          case 0 => probList
+          case _ => filterNode(probList.filter(ndProb => !(nodeBool.head._2 ^ ndProb._1.split(" -- ").contains(nodeBool.head._1))),nodeBool.tail)
+        }
+      }
+      (splitProbTL.toList.head.toDouble,filterNode(stateProb,netState.state.toList).map(_._2).sum)
+    })
+  }
+
+  def nodeTrajectory(node : String) : List[(Double,Double)] =
+  {
+    parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
+      val splitProbTL  = probTL.split("\t")
+      (splitProbTL.head.toDouble,
+        splitProbTL.dropWhile("[0-9].*".r.matches(_)).
+        sliding(3,3).map(x=>(x(0),x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
+    })
+  }
+//  def plotTrajectories(netStates : List[NetState],filename : String) : Unit = {
+//
+//  }
 }
 
