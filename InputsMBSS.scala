@@ -35,6 +35,10 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
   def this(stateString : String,cfgMbSS : CfgMbss) =
     this(NetState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
   if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
+  override def toString: String = {
+    val activeNodes = state.filter(_._2).map(_._1).toList
+    if (activeNodes.length == 0) "<nil>" else activeNodes.mkString(" -- ")
+  }
 }
 
 
