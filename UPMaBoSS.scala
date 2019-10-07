@@ -31,34 +31,40 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
                val steps : Int , val seed:Int, val cfgMbss : CfgMbss) {
   val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 
-  def upDate(optionResult : Option[Result]) : CfgMbss = {
+  def upDate(optionResult : Option[Result]) : (CfgMbss,Double) = {
   optionResult match {
     case None => cfgMbss
     case Some(result) => {
-
+    val upLastLine = result.updateLastLine(divNode,deathNode)
+      (cfgMbss.setInitCond(upLastLine._1).
+        ,upLastLine._2)
     }
   }
  }
 
  def run : UPMbssOut = {
-   def stepRun(results : List[Result] , step : Int ) : List[Result] = { //careful, list in in reverse order
+   def stepRun(results : List[Result] , step : Int, ratio : List[Double] ) : (List[Result],List[Double]) = { //careful, list in in reverse order
      step match {
-       case s:Int if (s == steps) => results
+       case s:Int if (s == steps) => (results,upDate(results match {
+         case Nil => None : Option[Result]
+         case list : List[Result] => Some(list.head)
+       })._2 :: ratio)
        case _ => {
-         val newSimulation : CfgMbss = upDate(results match {
+         val cfgRatio  = upDate(results match {
            case Nil => None : Option[Result]
            case list : List[Result] => Some(list.head)
          })
+         val newSimulation = cfgRatio._1
          val mcli = new MaBoSSClient(port=4291)
          println("Start Simulation of step"+step)
          val result= mcli.run(newSimulation,hints)
          mcli.close()
-         stepRun(result :: results,step+1)
+         stepRun(result :: results,step+1,cfgRatio._2 :: ratio)
        }
      }
    }
-   stepRun( Nil : List[Result],steps)
-   
+   stepRun( Nil : List[Result],steps, 1d :: Nil)
+
  }
 }
 
