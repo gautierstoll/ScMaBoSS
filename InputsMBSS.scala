@@ -138,6 +138,21 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     }
     new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
   }
+
+  def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = { // to be tested
+    val firstStateNodes : List[String] = probDist.head._1.nodeList
+    if (probDist.tail.exists(x=> (x._1.nodeList.toSet != firstStateNodes.toSet)))
+      throw new IllegalArgumentException("States of probdist are not compatible")
+    if (firstStateNodes.toSet.union(bndMbss.nodeList.toSet).size > bndMbss.nodeList.length)
+      throw new IllegalArgumentException("States of probdist are not compatible with bnd")
+    val newCfg : String = cfg.split("\n").filter(x => "istate".r.findFirstIn(x) == None).mkString("\n") + "\n" +
+    "["+firstStateNodes.mkString(",")+"].istate = "+probDist.map(x=> (if (hex) java.lang.Double.toHexString(x._2) else x._2.toString) +
+    " ["+
+      firstStateNodes.map(node => if (x._1.state(node)) 1 else 0).mkString(",")
+    + "]").mkString(" , ") +";\n"
+    new CfgMbss(bndMbss,newCfg)
+  }
+
   def writeCfgToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write(cfg)
