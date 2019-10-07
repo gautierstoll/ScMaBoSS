@@ -54,7 +54,7 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
         } else (x._1 -> x._2)
       }).toList
     val normFactor = nonNormDist.map(x => x._2).sum
-    (nonNormDist.map(x => (x._1, (x._2 / normFactor))).toMap, normFactor)
+    (nonNormDist.map(x => (x._1, x._2 / normFactor)).toMap, normFactor)
   }
 
   def writeProbTraj2File(filename: String): Unit = {
@@ -76,10 +76,10 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
   }
 
 
-  def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested
+  def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
     parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
       val splitProbTL = probTL.split("\t")
-      val stateProb: List[(String, Double)] = splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_) != None).
+      val stateProb: List[(String, Double)] = splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
         sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
 
       def filterNode(probList: List[(String, Double)], nodeBool: List[(String, Boolean)]): List[(String, Double)] = {
@@ -93,12 +93,12 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     })
   }
 
-  def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested
+  def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested, the .isDefined
   {
     parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
       val splitProbTL = probTL.split("\t")
       (splitProbTL.head.toDouble,
-        splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_) != None).
+        splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
           sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
     })
   }
