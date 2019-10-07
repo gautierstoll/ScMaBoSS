@@ -12,7 +12,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String,val updateVar : List
  def run : UPMbssOut = {
    def stepRun(results : List[Result] , step : Int ) : List[Result] = { //careful, list in in reverse order
      step match {
-       case s:Int if(s=steps) => results
+       case s:Int if(s == steps) => results
        case _ => {
          val newSimulation : CfgMbss = upDate(results.head)
          val mcli = new MaBoSSClient(port=4291)
@@ -22,7 +22,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String,val updateVar : List
          stepRun(result :: results,step+1)
        }}
    }
-   
+
  }
 }
 
