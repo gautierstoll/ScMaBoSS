@@ -12,6 +12,6 @@ val simulation : CfgMbss = CfgMbss.fromFile("cellcycle_runcfg.cfg", BndMbss.from
 
 val mcli = new MaBoSSClient(port=4291)
 println("Start Simulation")
-val result_p53= mcli.run(simulation,hints)
+val result_cellcycle= mcli.run(simulation,hints)
 mcli.close()
 println("Finished simluation")

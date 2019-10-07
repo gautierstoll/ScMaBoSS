@@ -1,11 +1,13 @@
 import java.io.PrintWriter
 import java.io._
 import org.saddle._
+import org.nspl
 import org.nspl._
 import org.nspl.saddle._
 import org.nspl.data._
 import org.nspl.awtrenderer._
 import org.saddle.io._
+import org.saddle.io.CsvImplicits._
 
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
@@ -100,15 +102,23 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
           sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
     })
   }
-   def plotStateTraj(netStates : List[NetState]) : File = {
+
+  def plotStateTraj(netStates : List[NetState],filename : String) : File = {
      val listTraj=netStates.map(x => stateTrajectory(x))
-     val Mat4Plot[Double] = Mat((Vec(listTraj.head.map(_._1)) ::
-       listTraj.map(x => x.map( y=> Vec(y._2))) :::
-       (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x))).toList).toArray)
-      val builtElement = xyplot(Mat4Plot ->
-        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,
-          color = DiscreteColors(netStates.length - 1))).toList)(extraLegend =
-        netStates.zipWithIndex(x => x._1.toSring -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1), //x._1 + 1 for starting cluster nb with 1
-          color = DiscreteColors(netStates.length)(x.toDouble) )))
+     val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
+       listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
+       (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble).toArray)).toList).toArray)
+      val builtElement =
+        xyplot(Mat4Plot -> (
+          (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,
+          color = DiscreteColors(netStates.length - 1))).toList :::
+          (1 to netStates.length).map(x =>
+            point(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,sizeCol=3+2*netStates.length,
+              shapeCol=3+2*netStates.length, errorTopCol = 3+2*netStates.length , size = 4d,
+              color = DiscreteColors(netStates.length - 1))).toList))(xlab = "Time",ylab="Probability",extraLegend =
+        netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
+          color = DiscreteColors(netStates.length)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
+    val pdfFile = new File(filename)
+  pdfToFile(pdfFile,sequence((builtElement :: Nil),FreeLayout).build)
   }
 }

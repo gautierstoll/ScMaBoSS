@@ -20,7 +20,7 @@ libraryDependencies += "io.github.pityka" %% "nspl-awt" % "0.0.21"
 libraryDependencies += "io.github.pityka" %% "nspl-saddle" % "0.0.21"
 
 resolvers ++= Seq(
-  "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
-  "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
+  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases"
 )
 resolvers += Opts.resolver.sonatypeSnapshots
