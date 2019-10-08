@@ -1,9 +1,7 @@
 import org.apache.commons.lang.ObjectUtils.Null
 import scalatags.Text.short.*
 
-/**Companion object, for instancing class from file
-  *
-  */
+/**Companion object, for instancing class from file */
 object UPMaBoSS {
   def fromFiles(upFile: String, cfg: CfgMbss): UPMaBoSS = {
     val upLines : List[String] = ManageInputFile.file_get_content(upFile).split("\n").toList
@@ -26,7 +24,6 @@ object UPMaBoSS {
     val updateVar : List[(String,String)]= upLines.filter(x => "u=".r.findFirstIn(x).isDefined).
       map(x => x.split("\\s*u=\\s*").toList).
       map( x=> ("\\s*".r.replaceAllIn(x.head,""),x.tail.head))
-
     new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg)
   }
 }
@@ -41,7 +38,8 @@ object UPMaBoSS {
   * @param cfgMbss
   * @param hexUP using hexString in cfg
   */
-class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[(String,String)], steps : Int, val seed:Int, val cfgMbss : CfgMbss,hexUP : Boolean = false) {
+class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[(String,String)], steps : Int,
+               val seed:Int, val cfgMbss : CfgMbss,hexUP : Boolean = false) {
   val hints : Hints = Hints(check = false,hexfloat = hexUP,augment = true,overRide = false,verbose = false)
 
   case class UpStep(cfgMbss: CfgMbss, result: Result = null, seed : Int = 0, relSize : Double = 1d) {}
