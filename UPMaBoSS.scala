@@ -1,6 +1,9 @@
 import org.apache.commons.lang.ObjectUtils.Null
 import scalatags.Text.short.*
 
+/**Companion object, for instancing class from file
+  *
+  */
 object UPMaBoSS {
   def fromFiles(upFile: String, cfg: CfgMbss): UPMaBoSS = {
     val upLines : List[String] = ManageInputFile.file_get_content(upFile).split("\n").toList
@@ -27,6 +30,17 @@ object UPMaBoSS {
     new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg)
   }
 }
+
+/**UPMaBoSS in scala, using MaBoSS server
+  *
+  * @param divNode
+  * @param deathNode
+  * @param updateVar
+  * @param steps
+  * @param seed necessary because '#rand' can be in
+  * @param cfgMbss
+  * @param hexUP using hexString in cfg
+  */
 class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[(String,String)], steps : Int, val seed:Int, val cfgMbss : CfgMbss,hexUP : Boolean = false) {
   val hints : Hints = Hints(check = false,hexfloat = hexUP,augment = true,overRide = false,verbose = false)
 
@@ -40,12 +54,19 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     val newRelSize = upStep.relSize * newInitCond._2
     val newCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP)
 
-    // need to add update cfg according to newInitCond._2 and updateVar
+    // need to add update cfg according to newInitCond._2 and updateVar (with #rand and #pop_ratio)
 
 
     UpStep(newCfg, newResult, seed, newRelSize)
   }
+
   val strRun : Stream[UpStep] = UpStep(cfgMbss) #:: strRun.map(res => upDate(res))
+
+  /**Run UpMaBoSS
+    *
+    * @param nbSteps
+    * @return full outputs of UPMaBoSS
+    */
   def run(nbSteps : Int) : UPMbssOut = {
     val listRun = strRun.zipWithIndex.map(x => {println("Step: "+(x._2+1));x._1}).take(nbSteps).toList
     UPMbssOut(listRun.map(_.relSize),listRun.map(_.cfgMbss))
@@ -59,25 +80,30 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       case Some(line) => Some(Result.updateLine(line,divNode, deathNode))
     }
     val newRelSize = newInitCond  match {
-          case None => upStep.relSize
-          case Some((dist,ratio)) => upStep.relSize * ratio
-        }
+      case None => upStep.relSize
+      case Some((dist,ratio)) => upStep.relSize * ratio
+    }
     val newCfg = newInitCond match {
       case None => cfgMbss
-      case Some((dist,ratio)) => cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP ) // need to add update cfg according to newInitCond._2 and updateVar
+      case Some((dist,ratio)) => cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP )
+      // need to add update cfg according to newInitCond._2 and updateVar (with #rand and #pop_ratio)
     }
     val mcli = new MaBoSSClient(port = 4291)
     val result = mcli.run(newCfg, hints)
     mcli.close()
     UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last),seed,newRelSize)
-      }
+  }
 
-  val strRunLight : Stream[UpStepLight] = UpStepLight() #:: strRunLight.map(res => upDateLight(res)) //careful, simulation data start at index 1
-    def runLight(nbSteps : Int) : UPMbssOutLight = {
-      val listRun = strRunLight.zipWithIndex.map(x => {println("Step: "+x._2);x._1}).take(nbSteps+1).toList.tail
-      UPMbssOutLight(listRun.map(_.relSize),listRun.map(x => x.lastLineProbTraj match {case None => "";case Some(s) => s}))
-    }
-
+  val strRunLight : Stream[UpStepLight] = UpStepLight() #:: strRunLight.map(res => upDateLight(res))//careful, simulation data start at index 1
+  /** Run UpMaBoSS, using minimal data
+    *
+    * @param nbSteps
+    * @return minimal outputs of UPMaBoSS
+    */
+  def runLight(nbSteps : Int) : UPMbssOutLight = {
+    val listRun = strRunLight.zipWithIndex.map(x => {println("Step: "+x._2);x._1}).take(nbSteps+1).toList.tail
+    UPMbssOutLight(listRun.map(_.relSize),listRun.map(x => x.lastLineProbTraj match {case None => "";case Some(s) => s}))
+  }
 }
 
 case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}

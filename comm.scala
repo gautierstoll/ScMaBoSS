@@ -7,6 +7,9 @@ import java.net._
 import java.io.InterruptedIOException
 import scala.sys.process
 
+/**Constants for MaBoSS server protocol 1.0
+  *
+  */
 object GlCst {
   val PROTOCOL_VERSION_NUMBER = "1.0"
   val MABOSS_MAGIC = "MaBoSS-2.0"
@@ -33,10 +36,11 @@ object GlCst {
   val RUN_LOG = "Run-Log:"
 }
 
+/**Methods for parsing input and output data
+  *
+  */
 object DataStreamer {
-
   def buildStreamData(client_data: ClientData, hints: Hints = null): String = {
-
     val flags: Int = 0 | (if (hints.hexfloat) GlCst.HEXFLOAT_FLAG else 0) |
       (if (hints.overRide) GlCst.OVERRIDE_FLAG else 0) | (if (hints.augment) GlCst.AUGMENT_FLAG else 0)
 
@@ -55,7 +59,6 @@ object DataStreamer {
     }
     headerConfigNetwork + "\n" + dataConfigNetwork
   }
-
   def parseStreamData(ret_data : String, hints : Hints): ResultData = {
     val magic : String = GlCst.RETURN + " " + GlCst.MABOSS_MAGIC
     val magic_len : Int = magic.length
@@ -129,6 +132,11 @@ object DataStreamer {
   }
 }
 
+/**Socket communication with MaBoSS server
+  *
+  * @param host
+  * @param port
+  */
 class MaBoSSClient (host : String = "localhost", port : Int) {
   val socket : Socket =
     try {

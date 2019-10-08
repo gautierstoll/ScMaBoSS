@@ -8,6 +8,9 @@ import jdk.nashorn.internal.runtime.regexp.RegExp
 
 import scala.io.Source
 
+/**Manage errors when reading file
+  *
+  */
 object ManageInputFile {
   def file_get_content(filename: String): String = {
     if (!Files.exists(Paths.get(filename))) throw new FileNotFoundException(filename + "is not valid")
@@ -20,6 +23,9 @@ object ManageInputFile {
   }
 }
 
+/**Method used in different NetState constructors
+  *
+  */
 object NetState {
   private def stringtoBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
@@ -27,6 +33,11 @@ object NetState {
   }
 }
 
+/**Network state, with associated node list and error handling
+  *
+  * @param state
+  * @param nodeList
+  */
 class NetState private (val state: Map[String,Boolean],val nodeList : List[String]) {
    def this(state : Map[String,Boolean],bndMbss : BndMbss) = this(state,bndMbss.nodeList)
   def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
@@ -41,7 +52,9 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
   }
 }
 
-
+/**Companion object, for using input file and default cfg
+  *
+  */
 object BndMbss {
   def fromFile(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
   val glConfVar : String = "// global configuration variables\ntime_tick = 0.5;" +
@@ -60,6 +73,10 @@ object BndMbss {
     "\n// - weighted random: [NODE].istate = P0 [0], P1 [1]; where P0 and P1 are arithmetic expressions\n"
 }
 
+/**Boolean Network Descriptor for MaBoSS
+  *
+  * @param bnd
+  */
 class BndMbss(val bnd : String) {
   private val noCommentBnd = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
   private val extVarList : List[String] = "\\$[a-zA-Z_0-9]+".r.findAllIn(noCommentBnd).toList.distinct
@@ -67,6 +84,11 @@ class BndMbss(val bnd : String) {
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
     case Some(node) => node ; case None => null}}).toList
 
+  /**Generates bnd with mutations controlled by external variables
+    *
+    * @param mutNodes
+    * @return
+    */
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
     val mutNodeFields: String = "node " + nodeFields.map(field => {
       val node = "[^\\s]+".r.findFirstIn(field) match {
@@ -95,6 +117,10 @@ class BndMbss(val bnd : String) {
     new BndMbss(mutNodeFields)
   }
 
+  /**Default cfg
+    *
+    * @return
+    */
   def configTemplate() : String = {
     BndMbss.glConfVar + BndMbss.varSet + extVarList.mkString(" = 0 ; \n") + " = 0 ; \n" +
       BndMbss.setInternal + nodeList.mkString(".is_internal = 0;\n") + ".is_internal = 0;\n" +
@@ -109,6 +135,9 @@ class BndMbss(val bnd : String) {
   }
 }
 
+/**Companion object for constructor from file
+  *
+  */
 object CfgMbss {
   def fromFile(filename : String,bndMbss : BndMbss) : CfgMbss = {
     new CfgMbss(bndMbss,ManageInputFile.file_get_content(filename))}
@@ -117,6 +146,11 @@ object CfgMbss {
     new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))}
 }
 
+/**Configuration for MaBoSS
+  *
+  * @param bndMbss
+  * @param cfg
+  */
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   val extNodeList : List[String] = bndMbss.nodeList.
@@ -126,6 +160,11 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
+  /**Updates external variables
+    *
+    * @param newParam
+    * @return
+    */
   def update(newParam : Map[String,String]) : CfgMbss = {
     def newCfg(cfg:String, listParam : List[(String,String)]) : String = {
       listParam match {
@@ -139,6 +178,12 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
   }
 
+  /**Sets initial condition from probability distribution
+    *
+    * @param probDist
+    * @param hex
+    * @return
+    */
   def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = { // to be tested
     val firstStateNodes : List[String] = probDist.head._1.nodeList
     if (probDist.tail.exists(x=> (x._1.nodeList.toSet != firstStateNodes.toSet)))

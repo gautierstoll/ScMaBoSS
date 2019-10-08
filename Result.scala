@@ -17,6 +17,9 @@ case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : 
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
+/** Companion object for updating probtraj line for UPMaBoSS
+  *
+  */
 object Result {
   def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
     val nonNormDist = line.split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
@@ -31,15 +34,17 @@ object Result {
     val normFactor = nonNormDist.map(x => x._2).sum
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
-
 }
 
 class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
-  // def mbssStringtoDouble(string: String): Double; scala is supposed to understand the difference
+  /**Generates String or hexString from Double, according to Hints.hexfloat
+    *
+    * @param double
+    * @return
+    */
   def doubleToMbssString(double: Double): String = {
     if (hints.hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
-
   val command: String = if (hints.check) {
     GlCst.CHECK_COMMAND
   } else GlCst.RUN_COMMAND
@@ -48,8 +53,7 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
   val outputData: String = mbcli.send(data)
   val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, hints)
 
-  /**
-    * update last probability distribution for UPMaBoSS
+  /** updates last probability distribution for UPMaBoSS
     *
     * @param divNode   division node
     * @param deathNode death node
@@ -76,7 +80,6 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     pw.write(parsedResultData.stat_dist)
     pw.close()
   }
-
 
   def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
     parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
