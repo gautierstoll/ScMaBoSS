@@ -42,7 +42,7 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode: String, deathNode: String): (Map[String, Double], Double) = { // to be tested
+  def updateLastLine(divNode: String, deathNode: String): (List[String, Double], Double) = { // to be tested
     val nonNormDist = parsedResultData.prob_traj.split("\n").toList.last.
       split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
       sliding(3, 3).map(x => (x(0) -> x(1).toDouble)).
@@ -54,7 +54,7 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
         } else (x._1 -> x._2)
       }).toList
     val normFactor = nonNormDist.map(x => x._2).sum
-    (nonNormDist.map(x => (x._1, x._2 / normFactor)).toMap, normFactor)
+    (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
 
   def writeProbTraj2File(filename: String): Unit = {

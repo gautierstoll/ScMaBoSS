@@ -27,12 +27,22 @@ object UPMaBoSS {
     new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg)
   }
 }
-class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[(String,String)],
-               val steps : Int , val seed:Int, val cfgMbss : CfgMbss) {
+class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[(String,String)], steps : Int, val seed:Int, val cfgMbss : CfgMbss) {
   val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 
-  def upDate(optionResult : Option[Result]) : (CfgMbss,Double) = {
-  optionResult match {
+  case class UpStep(cfgMbss: CfgMbss, result: Result = null, seed : Int = 0, relSize : Double = 1d) {}
+
+
+  def upDate(upStep : UpStep) : UpStep = {
+    val mcli = new MaBoSSClient(port=4291)
+    val newResult= mcli.run(upStep.cfgMbss,hints)
+    mcli.close()
+    val newInitCond = newResult.updateLastLine(divNode,deathNode)
+    val newRelSize = upStep.relSize * newInitCond._2
+    val newCfg = newInitCond._1.
+
+
+  upStep.oResult match {
     case None => cfgMbss
     case Some(result) => {
     val upLastLine = result.updateLastLine(divNode,deathNode)
@@ -42,7 +52,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
   }
  }
 
- def run : UPMbssOut = {
+
    def stepRun(results : List[Result] , step : Int, ratio : List[Double] ) : (List[Result],List[Double]) = { //careful, list in in reverse order
      step match {
        case s:Int if (s == steps) => (results,upDate(results match {
@@ -62,8 +72,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
          stepRun(result :: results,step+1,cfgRatio._2 :: ratio)
        }
      }
-   }
-   stepRun( Nil : List[Result],steps, 1d :: Nil)
+
 
  }
 }
