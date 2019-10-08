@@ -18,6 +18,19 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
 object Result {
+  def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
+    val nonNormDist = line.split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
+      sliding(3, 3).map(x => (x(0), x(1).toDouble)).
+      filter(x => !(x._1.split(" -- ").contains(deathNode))).
+      map(x => {
+        if (x._1.split(" -- ").contains(divNode)) {
+          (divNode.r.replaceAllIn((" -- " + divNode).r.replaceAllIn((divNode + " -- ").r.replaceAllIn(x._1, ""), ""), "<nil>"),
+            x._2 * 2)
+        } else (x._1 , x._2)
+      }).toList
+    val normFactor = nonNormDist.map(x => x._2).sum
+    (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
+  }
 
 }
 
@@ -42,19 +55,8 @@ class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode: String, deathNode: String): (List[String, Double], Double) = { // to be tested
-    val nonNormDist = parsedResultData.prob_traj.split("\n").toList.last.
-      split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
-      sliding(3, 3).map(x => (x(0) -> x(1).toDouble)).
-      filter(x => !(x._1.split(" -- ").contains(deathNode))).
-      map(x => {
-        if (x._1.split(" -- ").contains(divNode)) {
-          (divNode.r.replaceAllIn((" -- " + divNode).r.replaceAllIn((divNode + " -- ").r.replaceAllIn(x._1, ""), ""), "<nil>") ->
-            x._2 * 2)
-        } else (x._1 -> x._2)
-      }).toList
-    val normFactor = nonNormDist.map(x => x._2).sum
-    (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
+  def updateLastLine(divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
+    Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last,divNode,deathNode)
   }
 
   def writeProbTraj2File(filename: String): Unit = {
