@@ -22,15 +22,18 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
   */
 object Result {
   def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
-    val nonNormDist = line.split("\t").dropWhile("[0-9].*".r.findFirstIn(_) != None).
+    val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
       sliding(3, 3).map(x => (x(0), x(1).toDouble)).
       filter(x => !(x._1.split(" -- ").contains(deathNode))).
       map(x => {
         if (x._1.split(" -- ").contains(divNode)) {
-          (divNode.r.replaceAllIn((" -- " + divNode).r.replaceAllIn((divNode + " -- ").r.replaceAllIn(x._1, ""), ""), "<nil>"),
-            x._2 * 2)
+          x._1.split(" -- ").filter(x => x != divNode).toList match {
+            case Nil => ("<nil>",x._2*2)
+            case l => (l.mkString(" -- "),x._2*2)
+          }
         } else (x._1 , x._2)
-      }).toList
+      }).toList.
+      groupBy(_._1.split(" -- ").toSet).map(x=> (x._1,x._2.map(_._2).sum)).toList.map(x=>(x._1.mkString(" -- "),x._2)) // group states
     val normFactor = nonNormDist.map(x => x._2).sum
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }

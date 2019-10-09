@@ -8,13 +8,13 @@ import java.io.InterruptedIOException
 import scala.collection.immutable.Map
 
 val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
-val simulation : CfgMbss = CfgMbss.fromFile("cellcycle_runcfg.cfg", BndMbss.fromFile("cellcycle.bnd"))
+val simulation : CfgMbss = CfgMbss.fromFile("p53_Mdm2_4UP.cfg", BndMbss.fromFile("p53_Mdm2.bnd"))
 
 val mcli = new MaBoSSClient(port=4291)
 println("Start Simulation")
-val result_cellcycle= mcli.run(simulation,hints)
+val result_p53= mcli.run(simulation,hints)
 mcli.close()
-println("Finished simluation")
+println("Finished simulation")
 
 //val probStat = ((new NetState(simulation.extNodeList.zip(false :: true :: false :: true :: Nil).toMap,simulation),.5) ::
 //  (new NetState(simulation.extNodeList.zip(true :: true :: false :: true :: Nil).toMap,simulation),.2) ::

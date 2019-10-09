@@ -14,21 +14,21 @@ object UPMaBoSS {
     */
   def fromFiles(upFile: String, cfg: CfgMbss): UPMaBoSS = {
     val upLines : List[String] = ManageInputFile.file_get_content(upFile).split("\n").toList
-    val deathNode : String = upLines.filter(x => "\\s*death\\s*".r.findFirstIn(x).isDefined) match {
-      case List() => ""
-      case deathList: List[String] => "[\\s;]*".r.replaceAllIn("*\\s*death\\s*=\\s*".r.replaceAllIn(deathList.head,""),"")
+    val deathNode : String = upLines.filter(x => "death\\s*=".r.findFirstIn(x).isDefined) match {
+      case Nil => ""
+      case deathList: List[String] => "[\\s;]*".r.replaceAllIn("\\s*death\\s*=\\s*".r.replaceAllIn(deathList.head,""),"")
     }
-    val divisionNode : String = upLines.filter(x => "\\s*division\\s*".r.findFirstIn(x).isDefined) match {
+    val divisionNode : String = upLines.filter(x => "division\\s*=".r.findFirstIn(x).isDefined) match {
       case List() => ""
-      case divisionList: List[String] => "[\\s;]*".r.replaceAllIn("*\\s*division\\s*=\\s*".r.replaceAllIn(divisionList.head,""),"")
+      case divisionList: List[String] => "[\\s;]*".r.replaceAllIn("\\s*division\\s*=\\s*".r.replaceAllIn(divisionList.head,""),"")
     }
-    val steps : Int = upLines.filter(x => "\\s*step\\s*".r.findFirstIn(x).isDefined) match {
+    val steps : Int = upLines.filter(x => "steps\\s*=".r.findFirstIn(x).isDefined) match {
       case List() => 1
-      case stepList: List[String] => "[\\s;]*".r.replaceAllIn("*\\s*division\\s*=\\s*".r.replaceAllIn(stepList.head,""),"").toInt
+      case stepList: List[String] => "[\\s;]*".r.replaceAllIn("\\s*steps\\s*=\\s*".r.replaceAllIn(stepList.head,""),"").toInt
     }
-    val seed : Int = upLines.filter(x => "\\s*seed\\s*".r.findFirstIn(x).isDefined) match {
+    val seed : Int = upLines.filter(x => "seed\\s*=".r.findFirstIn(x).isDefined) match {
       case List() => 0
-      case seedList: List[String] => "[\\s;]*".r.replaceAllIn("*\\s*division\\s*=\\s*".r.replaceAllIn(seedList.head,""),"").toInt
+      case seedList: List[String] => "[\\s;]*".r.replaceAllIn("\\s*seed\\s*=\\s*".r.replaceAllIn(seedList.head,""),"").toInt
     }
     val updateVar : List[String]= upLines.filter(x => "u=".r.findFirstIn(x).isDefined)
     new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg)
@@ -68,7 +68,7 @@ object UPMaBoSS {
   * @param cfgMbss
   * @param hexUP using hexString in cfg
   */
-class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], steps : Int,
+class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], val steps : Int,
                val seed:Int, val cfgMbss : CfgMbss,hexUP : Boolean = false) {
   def writeToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
@@ -109,9 +109,13 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     val newInitCond = newResult.updateLastLine(divNode, deathNode)
     val newRelSize = upStep.relSize * newInitCond._2
     val newInitCondCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP)
-    val newCfg = new CfgMbss(newInitCondCfg.bndMbss,
-    newInitCondCfg.cfg.split("\n").filter(x => !updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _)).mkString("\n") + "\n" +
-      setUpdateVar(newInitCond))
+    val newCfgString = updateVarNames match {
+      case Nil => newInitCondCfg.cfg + "\n" +
+        setUpdateVar(newInitCond)
+      case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
+        setUpdateVar(newInitCond)
+    }
+    val newCfg = new CfgMbss(newInitCondCfg.bndMbss,newCfgString)
     UpStep(newCfg, newResult, newRelSize)
   }
 
@@ -142,6 +146,16 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       case None => cfgMbss
       case Some((dist,ratio)) => {
         val newInitCondCfg = cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP )
+        val newCfgString = updateVarNames match {
+          case Nil => newInitCondCfg.cfg + "\n" +
+            setUpdateVar(newInitCond)
+          case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
+            setUpdateVar(newInitCond)
+        }
+        val newCfg = new CfgMbss(newInitCondCfg.bndMbss,newCfgString)
+
+
+
         new CfgMbss(newInitCondCfg.bndMbss,
           newInitCondCfg.cfg.split("\n").filter(x => !updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _)).mkString("\n") + "\n" +
             setUpdateVar(dist,ratio))

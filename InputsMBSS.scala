@@ -184,7 +184,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     * @param hex
     * @return
     */
-  def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = { // to be tested
+  def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = {
     val firstStateNodes : List[String] = probDist.head._1.nodeList
     if (probDist.tail.exists(x=> (x._1.nodeList.toSet != firstStateNodes.toSet)))
       throw new IllegalArgumentException("States of probdist are not compatible")
