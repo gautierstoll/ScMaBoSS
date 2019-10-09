@@ -1,10 +1,17 @@
 import org.apache.commons.lang.ObjectUtils.Null
 import scalatags.Text.short.*
 
+import java.io._
 import scala.util.Random
 
-/**Companion object, for instancing class from file */
+
 object UPMaBoSS {
+  /** for instancing class from file
+    *
+    * @param upFile
+    * @param cfg
+    * @return
+    */
   def fromFiles(upFile: String, cfg: CfgMbss): UPMaBoSS = {
     val upLines : List[String] = ManageInputFile.file_get_content(upFile).split("\n").toList
     val deathNode : String = upLines.filter(x => "\\s*death\\s*".r.findFirstIn(x).isDefined) match {
@@ -26,6 +33,13 @@ object UPMaBoSS {
     val updateVar : List[String]= upLines.filter(x => "u=".r.findFirstIn(x).isDefined)
     new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg)
   }
+
+  /** Applies init condition for updating external variables
+    *
+    * @param initCondProb
+    * @param upProb
+    * @return
+    */
   def upProbFromInitCond(initCondProb : List[(String,Double)] , upProb : String) : Double = {
     val nodes = try (upProb.split("=").head) catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
@@ -56,6 +70,16 @@ object UPMaBoSS {
   */
 class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], steps : Int,
                val seed:Int, val cfgMbss : CfgMbss,hexUP : Boolean = false) {
+  def writeToFile(filename : String) : Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write("death = "+deathNode+"\n")
+    pw.write("division = "+divNode+"\n")
+    pw.write("death = "+deathNode+"\n")
+    pw.write(updateVar.mkString("\n")+"\n")
+    pw.write("steps = "+steps.toString+"\n")
+    pw.write("seed = "+seed.toString+"\n")
+    pw.close
+  }
   val updateVarNames : List[String] = updateVar.map(x => "\\s*".r.replaceAllIn("=.*".r.replaceAllIn(x,""),""))
   val upRandom: Random = new Random(seed)
   val hints : Hints = Hints(check = false,hexfloat = hexUP,augment = true,overRide = false,verbose = false)
@@ -98,7 +122,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     * @param nbSteps
     * @return full outputs of UPMaBoSS
     */
-  def run(nbSteps : Int) : UPMbssOut = {
+  def run(nbSteps : Int = steps) : UPMbssOut = {
     val listRun = strRun.zipWithIndex.map(x => {println("Step: "+(x._2+1));x._1}).take(nbSteps).toList
     UPMbssOut(listRun.map(_.relSize),listRun.map(_.cfgMbss))
   }
@@ -135,7 +159,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     * @param nbSteps
     * @return minimal outputs of UPMaBoSS
     */
-  def runLight(nbSteps : Int) : UPMbssOutLight = {
+  def runLight(nbSteps : Int = steps) : UPMbssOutLight = {
     val listRun = strRunLight.zipWithIndex.map(x => {println("Step: "+x._2);x._1}).take(nbSteps+1).toList.tail
     UPMbssOutLight(listRun.map(_.relSize),listRun.map(x => x.lastLineProbTraj match {case None => "";case Some(s) => s}))
   }
