@@ -145,20 +145,14 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     val newCfg = newInitCond match {
       case None => cfgMbss
       case Some((dist,ratio)) => {
-        val newInitCondCfg = cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)),hex = hexUP )
+        val newInitCondCfg = cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
         val newCfgString = updateVarNames match {
           case Nil => newInitCondCfg.cfg + "\n" +
-            setUpdateVar(newInitCond)
+            setUpdateVar((dist, ratio))
           case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
-            setUpdateVar(newInitCond)
+            setUpdateVar((dist, ratio))
         }
-        val newCfg = new CfgMbss(newInitCondCfg.bndMbss,newCfgString)
-
-
-
-        new CfgMbss(newInitCondCfg.bndMbss,
-          newInitCondCfg.cfg.split("\n").filter(x => !updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _)).mkString("\n") + "\n" +
-            setUpdateVar(dist,ratio))
+        new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
       }
     }
     val mcli = new MaBoSSClient(port = 4291)
