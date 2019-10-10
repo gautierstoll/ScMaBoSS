@@ -153,9 +153,11 @@ object CfgMbss {
   */
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
+  println("No comment cfg created")
   val extNodeList : List[String] = bndMbss.nodeList.
-    filter(node => (("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*TRUE[\\S\\s]*").r.findFirstIn(noCommentCfg) == None)).
-    filter(node => (("[\\s\\S]*"+node+"\\.is_internal\\s*=\\s*1[\\S\\s]*").r.findFirstIn(noCommentCfg)) == None)
+    filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
+    filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
+  println("New cfgMbss created")
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
@@ -195,6 +197,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     " ["+
       firstStateNodes.map(node => if (x._1.state(node)) 1 else 0).mkString(",")
     + "]").mkString(" , ") +";\n"
+    println("New cfg string created of length: "+newCfg.length.toString)
     new CfgMbss(bndMbss,newCfg)
   }
 

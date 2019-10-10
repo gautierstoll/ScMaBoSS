@@ -119,20 +119,20 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
   def upDate(upStep : UpStep) : UpStep = {
     if (upStep.relSize == 0) UpStep(null,null,0) else {
       val mcli = new MaBoSSClient(port = 4291)
-      println("Run MaBoSS with "+upStep.cfgMbss.cfg)
       val newResult = mcli.run(upStep.cfgMbss, hints)
       mcli.close()
-      println("last line: "+newResult.parsedResultData.prob_traj.split("\n").toList.last)
       val newInitCond = newResult.updateLastLine(divNode, deathNode)
-      println("newInitCond: "+newInitCond._1)
       val newRelSize = upStep.relSize * newInitCond._2
+      println("New relative size: "+newRelSize)
       val newInitCondCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
+      println("New initial condition")
       val newCfgString = updateVarNames match {
         case Nil => newInitCondCfg.cfg + "\n" +
           setUpdateVar(newInitCond)
         case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => ("\\"+name+"\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
           setUpdateVar(newInitCond)
       }
+      println("External variable updated")
       val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
       UpStep(newCfg, newResult, newRelSize)
     }
