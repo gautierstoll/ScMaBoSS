@@ -21,10 +21,10 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
   *
   */
 object Result {
-  def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
+  def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = {
     val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
       sliding(3, 3).map(x => (x(0), x(1).toDouble)).
-      filter(x => !(x._1.split(" -- ").contains(deathNode))).
+      filter(x => !x._1.split(" -- ").contains(deathNode)).
       map(x => {
         if (x._1.split(" -- ").contains(divNode)) {
           x._1.split(" -- ").filter(x => x != divNode).toList match {

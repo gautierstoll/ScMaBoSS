@@ -43,9 +43,9 @@ object UPMaBoSS {
     */
   def upProbFromInitCond(initCondProb : List[(String,Double)] , upProb : String,hex :Boolean = false) : String = {
     println("upProb: "+upProb)
-    val nodes = try (upProb.split("=").head) catch
+    val nodes = try upProb.split("=").head catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
-    val boolState = try (upProb.split("=").tail.head) catch
+    val boolState = try upProb.split("=").tail.head catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
     val nodeList = "\\s*\\)\\s*".r.replaceAllIn("p\\[\\s*\\(\\s*".r.replaceAllIn(nodes,""),"").split(",").
       map(x=> "\\s*".r.replaceAllIn(x,"")).toList
@@ -129,8 +129,9 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       val newCfgString = updateVarNames match {
         case Nil => newInitCondCfg.cfg + "\n" +
           setUpdateVar(newInitCond)
-        case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => ("\\"+name+"\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
-          setUpdateVar(newInitCond)
+        case l => newInitCondCfg.cfg.split("\n").
+          filter(x => !updateVarNames.map(name => ("\\"+name+"\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _)).
+          mkString("\n") + "\n" + setUpdateVar(newInitCond)
       }
       println("External variable updated")
       val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
@@ -169,8 +170,9 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
           val newCfgString = updateVarNames match {
             case Nil => newInitCondCfg.cfg + "\n" +
               setUpdateVar((dist, ratio))
-            case l => newInitCondCfg.cfg.split("\n").filter(x => !(updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _))).mkString("\n") + "\n" +
-              setUpdateVar((dist, ratio))
+            case l => newInitCondCfg.cfg.split("\n").
+              filter(x => !updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _)).
+              mkString("\n") + "\n" + setUpdateVar((dist, ratio))
           }
           new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
         }
