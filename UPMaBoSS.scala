@@ -1,3 +1,5 @@
+package ScMaBoSS
+
 import org.apache.commons.lang.ObjectUtils.Null
 import scalatags.Text.short.*
 import java.io._

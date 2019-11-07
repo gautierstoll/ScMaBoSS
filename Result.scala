@@ -1,5 +1,9 @@
+package ScMaBoSS
+
 import java.io.PrintWriter
 import java.io._
+
+import ScMaBoSS.CfgMbss
 import org.saddle._
 import org.nspl
 import org.nspl._
@@ -37,24 +41,35 @@ object Result {
     val normFactor = nonNormDist.map(x => x._2).sum
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
+  def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Result = {
+    val command: String = if (hints.check) {
+      GlCst.CHECK_COMMAND
+    } else GlCst.RUN_COMMAND
+    val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
+    val data: String = DataStreamer.buildStreamData(clientData, hints)
+    val outputData: String = mbcli.send(data)
+    new Result(simulation,hints.verbose,hints.hexfloat,outputData)
+  }
 }
 
-class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
+//class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
+class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
+
   /**Generates String or hexString from Double, according to Hints.hexfloat
     *
     * @param double
     * @return
     */
   def doubleToMbssString(double: Double): String = {
-    if (hints.hexfloat) java.lang.Double.toHexString(double) else double.toString
+    if (hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
-  val command: String = if (hints.check) {
-    GlCst.CHECK_COMMAND
-  } else GlCst.RUN_COMMAND
-  val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
-  val data: String = DataStreamer.buildStreamData(clientData, hints)
-  val outputData: String = mbcli.send(data)
-  val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, hints)
+  // val command: String = if (hints.check) {
+  //  GlCst.CHECK_COMMAND
+  //} else GlCst.RUN_COMMAND
+  //val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
+  //val data: String = DataStreamer.buildStreamData(clientData, hints)
+  //val outputData: String = mbcli.send(data)
+  val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, verbose)
 
   /** updates last probability distribution for UPMaBoSS
     *

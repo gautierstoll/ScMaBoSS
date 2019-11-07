@@ -5,21 +5,24 @@ import java.io._
 import java.util._
 import java.net._
 import java.io.InterruptedIOException
+
+import ScMaBoSS.{BndMbss, CfgMbss, Hints, MaBoSSClient}
+
 import scala.collection.immutable.Map
 
-//val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
-//val simulation : CfgMbss = CfgMbss.fromFile("p53_Mdm2_4UP.cfg", BndMbss.fromFile("p53_Mdm2.bnd"))
+val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
+val simulation : CfgMbss = CfgMbss.fromFile("cellcycle_runcfg.cfg", BndMbss.fromFile("cellcycle.bnd"))
 
-//val mcli = new MaBoSSClient(port=4291)
-//println("Start Simulation")
-//val result_p53= mcli.run(simulation,hints)
-//mcli.close()
-//println("Finished simulation")
+val mcli = new MaBoSSClient(port=4291)
+println("Start Simulation")
+val result_p53= mcli.run(simulation,hints)
+mcli.close()
+println("Finished simulation")
 
-val simulation : CfgMbss = CfgMbss.fromFile("Tests/CellFateModel.cfg",
-  BndMbss.fromFile("Tests/CellFateModel.bnd"))
+//val simulation : CfgMbss = CfgMbss.fromFile("Tests/CellFateModel.cfg",
+//  BndMbss.fromFile("Tests/CellFateModel.bnd"))
 
-val upSimulation : UPMaBoSS = UPMaBoSS.fromFiles("Tests/CellFate.upp",simulation)
+//val upSimulation : UPMaBoSS = UPMaBoSS.fromFiles("Tests/CellFate.upp",simulation)
 
 
 

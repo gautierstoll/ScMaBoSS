@@ -1,3 +1,5 @@
+package ScMaBoSS
+
 import java.security.KeyStore.TrustedCertificateEntry
 import Runtime._
 import java.net.Socket
@@ -5,6 +7,9 @@ import java.io._
 import java.util._
 import java.net._
 import java.io.InterruptedIOException
+
+import ScMaBoSS.{CfgMbss, ClientData, Hints, ResultData}
+
 import scala.sys.process
 
 /**Constants for MaBoSS server protocol 1.0
@@ -59,7 +64,7 @@ object DataStreamer {
     }
     headerConfigNetwork + "\n" + dataConfigNetwork
   }
-  def parseStreamData(ret_data : String, hints : Hints): ResultData = {
+  def parseStreamData(ret_data : String, verbose : Boolean): ResultData = {
     val magic : String = GlCst.RETURN + " " + GlCst.MABOSS_MAGIC
     val magic_len : Int = magic.length
     if (ret_data.substring(0,magic_len) != magic) {
@@ -70,7 +75,7 @@ object DataStreamer {
       else {
         val header = ret_data.substring(magic_len+1,pos+1)
         val data  = ret_data.substring(pos+2)
-        if (hints.verbose) {
+        if (verbose) {
           print("======= receiving header \n" + header)
           print("======= receiving data[0:200]\n" + data.substring(0, 200) + "\n[...]\n")
         }
@@ -156,6 +161,6 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
       scannerBis.next()
   }
   def run(simulation : CfgMbss,hints : Hints ) : Result =
-  {new Result(this,simulation,hints)}
+  {Result.fromInputsMBSS(this,simulation,hints)}
   def close(): Unit = {socket.close()}
 }

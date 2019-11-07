@@ -1,3 +1,5 @@
+package ScMaBoSS
+
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 import scala.util.matching.Regex
