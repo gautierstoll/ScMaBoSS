@@ -142,6 +142,6 @@ class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputD
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
           color = DiscreteColors(netStates.length)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
     val pdfFile = new File(filename)
-  pdfToFile(pdfFile,sequence((builtElement :: Nil),FreeLayout).build)
+  pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
   }
 }

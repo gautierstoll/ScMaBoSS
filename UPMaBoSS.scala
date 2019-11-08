@@ -85,11 +85,11 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     pw.write(updateVar.mkString("\n")+"\n")
     pw.write("steps = "+steps.toString+"\n")
     pw.write("seed = "+seed.toString+"\n")
-    pw.close
+    pw.close()
   }
   val updateVarNames : List[String] = updateVar.map(x => "\\s*".r.replaceAllIn("u=.*".r.replaceAllIn(x,""),""))
   val upRandom: Random = new Random(seed)
-  val hints : Hints = Hints(check = false,hexfloat = hexUP,augment = true,overRide = false,verbose = false)
+  val hints : Hints = Hints(hexfloat = hexUP)
 
   def setUpdateVar(probDistRelSize : (List[(String,Double)],Double)) : String = {
     def recReplaceRand(s:String) : String = {
