@@ -156,6 +156,9 @@ object CfgMbss {
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   private val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   println("No comment cfg created")
+  /** List of external nodes
+    *
+    */
   val extNodeList : List[String] = bndMbss.nodeList.
     filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
