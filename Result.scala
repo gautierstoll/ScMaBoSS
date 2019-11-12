@@ -13,11 +13,35 @@ import org.nspl.awtrenderer._
 import org.saddle.io._
 import org.saddle.io.CsvImplicits._
 
+/** Data sent to MaBoSS server
+  *
+  * @param network
+  * @param config
+  * @param command
+  */
 case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
 
+/** Parameters for MaBoSS server
+  *
+  * @param check
+  * @param hexfloat
+  * @param augment
+  * @param overRide
+  * @param verbose
+  */
 case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : Boolean =  true,
                  overRide : Boolean = false , verbose : Boolean = false) {}
 
+/** Parsed results from MaBoSS server
+  *
+  * @param status
+  * @param errmsg
+  * @param stat_dist
+  * @param prob_traj
+  * @param traj
+  * @param FP
+  * @param runlog
+  */
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
@@ -53,6 +77,13 @@ object Result {
 }
 
 //class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
+/** Results from MaBoSS server
+  *
+  * @param simulation
+  * @param verbose
+  * @param hexfloat
+  * @param outputData raw data from MaBoSS server
+  */
 class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
 
   /**Generates String or hexString from Double, according to Hints.hexfloat

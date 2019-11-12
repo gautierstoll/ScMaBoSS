@@ -7,7 +7,9 @@ import java.io._
 import scala.util.Random
 import scala.util.matching.Regex
 
-
+/** Methods for UPMaBoSS: instancing UPMaBoSS from file, update external variables
+  *
+  */
 object UPMaBoSS {
   /** for instancing class from file
     *
