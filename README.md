@@ -1,4 +1,3 @@
-==========================
 ScMaBoSS: Scala for running MaBoSS
 ==========================
 
