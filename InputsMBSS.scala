@@ -59,16 +59,18 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
   */
 object BndMbss {
   def fromFile(filename : String): BndMbss = {new BndMbss(ManageInputFile.file_get_content(filename))}
-  val glConfVar : String = "// global configuration variables\ntime_tick = 0.5;" +
+
+  // constants for default cfg
+  private val glConfVar : String = "// global configuration variables\ntime_tick = 0.5;" +
     "\nmax_time = 1000;\nsample_count = 10000;\ndiscrete_time = 0;\nuse_physrandgen = 0;" +
     "\nseed_pseudorandom = 0;\ndisplay_traj = 0;\nstatdist_traj_count = 0;\n" +
     "statdist_cluster_threshold = 1;\nthread_count = 1;\nstatdist_similarity_cache_max_size = 20000;\n"
-  val varSet : String = "\n// variables to be set in the configuration file or by using the --config-vars option\n"
-  val setInternal : String = "\n// set is_internal attribute value to 1 if node is an internal node\n"
-  val setRefState : String = "\n// if node is a reference node, set refstate attribute value to 0 or 1 " +
+  private val varSet : String = "\n// variables to be set in the configuration file or by using the --config-vars option\n"
+  private val setInternal : String = "\n// set is_internal attribute value to 1 if node is an internal node\n"
+  private val setRefState : String = "\n// if node is a reference node, set refstate attribute value to 0 or 1 " +
     "according to its reference state\n" +
     "\n// if node is not a reference node, skip its refstate declaration or set value to -1\n"
-  val setIstate : String = "\n// if NODE initial state is: " +
+  private val setIstate : String = "\n// if NODE initial state is: " +
     "\n// - equals to 1: NODE.istate = 1;"+
     "\n// - equals to 0: NODE.istate = 0;"+
     "\n// - random: NODE.istate = -1; OR [NODE].istate = 0.5 [0], 0.5 [1]; OR skip NODE.istate declaration"+
@@ -163,6 +165,12 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
   println("New cfgMbss created")
+
+  /**Generates bnd with mutations controlled by external variables
+    *
+    * @param mutNodes
+    * @return
+    */
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}

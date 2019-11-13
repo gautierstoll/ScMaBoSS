@@ -49,6 +49,13 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
   *
   */
 object Result {
+  /** initial condition and normalization factor from last line of probtraj
+    *
+    * @param line
+    * @param divNode
+    * @param deathNode
+    * @return
+    */
   def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = {
     val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
       sliding(3, 3).map(x => (x(0), x(1).toDouble)).
@@ -65,6 +72,14 @@ object Result {
     val normFactor = nonNormDist.map(x => x._2).sum
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
+
+  /** Result of from MaBoSS server run
+    *
+    * @param mbcli
+    * @param simulation
+    * @param hints
+    * @return
+    */
   def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Result = {
     val command: String = if (hints.check) {
       GlCst.CHECK_COMMAND

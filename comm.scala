@@ -150,8 +150,8 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     catch {
       case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
-    val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
-    val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
+    private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
+    private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData : String):String =  {
     bos.write(inputData.getBytes())
     bos.write(0.toChar)

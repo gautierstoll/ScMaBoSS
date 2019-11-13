@@ -93,7 +93,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
   val upRandom: Random = new Random(seed)
   val hints : Hints = Hints(hexfloat = hexUP)
 
-  def setUpdateVar(probDistRelSize : (List[(String,Double)],Double)) : String = {
+  private def setUpdateVar(probDistRelSize : (List[(String,Double)],Double)) : String = {
     def recReplaceRand(s:String) : String = {
       "#rand".r.findFirstIn(s) match {
         case None => s
@@ -120,7 +120,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
 
   case class UpStep(cfgMbss: CfgMbss, result: Result = null, relSize : Double = 1d) {}
 
-  def upDate(upStep : UpStep) : UpStep = {
+  private def upDate(upStep : UpStep) : UpStep = {
     if (upStep.relSize == 0) UpStep(null,null,0) else {
       val mcli = new MaBoSSClient(port = 4291)
       val newResult = mcli.run(upStep.cfgMbss, hints)
@@ -157,7 +157,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
 
   case class UpStepLight(lastLineProbTraj : Option[String] = None, relSize : Double = 1d) {}
 
-  def upDateLight(upStep : UpStepLight) : UpStepLight = {
+  private def upDateLight(upStep : UpStepLight) : UpStepLight = {
     if (upStep.relSize == 0) UpStepLight(None,0) else {
       val newInitCond = upStep.lastLineProbTraj match {
         case None => None
