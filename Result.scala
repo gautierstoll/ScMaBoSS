@@ -173,7 +173,7 @@ class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputD
   }
 
   def plotStateTraj(netStates : List[NetState],filename : String) : File = {
-     val listTraj=netStates.map(x => stateTrajectory(x))
+     val listTraj =netStates.map(x => stateTrajectory(x))
      val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
        listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
        (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble).toArray)).toList).toArray)

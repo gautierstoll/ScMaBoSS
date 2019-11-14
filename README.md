@@ -4,7 +4,7 @@ ScMaBoSS: Scala for running MaBoSS
 Introduction
 ============
 
-ScMaBoSS is a library for running MaBoSS though Scala through MaBoSS server (https://github.com/maboss-bkmc)
+ScMaBoSS is a library for running MaBoSS through Scala within MaBoSS server (https://github.com/maboss-bkmc)
 
 Documentation
 =============

@@ -196,7 +196,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     */
   def runLight(nbSteps : Int = steps) : UPMbssOutLight = {
     val listRun = strRunLight.zipWithIndex.map(x => {println("Step: "+x._2);x._1}).take(nbSteps+1).toList.tail
-    UPMbssOutLight(listRun.map(_.relSize),listRun.map(x => x.lastLineProbTraj match {case None => "";case Some(s) => s}))
+    UPMbssOutLight(listRun.map(_.relSize),listRun.map(x => x.lastLineProbTraj match {case None => "";case Some(s) => s}),cfgMbss)
   }
 }
 
@@ -212,4 +212,4 @@ case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}
   * @param sizes
   * @param lastLines
   */
-case class UPMbssOutLight(sizes : List[Double], lastLines : List[String] ) {}
+case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) {}
