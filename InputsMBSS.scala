@@ -41,13 +41,45 @@ object NetState {
   * @param nodeList
   */
 class NetState private (val state: Map[String,Boolean],val nodeList : List[String]) {
+  /**
+    *
+    * @param state
+    * @param bndMbss list of nodes from bnd
+    * @return
+    */
    def this(state : Map[String,Boolean],bndMbss : BndMbss) = this(state,bndMbss.nodeList)
+
+  /**
+    *
+    * @param state
+    * @param cfgMbss list of nodes from external node in cfg
+    * @return
+    */
   def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
+
+  /**
+    *
+    * @param stateString active nodes separates by " -- "
+    * @param bndMbSS list of nodes from bnd
+    * @return
+    */
   def this(stateString : String,bndMbSS : BndMbss) =
     this(NetState.stringtoBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
+
+  /**
+    *
+    * @param stateString active nodes separates by " -- "
+    * @param cfgMbSS list of nodes from external node in cfg
+    * @return
+    */
   def this(stateString : String,cfgMbSS : CfgMbss) =
     this(NetState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
   if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
+
+  /**
+    *
+    * @return active nodes separates by " -- "
+    */
   override def toString: String = {
     val activeNodes = state.filter(_._2).keys.toList
     if (activeNodes.isEmpty) "<nil>" else activeNodes.mkString(" -- ")
