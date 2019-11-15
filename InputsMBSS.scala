@@ -52,7 +52,7 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
   /**
     *
     * @param state
-    * @param cfgMbss list of nodes from external node in cfg
+    * @param cfgMbss list of nodes from external nodes in cfg
     * @return
     */
   def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
@@ -69,7 +69,7 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
   /**
     *
     * @param stateString active nodes separates by " -- "
-    * @param cfgMbSS list of nodes from external node in cfg
+    * @param cfgMbSS list of nodes from external nodes in cfg
     * @return
     */
   def this(stateString : String,cfgMbSS : CfgMbss) =
@@ -198,7 +198,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
   println("New cfgMbss created")
 
-  /**Generates bnd with mutations controlled by external variables
+  /**Generates cfg with mutations controlled by external variables
     *
     * @param mutNodes
     * @return
