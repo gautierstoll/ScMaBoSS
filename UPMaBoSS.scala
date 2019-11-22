@@ -213,5 +213,11 @@ case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}
   * @param lastLines
   */
 case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) {
-
+  val stepTime : Double = "=(.*);".r.findAllIn(cfgMbss.noCommentCfg.split("\n").filter("max_time".r.findFirstMatchIn(_).isDefined).head).
+    matchData.map(_.group(1).toDouble).next()
+  val lastLinesWithTime : List[String] = lastLines.zipWithIndex.
+    map(lineIndex => {"^[\t]*".r.replaceAllIn(lineIndex._1,(lineIndex._2*stepTime).toString)})
+  def plotStateTraj(netStates : List[NetState],filename : String) : File = {
+    Result.plotStateTraj(netStates,lastLinesWithTime,filename)
+  }
 }
