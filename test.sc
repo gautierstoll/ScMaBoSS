@@ -1,21 +1,21 @@
-import java.security.KeyStore.TrustedCertificateEntry
-import Runtime._
+
 import java.net.Socket
 import java.io._
 import java.util._
 import java.net._
 import java.io.InterruptedIOException
 
-import ScMaBoSS.{BndMbss, CfgMbss, Hints, MaBoSSClient}
+//import ScMaBoSS.{BndMbss, CfgMbss, Hints, MaBoSSClient}
+import ScMaBoSS._
+//import ScMaBoSS.{BndMbss, CfgMbss, Hints, MaBoSSClient}
 
-import scala.collection.immutable.Map
 
 val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
-val simulation : CfgMbss = CfgMbss.fromFile("cellcycle_runcfg.cfg", BndMbss.fromFile("cellcycle.bnd"))
+val simulation : CfgMbss = CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg", BndMbss.fromFile("Tests2/ToyModel4Sc.bnd"))
 
 val mcli = new MaBoSSClient(port=4291)
 println("Start Simulation")
-val result_p53= mcli.run(simulation,hints)
+val result_tes2= mcli.run(simulation,hints)
 mcli.close()
 println("Finished simulation")
 

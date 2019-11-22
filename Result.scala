@@ -97,14 +97,14 @@ object Result {
     * @return probability over time
     */
   def stateTrajectory(netState: NetState,probTrajLines : List[String]): List[(Double, Double)] = { // to be tested, the .isDefined
-    val activeNodes = netState.state.filter(nodeBool => nodeBool._2).map(_._1).toSet
-    val unactiveNodes = netState.state.filter(nodeBool => !(nodeBool._2)).map(_._1).toSet
+    val activeNodes = netState.state.filter(nodeBool => nodeBool._2).keySet
+    val unactiveNodes = netState.state.filter(nodeBool => !nodeBool._2).keySet
     probTrajLines.map(probTrajLine => {
       val splitProbTrajLine = probTrajLine.split("\t")
       val stateDistProb: List[(String, Double)] = splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
         sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
       val prob = stateDistProb.filter(stateProb => {
-        val nodes = stateProb._1.split(" --").toSet
+        val nodes = stateProb._1.split(" -- ").toSet
         activeNodes.diff(nodes).isEmpty & unactiveNodes.intersect(nodes).isEmpty}).
         map(_._2).sum
       (splitProbTrajLine.toList.head.toDouble, prob)
@@ -138,17 +138,18 @@ object Result {
     val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
     val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
       listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
-      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble).toArray)).toList).toArray)
+      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble-1).toArray)).toList).toArray)
+    print(Mat4Plot)
     val builtElement =
       xyplot(Mat4Plot -> (
-        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,
+        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = netStates.length+x,
           color = DiscreteColors(netStates.length - 1))).toList :::
           (1 to netStates.length).map(x =>
-            point(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,sizeCol=3+2*netStates.length,
+            point(xCol = 0,yCol = x,colorCol = netStates.length+x,sizeCol=3+2*netStates.length,
               shapeCol=3+2*netStates.length, errorTopCol = 3+2*netStates.length , size = 4d,
               color = DiscreteColors(netStates.length - 1))).toList))(xlab = "Time",ylab="Probability",extraLegend =
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
-          color = DiscreteColors(netStates.length)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
+          color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
     val pdfFile = new File(filename)
     pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
   }
