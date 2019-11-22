@@ -29,7 +29,7 @@ object ManageInputFile {
   *
   */
 object NetState {
-  private def stringtoBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
+  private def stringToBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
@@ -64,7 +64,7 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
     * @return
     */
   def this(stateString : String,bndMbSS : BndMbss) =
-    this(NetState.stringtoBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
+    this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
 
   /**
     *
@@ -73,7 +73,7 @@ class NetState private (val state: Map[String,Boolean],val nodeList : List[Strin
     * @return
     */
   def this(stateString : String,cfgMbSS : CfgMbss) =
-    this(NetState.stringtoBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
+    this(NetState.stringToBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
   if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
 
   /**

@@ -207,9 +207,11 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
   */
 case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}
 
-/** Minimal output of UPMaBoSS, including population size and last line of each MaBoSS run
+/** Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
   *
   * @param sizes
   * @param lastLines
   */
-case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) {}
+case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) {
+
+}

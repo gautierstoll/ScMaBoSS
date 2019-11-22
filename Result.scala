@@ -89,6 +89,69 @@ object Result {
     val outputData: String = mbcli.send(data)
     new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
+
+  /** Boolean state probability trajectory, given a list of probtraj
+    *
+    * @param netState
+    * @param probTrajLines
+    * @return probability over time
+    */
+  def stateTrajectory(netState: NetState,probTrajLines : List[String]): List[(Double, Double)] = { // to be tested, the .isDefined
+    val activeNodes = netState.state.filter(nodeBool => nodeBool._2).map(_._1).toSet
+    val unactiveNodes = netState.state.filter(nodeBool => !(nodeBool._2)).map(_._1).toSet
+    probTrajLines.map(probTrajLine => {
+      val splitProbTrajLine = probTrajLine.split("\t")
+      val stateDistProb: List[(String, Double)] = splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
+        sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
+      val prob = stateDistProb.filter(stateProb => {
+        val nodes = stateProb._1.split(" --").toSet
+        activeNodes.diff(nodes).isEmpty & unactiveNodes.intersect(nodes).isEmpty}).
+        map(_._2).sum
+      (splitProbTrajLine.toList.head.toDouble, prob)
+    })
+  }
+
+  /** Node state probability trajectory, given a list of probtraj
+    *
+    * @param node
+    * @param probTrajLines
+    * @return probability over time
+    */
+  def nodeTrajectory(node: String,probTrajLines : List[String]): List[(Double, Double)] = // to be tested, the .isDefined
+  {
+    probTrajLines.map(probTrajLine => {
+      val splitProbTrajLine = probTrajLine.split("\t")
+      (splitProbTrajLine.head.toDouble,
+        splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
+          sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
+    })
+  }
+
+  /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
+    *
+    * @param netStates
+    * @param probTrajLines
+    * @param filename
+    * @return
+    */
+  def plotStateTraj(netStates : List[NetState],probTrajLines : List[String],filename : String) : File = {
+    val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
+    val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
+      listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
+      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble).toArray)).toList).toArray)
+    val builtElement =
+      xyplot(Mat4Plot -> (
+        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,
+          color = DiscreteColors(netStates.length - 1))).toList :::
+          (1 to netStates.length).map(x =>
+            point(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,sizeCol=3+2*netStates.length,
+              shapeCol=3+2*netStates.length, errorTopCol = 3+2*netStates.length , size = 4d,
+              color = DiscreteColors(netStates.length - 1))).toList))(xlab = "Time",ylab="Probability",extraLegend =
+        netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
+          color = DiscreteColors(netStates.length)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
+    val pdfFile = new File(filename)
+    pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
+  }
 }
 
 //class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
@@ -146,48 +209,15 @@ class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputD
   }
 
   def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
-    parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
-      val splitProbTL = probTL.split("\t")
-      val stateProb: List[(String, Double)] = splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-        sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
-
-      def filterNode(probList: List[(String, Double)], nodeBool: List[(String, Boolean)]): List[(String, Double)] = {
-        nodeBool.length match {
-          case 0 => probList
-          case _ => filterNode(probList.filter(ndProb => !(nodeBool.head._2 ^ ndProb._1.split(" -- ").contains(nodeBool.head._1))), nodeBool.tail)
-        }
-      }
-
-      (splitProbTL.toList.head.toDouble, filterNode(stateProb, netState.state.toList).map(_._2).sum)
-    })
+    Result.stateTrajectory(netState,parsedResultData.prob_traj.split("\n").toList.tail)
   }
 
   def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested, the .isDefined
   {
-    parsedResultData.prob_traj.split("\n").toList.tail.map(probTL => {
-      val splitProbTL = probTL.split("\t")
-      (splitProbTL.head.toDouble,
-        splitProbTL.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-          sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
-    })
+    Result.nodeTrajectory(node,parsedResultData.prob_traj.split("\n").toList.tail)
   }
 
   def plotStateTraj(netStates : List[NetState],filename : String) : File = {
-     val listTraj =netStates.map(x => stateTrajectory(x))
-     val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
-       listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
-       (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble).toArray)).toList).toArray)
-      val builtElement =
-        xyplot(Mat4Plot -> (
-          (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,
-          color = DiscreteColors(netStates.length - 1))).toList :::
-          (1 to netStates.length).map(x =>
-            point(xCol = 0,yCol = x,colorCol = 1+netStates.length+x,sizeCol=3+2*netStates.length,
-              shapeCol=3+2*netStates.length, errorTopCol = 3+2*netStates.length , size = 4d,
-              color = DiscreteColors(netStates.length - 1))).toList))(xlab = "Time",ylab="Probability",extraLegend =
-        netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
-          color = DiscreteColors(netStates.length)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
-    val pdfFile = new File(filename)
-  pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
+    Result.plotStateTraj(netStates,parsedResultData.prob_traj.split("\n").toList.tail,filename)
   }
 }

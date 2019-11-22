@@ -189,9 +189,9 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="UPMbssOutLight.html" title="Minimal output of UPMaBoSS, including population size and last line of each MaBoSS run
+                        <a class="class" href="UPMbssOutLight.html" title="Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
 "></a>
-                        <a href="UPMbssOutLight.html" title="Minimal output of UPMaBoSS, including population size and last line of each MaBoSS run
+                        <a href="UPMbssOutLight.html" title="Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
 ">
                           UPMbssOutLight
                         </a>
@@ -503,6 +503,24 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ScMaBoSS.Result#nodeTrajectory" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nodeTrajectory(node:String,probTrajLines:List[String]):List[(Double,Double)]"></a><a id="nodeTrajectory(String,List[String]):List[(Double,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/Result$.html#nodeTrajectory(node:String,probTrajLines:List[String]):List[(Double,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="probTrajLines">probTrajLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Node state probability trajectory, given a list of probtraj
+</p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a list of probtraj
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -535,6 +553,41 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ScMaBoSS.Result#plotStateTraj" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="plotStateTraj(netStates:List[ScMaBoSS.NetState],probTrajLines:List[String],filename:String):java.io.File"></a><a id="plotStateTraj(List[NetState],List[String],String):File"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/Result$.html#plotStateTraj(netStates:List[ScMaBoSS.NetState],probTrajLines:List[String],filename:String):java.io.File" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plotStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="probTrajLines">probTrajLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.io.File">File</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
+</p>
+    </li><li name="ScMaBoSS.Result#stateTrajectory" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stateTrajectory(netState:ScMaBoSS.NetState,probTrajLines:List[String]):List[(Double,Double)]"></a><a id="stateTrajectory(NetState,List[String]):List[(Double,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/Result$.html#stateTrajectory(netState:ScMaBoSS.NetState,probTrajLines:List[String]):List[(Double,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="probTrajLines">probTrajLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Boolean state probability trajectory, given a list of probtraj
+</p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a list of probtraj
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
