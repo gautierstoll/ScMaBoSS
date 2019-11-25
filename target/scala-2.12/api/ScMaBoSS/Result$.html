@@ -157,9 +157,9 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="" title="Companion object for updating probtraj line for UPMaBoSS"></a>
-                        <a class="class" href="Result.html" title="Results from MaBoSS server
+                        <a class="class" href="Result.html" title="Results of MaBoSS server
 "></a>
-                        <a href="Result.html" title="Results from MaBoSS server
+                        <a href="Result.html" title="Results of MaBoSS server
 ">
                           Result
                         </a>
@@ -437,7 +437,7 @@
         <span class="name">fromInputsMBSS</span><span class="params">(<span name="mbcli">mbcli: <a href="MaBoSSClient.html" class="extype" name="ScMaBoSS.MaBoSSClient">MaBoSSClient</a></span>, <span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>)</span><span class="result">: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a></span>
       </span>
       
-      <p class="shortcomment cmt">Result of from MaBoSS server run
+      <p class="shortcomment cmt">Constructor of Result object from MaBoSS server run
 </p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
@@ -518,8 +518,8 @@
         <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="probTrajLines">probTrajLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Node state probability trajectory, given a list of probtraj
-</p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a list of probtraj
+      <p class="shortcomment cmt">Node state probability trajectory, given a list of probtraj and a node
+</p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a list of probtraj and a node
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -585,8 +585,8 @@
         <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="probTrajLines">probTrajLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Boolean state probability trajectory, given a list of probtraj
-</p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a list of probtraj
+      <p class="shortcomment cmt">Boolean state probability trajectory, given a list of probtraj and a network state
+</p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a list of probtraj and a network state
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
@@ -635,7 +635,7 @@
         <span class="name">updateLine</span><span class="params">(<span name="line">line: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>)</span>
       </span>
       
-      <p class="shortcomment cmt">initial condition and normalization factor from last line of probtraj
+      <p class="shortcomment cmt">initial condition and normalization factor from last line of probtraj, usefull for UPMaBoSS
 </p>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

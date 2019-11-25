@@ -49,7 +49,7 @@ case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : Strin
   *
   */
 object Result {
-  /** initial condition and normalization factor from last line of probtraj
+  /** initial condition and normalization factor from last line of probtraj, usefull for UPMaBoSS
     *
     * @param line
     * @param divNode
@@ -73,7 +73,7 @@ object Result {
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
 
-  /** Result of from MaBoSS server run
+  /** Constructor of Result object from MaBoSS server run
     *
     * @param mbcli
     * @param simulation
@@ -90,7 +90,7 @@ object Result {
     new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
 
-  /** Boolean state probability trajectory, given a list of probtraj
+  /** Boolean state probability trajectory, given a list of probtraj and a network state
     *
     * @param netState
     * @param probTrajLines
@@ -111,7 +111,7 @@ object Result {
     })
   }
 
-  /** Node state probability trajectory, given a list of probtraj
+  /** Node state probability trajectory, given a list of probtraj and a node
     *
     * @param node
     * @param probTrajLines
@@ -136,18 +136,18 @@ object Result {
     */
   def plotStateTraj(netStates : List[NetState],probTrajLines : List[String],filename : String) : File = {
     val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
-    val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) ::
-      listTraj.map(x => Vec(x.map( y=> y._2).toArray)) :::
-      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble-1).toArray)).toList).toArray)
-    print(Mat4Plot)
+    val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) :: //matrix with x coordinates
+      listTraj.map(x => Vec(x.map( y=> y._2).toArray)) ::: // y coordinates
+      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble-1).toArray)).toList).toArray) //and colors
     val builtElement =
       xyplot(Mat4Plot -> (
-        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = netStates.length+x,
-          color = DiscreteColors(netStates.length - 1))).toList :::
-          (1 to netStates.length).map(x =>
-            point(xCol = 0,yCol = x,colorCol = netStates.length+x,sizeCol=3+2*netStates.length,
-              shapeCol=3+2*netStates.length, errorTopCol = 3+2*netStates.length , size = 4d,
-              color = DiscreteColors(netStates.length - 1))).toList))(xlab = "Time",ylab="Probability",extraLegend =
+        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = netStates.length+x, // lines given the column indices of the matrix
+          color = DiscreteColors(netStates.length - 1))).toList  :::
+          (1 to netStates.length).map(x => // points given the column indices of the matrix
+            point(xCol = 0,yCol = x, colorCol = netStates.length+x, sizeCol=3+2*netStates.length,
+              shapeCol=3+2*netStates.length, errorBottomCol =1+netStates.length , errorTopCol = 1+netStates.length , size = 4d,
+              color = DiscreteColors(netStates.length-1))).toList ) // careful, need to add zero to errorTop/Bottom
+      )(xlab = "Time",ylab="Probability",extraLegend =
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
           color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
     val pdfFile = new File(filename)
@@ -155,12 +155,11 @@ object Result {
   }
 }
 
-//class Result ( mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
-/** Results from MaBoSS server
+/** Results of MaBoSS server
   *
-  * @param simulation
-  * @param verbose
-  * @param hexfloat
+  * @param simulation Cfg and Bnd
+  * @param verbose flag for parser of data
+  * @param hexfloat flag for writing data of file, not yet used
   * @param outputData raw data from MaBoSS server
   */
 class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
@@ -170,7 +169,7 @@ class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputD
     * @param double
     * @return
     */
-  def doubleToMbssString(double: Double): String = {
+  def doubleToMbssString(double: Double): String = { // not yet used for writing files
     if (hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
   // val command: String = if (hints.check) {
@@ -209,15 +208,31 @@ class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputD
     pw.close()
   }
 
+  /**  Boolean state probability trajectory, given a network state
+    *
+    * @param netState
+    * @return
+    */
   def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
     Result.stateTrajectory(netState,parsedResultData.prob_traj.split("\n").toList.tail)
   }
 
+  /** Node state probability trajectory, given a node
+    *
+    * @param node
+    * @return
+    */
   def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested, the .isDefined
   {
     Result.nodeTrajectory(node,parsedResultData.prob_traj.split("\n").toList.tail)
   }
 
+  /** Plot Boolean state probability trajectories, given a list of network states
+    *
+    * @param netStates
+    * @param filename
+    * @return
+    */
   def plotStateTraj(netStates : List[NetState],filename : String) : File = {
     Result.plotStateTraj(netStates,parsedResultData.prob_traj.split("\n").toList.tail,filename)
   }
