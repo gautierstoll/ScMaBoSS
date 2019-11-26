@@ -161,6 +161,6 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
       scannerBis.next()
   }
   def run(simulation : CfgMbss,hints : Hints ) : Result =
-  {Result.fromInputsMBSS(this,simulation,hints)}
+  {new Result(this,simulation,hints)}
   def close(): Unit = {socket.close()}
 }

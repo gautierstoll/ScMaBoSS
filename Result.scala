@@ -73,21 +73,23 @@ object Result {
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
 
-  /** Constructor of Result object from MaBoSS server run
+  /** for overloaded Constructor from MaBoSS server run
     *
     * @param mbcli
     * @param simulation
     * @param hints
     * @return
     */
-  def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Result = {
+  //def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Result = {
+  private def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : String = {
     val command: String = if (hints.check) {
       GlCst.CHECK_COMMAND
     } else GlCst.RUN_COMMAND
     val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
     val data: String = DataStreamer.buildStreamData(clientData, hints)
     val outputData: String = mbcli.send(data)
-    new Result(simulation,hints.verbose,hints.hexfloat,outputData)
+    outputData
+    //new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
 
   /** Boolean state probability trajectory, given a list of probtraj and a network state
@@ -162,8 +164,17 @@ object Result {
   * @param hexfloat flag for writing data of file, not yet used
   * @param outputData raw data from MaBoSS server
   */
-class Result (simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
+class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
 
+  /** Constructor of Result from MaBoSS server run
+    *
+    * @param mbcli
+    * @param simulation
+    * @param hints
+    * @return
+    */
+  def this(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
+    this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
   /**Generates String or hexString from Double, according to Hints.hexfloat
     *
     * @param double
