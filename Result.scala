@@ -56,7 +56,7 @@ object Result {
     * @param deathNode
     * @return
     */
-  def updateLine(line : String,divNode: String, deathNode: String): (List[(String, Double)], Double) = {
+  def updateLine(line : String,divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = {
     val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
       sliding(3, 3).map(x => (x(0), x(1).toDouble)).
       filter(x => !x._1.split(" -- ").contains(deathNode)).
@@ -70,6 +70,7 @@ object Result {
       }).toList.
       groupBy(_._1.split(" -- ").toSet).map(x=> (x._1,x._2.map(_._2).sum)).toList.map(x=>(x._1.mkString(" -- "),x._2)) // group states
     val normFactor = nonNormDist.map(x => x._2).sum
+    if (verbose) println("Norm. factor: "+normFactor)
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
 
@@ -197,8 +198,8 @@ class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputDa
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode: String, deathNode: String): (List[(String, Double)], Double) = { // to be tested
-    Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last,divNode,deathNode)
+  def updateLastLine(divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = { // to be tested
+    Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last,divNode,deathNode,verbose)
   }
 
   def writeProbTraj2File(filename: String): Unit = {

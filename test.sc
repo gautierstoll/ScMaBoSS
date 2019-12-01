@@ -23,9 +23,10 @@ println("Finished simulation")
 //  BndMbss.fromFile("Tests/CellFateModel.bnd"))
 
 //val upSimulation : UPMaBoSS = UPMaBoSS.fromFiles("Tests/CellFate.upp",simulation)
-
-
-
+/*
+val UPMaBoSSTest2 = UPMaBoSS.fromFiles("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),false,true)
+val resUP3 = UPMaBoSSTest2.runLight(14)
+*/
 //val probStat = ((new NetState(simulation.extNodeList.zip(false :: true :: false :: true :: Nil).toMap,simulation),.5) ::
 //  (new NetState(simulation.extNodeList.zip(true :: true :: false :: true :: Nil).toMap,simulation),.2) ::
 //  (new NetState(simulation.extNodeList.zip(true :: true :: true :: true :: Nil).toMap,simulation),.3) :: Nil)
