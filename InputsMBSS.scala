@@ -178,11 +178,11 @@ object CfgMbss {
   def fromFile(filename : String,bndMbss : BndMbss) : CfgMbss = {
     new CfgMbss(bndMbss,ManageInputFile.file_get_content(filename))}
 
-  def fromFiles(bndMbss : BndMbss,filenames : List[String]) : CfgMbss = {
+  def fromFiles(filenames : List[String],bndMbss : BndMbss) : CfgMbss = {
     new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))}
 }
 
-/**Configuration for MaBoSS
+/**Configuration for MaBoSS (including bnd)
   *
   * @param bndMbss
   * @param cfg
@@ -196,7 +196,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
 
-  /**Generates cfg with mutations controlled by external variables
+  /**Generates CfgMbss with mutations controlled by external variables
     *
     * @param mutNodes
     * @return
@@ -205,7 +205,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
-  /**Updates external variables
+  /**Generates CfgMbss with updated external variables
     *
     * @param newParam
     * @return
@@ -226,7 +226,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   /**Sets initial condition from probability distribution
     *
     * @param probDist
-    * @param hex
+    * @param hex wirte Double in hexString?
     * @return
     */
   def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = {
