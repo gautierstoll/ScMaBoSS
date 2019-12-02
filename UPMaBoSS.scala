@@ -80,7 +80,7 @@ object UPMaBoSS {
   * @param verbose show normlization factor and update variables when running?
   */
 class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], val steps : Int,
-               val seed:Int, val cfgMbss : CfgMbss,port : Int , hexUP : Boolean = false,verbose:Boolean = false) {
+               val seed:Int, val cfgMbss : CfgMbss, portMbss : Int , hexUP : Boolean = false,verbose:Boolean = false) {
   def writeToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write("death = "+deathNode+"\n")
@@ -134,7 +134,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
 
   private def upDate(upStep : UpStep) : UpStep = {
     if (upStep.relSize == 0) UpStep(null,null,0) else {
-      val mcli = new MaBoSSClient(port)
+      val mcli = new MaBoSSClient("localhost",portMbss)
       val newResult = mcli.run(upStep.cfgMbss, hints)
       mcli.close()
       val newInitCond = newResult.updateLastLine(divNode, deathNode,verbose)
@@ -201,7 +201,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
           new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
         }
       }
-      val mcli = new MaBoSSClient(port)
+      val mcli = new MaBoSSClient("localhost",portMbss)
       val result = mcli.run(newCfg, hints)
       mcli.close()
       UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)

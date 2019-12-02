@@ -99,9 +99,9 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="CfgMbss$.html" title="Companion object for constructor from file"></a>
-                        <a class="class" href="CfgMbss.html" title="Configuration for MaBoSS
+                        <a class="class" href="CfgMbss.html" title="Configuration for MaBoSS (including bnd)
 "></a>
-                        <a href="CfgMbss.html" title="Configuration for MaBoSS
+                        <a href="CfgMbss.html" title="Configuration for MaBoSS (including bnd)
 ">
                           CfgMbss
                         </a>
@@ -277,9 +277,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
+      <a id="&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -288,10 +288,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">UPMaBoSS</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="updateVar">updateVar: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="steps">steps: <span class="extype" name="scala.Int">Int</span></span>, <span name="seed">seed: <span class="extype" name="scala.Int">Int</span></span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
+        <span class="name">UPMaBoSS</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="updateVar">updateVar: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="steps">steps: <span class="extype" name="scala.Int">Int</span></span>, <span name="seed">seed: <span class="extype" name="scala.Int">Int</span></span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="portMbss">portMbss: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">seed</dt><dd class="cmt"><p>necessary because '#rand' can be in</p></dd><dt class="param">hexUP</dt><dd class="cmt"><p>using hexString in cfg</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">seed</dt><dd class="cmt"><p>necessary because '#rand' can be in</p></dd><dt class="param">hexUP</dt><dd class="cmt"><p>using hexString in cfg</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>show normlization factor and update variables when running?</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -309,12 +309,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="UPMaBoSS$UpStep.html">
+        <a title="Steps of UPMaBoSS
+" href="UPMaBoSS$UpStep.html">
               <span class="name">UpStep</span>
             </a><span class="params">(<span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="result">result: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a> = <span class="symbol">null</span></span>, <span name="relSize">relSize: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1d</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Steps of UPMaBoSS
+</p>
     </li><li name="ScMaBoSS.UPMaBoSS.UpStepLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UpStepLightextendsProductwithSerializable"></a><a id="UpStepLight:UpStepLight"></a>
       <span class="permalink">
@@ -327,12 +329,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="UPMaBoSS$UpStepLight.html">
+        <a title="Light version of UpStep
+" href="UPMaBoSS$UpStepLight.html">
               <span class="name">UpStepLight</span>
             </a><span class="params">(<span name="lastLineProbTraj">lastLineProbTraj: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="relSize">relSize: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1d</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Light version of UpStep
+</p>
     </li></ol>
             </div>
 
@@ -724,7 +728,7 @@
         <span class="name">strRun</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="UPMaBoSS$UpStep.html" class="extype" name="ScMaBoSS.UPMaBoSS.UpStep">UpStep</a>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Stream made of UpStep</p>
     </li><li name="ScMaBoSS.UPMaBoSS#strRunLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="strRunLight:Stream[UPMaBoSS.this.UpStepLight]"></a><a id="strRunLight:Stream[UpStepLight]"></a>
       <span class="permalink">
@@ -740,7 +744,7 @@
         <span class="name">strRunLight</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="UPMaBoSS$UpStepLight.html" class="extype" name="ScMaBoSS.UPMaBoSS.UpStepLight">UpStepLight</a>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">Stream made of UpStepLight</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
