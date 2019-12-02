@@ -14,6 +14,11 @@ Documentation
 Usage
 =====
 
+MaBoSS server shoudl have been lauched on a given port_number
+```bash
+./MaBoSS-server --port port_number --hostocalhost --verbose
+```
+
 ## Import with
 ```scala
 import ScMaBoSS._
@@ -33,9 +38,9 @@ import ScMaBoSS._
 ```scala
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
 ```
-- Open server socket:
+- Open server socket on port port_number:
 ```scala
-    val mcli = new MaBoSSClient(port=...)
+    val mcli = new MaBoSSClient(port=port_number)
 ```
 - Run MaBoSS:
 ```scala
@@ -48,9 +53,10 @@ import ScMaBoSS._
 Methods of class [Result](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
 ## Example for using UPMaBoSS:
-- Create UPMaBoSS object from files:
+- Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hhoxFloat,
+with verbose for UPMaBoSS steps:
 ```scala
-    val upTest = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),4291,false,true)
+    val upTest = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
 ```
 - Run UPMaBoSS:
 ```scala

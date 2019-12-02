@@ -90,7 +90,7 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li class="current-entities indented1">
-                        <a class="object" href="BndMbss$.html" title="Companion object, for using input file and default cfg"></a>
+                        <a class="object" href="BndMbss$.html" title="Companion object, for using input file and generating default configuration"></a>
                         <a class="class" href="BndMbss.html" title="Boolean Network Descriptor for MaBoSS
 "></a>
                         <a href="BndMbss.html" title="Boolean Network Descriptor for MaBoSS
@@ -115,8 +115,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="object" href="DataStreamer$.html" title="Methods for parsing input and output data"></a>
-                        <a href="DataStreamer$.html" title="Methods for parsing input and output data">
+                        <a class="object" href="DataStreamer$.html" title="Methods for parsing input and output data of MaBoSS server"></a>
+                        <a href="DataStreamer$.html" title="Methods for parsing input and output data of MaBoSS server">
                           DataStreamer
                         </a>
                       </li><li class="current-entities indented1">
@@ -156,7 +156,7 @@
                           NetState
                         </a>
                       </li><li class="current-entities indented1">
-                        <a class="object" href="Result$.html" title="Companion object for updating probtraj line for UPMaBoSS"></a>
+                        <a class="object" href="Result$.html" title="Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run"></a>
                         <a class="class" href="" title="Results of MaBoSS server
 "></a>
                         <a href="" title="Results of MaBoSS server
@@ -181,9 +181,9 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="UPMbssOut.html" title="Output of UPMaBoSS, including population size and Cfg for each time steps
+                        <a class="class" href="UPMbssOut.html" title="Output of UPMaBoSS, including population size and CfgMbss for each time steps
 "></a>
-                        <a href="UPMbssOut.html" title="Output of UPMaBoSS, including population size and Cfg for each time steps
+                        <a href="UPMbssOut.html" title="Output of UPMaBoSS, including population size and CfgMbss for each time steps
 ">
                           UPMbssOut
                         </a>
@@ -308,7 +308,7 @@
         <span class="name">Result</span><span class="params">(<span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="hexfloat">hexfloat: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="outputData">outputData: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">simulation</dt><dd class="cmt"><p>Cfg and Bnd</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>flag for parser of data</p></dd><dt class="param">hexfloat</dt><dd class="cmt"><p>flag for writing data of file, not yet used</p></dd><dt class="param">outputData</dt><dd class="cmt"><p>raw data from MaBoSS server</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">simulation</dt><dd class="cmt"><p>configuration and network</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>flag for parser of data</p></dd><dt class="param">hexfloat</dt><dd class="cmt"><p>flag for writing data of file</p></dd><dt class="param">outputData</dt><dd class="cmt"><p>raw data from MaBoSS server</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -420,7 +420,7 @@
         <span class="name">doubleToMbssString</span><span class="params">(<span name="double">double: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Generates String or hexString from Double, according to Hints.hexfloat
+      <p class="shortcomment cmt">Generates String or hexString from Double, according to hexfloat
 </p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>

@@ -52,7 +52,7 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   /**
     *
     * @param state
-    * @param cfgMbss list of nodes from external nodes in cfg
+    * @param cfgMbss list of nodes from external nodes in CfgMbss
     * @return
     */
   def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
@@ -60,7 +60,7 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   /**
     *
     * @param stateString active nodes separates by " -- "
-    * @param bndMbSS list of nodes from bnd
+    * @param bndMbSS list of nodes from BndMbss
     * @return
     */
   def this(stateString : String,bndMbSS : BndMbss) =
@@ -69,7 +69,7 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   /**
     *
     * @param stateString active nodes separates by " -- "
-    * @param cfgMbSS list of nodes from external nodes in cfg
+    * @param cfgMbSS list of nodes from external nodes in CfgMbss
     * @return
     */
   def this(stateString : String,cfgMbSS : CfgMbss) =
@@ -86,7 +86,7 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   }
 }
 
-/**Companion object, for using input file and default cfg
+/**Companion object, for using input file and generating default configuration
   *
   */
 object BndMbss {
@@ -120,7 +120,7 @@ class BndMbss(val bnd : String) {
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
     case Some(node) => node ; case None => null}}).toList
 
-  /**Generates bnd with mutations controlled by external variables
+  /**Generate BndMbss with mutations controlled by external variables
     *
     * @param mutNodes
     * @return
@@ -153,7 +153,7 @@ class BndMbss(val bnd : String) {
     new BndMbss(mutNodeFields)
   }
 
-  /**Default cfg
+  /**Default configuration
     *
     * @return
     */
@@ -196,7 +196,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
 
-  /**Generates CfgMbss with mutations controlled by external variables
+  /**Generate CfgMbss with mutations controlled by external variables
     *
     * @param mutNodes
     * @return
@@ -205,7 +205,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
-  /**Generates CfgMbss with updated external variables
+  /**Generate CfgMbss with updated external variables
     *
     * @param newParam
     * @return
@@ -223,10 +223,10 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
   }
 
-  /**Sets initial condition from probability distribution
+  /**Generate new CfgMbss with initial condition from probability distribution
     *
     * @param probDist
-    * @param hex wirte Double in hexString?
+    * @param hex write Double in hexString?
     * @return
     */
   def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = {

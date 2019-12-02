@@ -41,7 +41,7 @@ object GlCst {
   val RUN_LOG = "Run-Log:"
 }
 
-/**Methods for parsing input and output data
+/**Methods for parsing input and output data of MaBoSS server
   *
   */
 object DataStreamer {

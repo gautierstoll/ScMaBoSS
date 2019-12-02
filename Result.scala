@@ -45,7 +45,7 @@ case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : 
 case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
                       prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
 
-/** Companion object for updating probtraj line for UPMaBoSS
+/** Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run
   *
   */
 object Result {
@@ -160,9 +160,9 @@ object Result {
 
 /** Results of MaBoSS server
   *
-  * @param simulation Cfg and Bnd
+  * @param simulation configuration and network
   * @param verbose flag for parser of data
-  * @param hexfloat flag for writing data of file, not yet used
+  * @param hexfloat flag for writing data of file
   * @param outputData raw data from MaBoSS server
   */
 class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
@@ -176,7 +176,7 @@ class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputDa
     */
   def this(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
     this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
-  /**Generates String or hexString from Double, according to Hints.hexfloat
+  /**Generates String or hexString from Double, according to hexfloat
     *
     * @param double
     * @return

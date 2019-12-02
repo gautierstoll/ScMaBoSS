@@ -73,11 +73,11 @@ object UPMaBoSS {
   * @param deathNode
   * @param updateVar
   * @param steps
-  * @param seed necessary because '#rand' can be in
+  * @param seed necessary because '#rand' can be in updateVar
   * @param cfgMbss
-  * @param port port of MaBoSS server
-  * @param hexUP using hexString in cfg
-  * @param verbose show normlization factor and update variables when running?
+  * @param portMbss port of MaBoSS server
+  * @param hexUP using hexString in cfg?
+  * @param verbose show normalization factor and update variables when running?
   */
 class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], val steps : Int,
                val seed:Int, val cfgMbss : CfgMbss, portMbss : Int , hexUP : Boolean = false,verbose:Boolean = false) {
@@ -223,7 +223,7 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
   }
 }
 
-/** Output of UPMaBoSS, including population size and Cfg for each time steps
+/** Output of UPMaBoSS, including population size and CfgMbss for each time steps
   *
   * @param sizes
   * @param configurations
@@ -238,6 +238,9 @@ case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}
 case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) {
   val stepTime : Double = "=(.*);".r.findAllIn(cfgMbss.noCommentCfg.split("\n").filter("max_time".r.findFirstMatchIn(_).isDefined).head).
     matchData.map(_.group(1).toDouble).next()
+  /** Last progtraj line with UPMaBoSS time
+    *
+    */
   val lastLinesWithTime : List[String] = lastLines.zipWithIndex.
     map(lineIndex => {"^[\t]*".r.replaceAllIn(lineIndex._1,(lineIndex._2*stepTime).toString+"\t")})
   def plotStateTraj(netStates : List[NetState],filename : String) : File = {
