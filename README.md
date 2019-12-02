@@ -11,6 +11,12 @@ Documentation
 
  - [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/)
 
+ Source files:
+- InputMBSS.scala: inputs for MaBoSS, including bnd and cfg
+- comm.scala: communication with MaBoSS server
+- Results.scala: outputs of MaBoSS, including trajectories extraction and simple plotting
+- UPMaBoSS.scala: UPMaBoSS implementation
+
 Usage
 =====
 
@@ -24,17 +30,13 @@ MaBoSS server shoudl have been lauched on a given port_number
 import ScMaBoSS._
 ```
 
-- InputMBSS.scala: inputs for MaBoSS, including bnd and cfg
-- comm.scala: communication with MaBoSS server
-- Results.scala: outputs of MaBoSS, including trajectories extraction and simple plotting
-- UPMaBoSS.scala: UPMaBoSS implementation
 
 ## Example for using MaBoSS server:
 - Parameters for the server:
 ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 ```
-- Constructing inputs for files:
+- Constructing inputs from files:
 ```scala
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
 ```
@@ -44,7 +46,7 @@ import ScMaBoSS._
 ```
 - Run MaBoSS:
 ```scala
-    val result= mcli.run(simulation,hints)
+    val result = mcli.run(simulation,hints)
 ```
 - Close socket:
 ```scala
@@ -53,7 +55,7 @@ import ScMaBoSS._
 Methods of class [Result](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
 ## Example for using UPMaBoSS:
-- Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hhoxFloat,
+- Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
 ```scala
     val upTest = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
@@ -74,7 +76,7 @@ ScMaBoSS is distributed under the Apache License Version 2.0 (see LICENSE file).
 Copyright
 =========
 
-Copyright (c) 2019-2019 Gautier Stoll
+Copyright (c) 2019 Gautier Stoll
 
 All rights reserved.
 
