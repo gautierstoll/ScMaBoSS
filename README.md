@@ -14,7 +14,7 @@ Documentation
 Usage
 =====
 
-import with
+## Import with
 ```scala
 import ScMaBoSS._
 ```
@@ -24,7 +24,7 @@ import ScMaBoSS._
 - Results.scala: outputs of MaBoSS, including trajectories extraction and simple plotting
 - UPMaBoSS.scala: UPMaBoSS implementation
 
-Example for using MaBoSS server:
+## Example for using MaBoSS server:
 - Parameters for the server:
 ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -34,30 +34,29 @@ Example for using MaBoSS server:
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
 ```
 - Open server socket:
-
+```scala
     val mcli = new MaBoSSClient(port=...)
-
+```
 - Run MaBoSS:
-
+```scala
     val result= mcli.run(simulation,hints)
-
+```
 - Close socket:
-
+```scala
     mcli.close()
+```
+Methods of class [Result](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
-Methods of class Result can be used for extracting ouput data.
-
-Example for using UPMaBoSS:
+## Example for using UPMaBoSS:
 - Create UPMaBoSS object from files:
-
+```scala
     val upTest = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),4291,false,true)
-
+```
 - Run UPMaBoSS:
-
+```scala
     upRes = upTest.runLight(14)
-
+```
 Methods of class UPMbssOutLight can be used for extracting output data. In particular, member lastLinesWithTime can be used within object Result.
-
 
 License
 =======
