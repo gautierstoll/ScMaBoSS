@@ -15,9 +15,9 @@ Usage
 =====
 
 import with
-'''scala
+```scala
 import ScMaBoSS._
-'''
+```
 
 - InputMBSS.scala: inputs for MaBoSS, including bnd and cfg
 - comm.scala: communication with MaBoSS server
@@ -26,13 +26,13 @@ import ScMaBoSS._
 
 Example for using MaBoSS server:
 - Parameters for the server:
-'''scala
+```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
-'''
+```
 - Constructing inputs for files:
-
+```scala
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
-
+```
 - Open server socket:
 
     val mcli = new MaBoSSClient(port=...)
