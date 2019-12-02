@@ -40,7 +40,7 @@ object NetState {
   * @param state
   * @param nodeList
   */
-class NetState private (val state: Map[String,Boolean],val nodeList : List[String]) {
+class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   /**
     *
     * @param state
