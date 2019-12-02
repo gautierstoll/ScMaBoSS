@@ -16,7 +16,7 @@ Usage
 
 MaBoSS server shoudl have been lauched on a given port_number
 ```bash
-./MaBoSS-server --port port_number --hostocalhost --verbose
+./MaBoSS-server --port port_number --host localhost --verbose
 ```
 
 ## Import with
