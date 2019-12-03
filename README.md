@@ -39,7 +39,7 @@ sbt package
 4. In your working directory, create a `lib/` sub-directory and copy the library from `ScMaBoSS/target/scala-2.12/`
 
 5. In your working directory, create a `build.sbt`, containing the library dependancies of ScMaBoSS
-([saddle]https://github.com/saddle/saddle and [nspl]https://github.com/pityka/nspl)
+([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl))
 
 6. ScMaBoSS can be used in a scala environment (like an sbt console)witth
 ```scala
