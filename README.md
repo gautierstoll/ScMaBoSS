@@ -20,7 +20,7 @@ Documentation
 Usage
 =====
 
-MaBoSS server shoudl have been lauched on a given port_number
+MaBoSS server should have been launched on a given port_number
 ```bash
 ./MaBoSS-server --port port_number --host localhost --verbose
 ```
@@ -31,17 +31,17 @@ MaBoSS server shoudl have been lauched on a given port_number
 
 2. Download the repository `ScMaBoSS/`.
 
-3. Compile the library in `ScMaBoSS`
+3. Compile the library in `ScMaBoSS/`
 ```bash
 sbt compile
 sbt package
 ```
 4. In your working directory, create a `lib/` sub-directory and copy the library from `ScMaBoSS/target/scala-2.12/`
 
-5. In your working directory, create a `build.sbt`, containing the library dependancies of ScMaBoSS
+5. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
 ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl))
 
-6. ScMaBoSS can be used in a scala environment (like an sbt console)witth
+6. ScMaBoSS can be used in a scala environment (like an sbt console) with
 ```scala
 import ScMaBoSS._
 ```
