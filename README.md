@@ -32,41 +32,41 @@ import ScMaBoSS._
 
 
 ## Example for using MaBoSS server:
-- Parameters for the server:
+1. Parameters for the server:
 ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 ```
-- Constructing inputs from files:
+2. Constructing inputs from files:
 ```scala
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
 ```
-- Open server socket on port port_number:
+3. Open server socket on port port_number:
 ```scala
-    val mcli = new MaBoSSClient(port=port_number)
+    val mcli : MaBoSSClient = new MaBoSSClient(port=port_number)
 ```
-- Run MaBoSS:
+4. Run MaBoSS:
 ```scala
-    val result = mcli.run(simulation,hints)
+    val result : Result = mcli.run(simulation,hints)
 ```
-- Close socket:
+5. Close socket:
 ```scala
     mcli.close()
 ```
 Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
 ## Example for using UPMaBoSS:
-- Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
+1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
 ```scala
-    val upTest = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
+    val upTest : UPMaBoSS = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
 ```
-- Run UPMaBoSS:
+2. Run UPMaBoSS:
 ```scala
-    upRes = upTest.runLight(numberOfSteps)
+    upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
 ```
-Methods of class [UPMbssOutLight](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMbssOutLight.html)
-can be used for extracting output data. In particular, member lastLinesWithTime can be used within
-object [Result](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result$.html).
+Methods of class [`UPMbssOutLight`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMbssOutLight.html)
+can be used for extracting output data. In particular, member `lastLinesWithTime` can be used within
+object [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result$.html).
 
 License
 =======
