@@ -4,7 +4,7 @@ ScMaBoSS: Scala for running MaBoSS
 Introduction
 ============
 
-ScMaBoSS is a library for running MaBoSS through Scala within MaBoSS server (https://github.com/maboss-bkmc)
+ScMaBoSS is a library for running MaBoSS through Scala within MaBoSS server (https://github.com/maboss-bkmc).
 
 Documentation
 =============
@@ -12,10 +12,10 @@ Documentation
  - [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/)
 
  Source files:
-- InputMBSS.scala: inputs for MaBoSS, including bnd and cfg
-- comm.scala: communication with MaBoSS server
-- Results.scala: outputs of MaBoSS, including trajectories extraction and simple plotting
-- UPMaBoSS.scala: UPMaBoSS implementation
+- `InputMBSS.scala`: inputs for MaBoSS, including bnd and cfg
+- `comm.scala`: communication with MaBoSS server
+- `Results.scala`: outputs of MaBoSS, including trajectories extraction and simple plotting
+- `UPMaBoSS.scala`: UPMaBoSS implementation
 
 Usage
 =====
@@ -52,7 +52,7 @@ import ScMaBoSS._
 ```scala
     mcli.close()
 ```
-Methods of class [Result](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
+Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
 ## Example for using UPMaBoSS:
 - Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
