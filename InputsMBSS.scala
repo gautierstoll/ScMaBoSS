@@ -41,6 +41,17 @@ object NetState {
   * @param nodeList
   */
 class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
+
+  /**
+    *
+    * @param stateString active nodes separates by " -- "
+    * @param nodeList
+    * @return
+    */
+  def this(stateString : String,nodeList : List[String]) =
+  this(NetState.stringToBoolMap(stateString,nodeList),nodeList)
+
+
   /**
     *
     * @param state
