@@ -167,7 +167,7 @@ object Result {
   * @param hexfloat flag for writing data of file
   * @param outputData raw data from MaBoSS server
   */
-class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
+class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
 
   /** Constructor of Result from MaBoSS server run
     *
@@ -254,33 +254,38 @@ class Result(simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputDa
 
 trait ParReducibleRun[OutType] {
   def linCombine(o1:OutType,o2:OutType) : OutType
-  def normalize(o: OutType,d:Double) : OutType
+  def multiply(o: OutType,d:Double) : OutType
   def generate(r:Result) : OutType
   def parRunMaBoSS(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
-    normalize(
+    multiply(
       seedHostPortSet.map(seedHostPort => {
       val newCfg = cfgMbss.update((("seed_pseudorandom",seedHostPort._1.toString) :: Nil).toMap)
       val mbcli = new MaBoSSClient(seedHostPort._2,seedHostPort._3)
       val result = mbcli.run(newCfg,hints)
       mbcli.close()
       generate(result)
-    }).reduce((x,y) => linCombine(x,y)),(1/(seedHostPortSet.size.toDouble)))
+    }).reduce((x,y) => linCombine(x,y)),1/seedHostPortSet.size.toDouble)
   }
 }
 
-
-object ReducibleFP extends ParReducibleRun[Map[String,Double]] {
- def linCombine(fpMap1 : Map[String,Double],fpMap2 : Map[String,Double]): Map[String,Double] =  {
+trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
+ def linCombine(fpMap1 : Map[NetState,Double],fpMap2 : Map[NetState,Double]): Map[NetState,Double] =  {
    (fpMap1.toList ::: fpMap2.toList).groupBy(_._1).map(x=>(x._1,x._2.map(_._2).sum))
  }
-  def normalize(fpMap : Map[String,Double],d:Double) : Map[String,Double] = {fpMap.map(x=>(x._1,x._2*d))}
-  def generate(r:Result) : Map[String,Double] = r.parsedResultData.FP.split("\n").tail.tail.
-    map(line => {val lSplit = line.split("\t");(lSplit(1),lSplit(0).toDouble)}).toMap
-  def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : Map[String,Double] =
+  def multiply(fpMap : Map[NetState,Double],d:Double) : Map[NetState,Double] = {fpMap.map(x=>(x._1,x._2*d))}
+  def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : Map[NetState,Double] =
     parRunMaBoSS(cfgMbss, hints, seedHostPortSet)
 }
 
-class ReducibleFP(val fp : Map[String,Double]) {
-  def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
-    this(ReducibleFP(cfgMbss,hints,seedHostPortSet))
+object ParReducibleFP extends ParReducibleProbDist
+{
+  def generate(r:Result) : Map[NetState,Double] = r.parsedResultData.FP.split("\n").tail.tail.
+    map(line => {val lSplit = line.split("\t");(new NetState(lSplit(1),r.simulation),lSplit(0).toDouble)}).toMap
 }
+
+private class ParReducibleFP(val fp : Map[NetState,Double]) {
+  def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
+    this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
+}
+
+
