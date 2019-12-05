@@ -156,6 +156,32 @@
                           NetState
                         </a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="ParReducibleFP$.html" title=""></a>
+                        <a href="ParReducibleFP$.html" title="">
+                          ParReducibleFP
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="ParReducibleLastLine$.html" title=""></a>
+                        <a href="ParReducibleLastLine$.html" title="">
+                          ParReducibleLastLine
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParReducibleProbDist.html" title="Trait for parallel runs of MaBoSS, outputs being a probability distribution"></a>
+                        <a href="ParReducibleProbDist.html" title="Trait for parallel runs of MaBoSS, outputs being a probability distribution">
+                          ParReducibleProbDist
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ParReducibleRun.html" title="Trait for parallel runs of MaBoSS with reduction
+"></a>
+                        <a href="ParReducibleRun.html" title="Trait for parallel runs of MaBoSS with reduction
+">
+                          ParReducibleRun
+                        </a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Result$.html" title="Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run"></a>
                         <a class="class" href="" title="Results of MaBoSS server
 "></a>
@@ -552,7 +578,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
       <p class="shortcomment cmt">Node state probability trajectory, given a node
@@ -617,11 +643,27 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">plotStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.io.File">File</span></span>
+        <span class="name">plotStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.io.File">File</span></span>
       </span>
       
       <p class="shortcomment cmt">Plot Boolean state probability trajectories, given a list of network states
 </p>
+    </li><li name="ScMaBoSS.Result#simulation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="simulation:ScMaBoSS.CfgMbss"></a><a id="simulation:CfgMbss"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/Result.html#simulation:ScMaBoSS.CfgMbss" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">simulation</span><span class="result">: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>
+      </span>
+      
+      
     </li><li name="ScMaBoSS.Result#stateTrajectory" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stateTrajectory(netState:ScMaBoSS.NetState):List[(Double,Double)]"></a><a id="stateTrajectory(NetState):List[(Double,Double)]"></a>
       <span class="permalink">
@@ -634,7 +676,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
       <p class="shortcomment cmt"> Boolean state probability trajectory, given a network state
@@ -683,7 +725,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">updateLastLine</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: (<span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>)</span>
+        <span class="name">updateLastLine</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: (<span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Double">Double</span>)], <span class="extype" name="scala.Double">Double</span>)</span>
       </span>
       
       <p class="shortcomment cmt">updates last probability distribution for UPMaBoSS
