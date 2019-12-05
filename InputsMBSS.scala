@@ -95,6 +95,20 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
     val activeNodes = state.filter(_._2).keys.toList
     if (activeNodes.isEmpty) "<nil>" else activeNodes.mkString(" -- ")
   }
+  private def canEqual(a: Any) = a.isInstanceOf[NetState]
+  override def equals(that: Any): Boolean = {
+    that match {
+      case that:NetState => {
+        this.canEqual(that) && (that.nodeList.toSet == this.nodeList.toSet) &&
+          (that.state.filter(_._2).keySet == this.state.filter(_._2).keySet)
+      }
+      case _ => false
+    }
+  }
+
+  override def hashCode(): Int = {
+    nodeList.toSet.hashCode() + this.state.filter(_._2).keySet.hashCode()
+  }
 }
 
 /**Companion object, for using input file and generating default configuration

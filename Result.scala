@@ -252,10 +252,22 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
   }
 }
 
+/** Trait for parallel runs of MaBoSS with reduction
+  *
+  * @tparam OutType
+  */
 trait ParReducibleRun[OutType] {
   def linCombine(o1:OutType,o2:OutType) : OutType
   def multiply(o: OutType,d:Double) : OutType
   def generate(r:Result) : OutType
+
+  /** parallel runs
+    *
+    * @param cfgMbss
+    * @param hints
+    * @param seedHostPortSet parralel set containing seed and (port,host) for MaBoSS servers
+    * @return
+    */
   def parRunMaBoSS(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
     multiply(
       seedHostPortSet.map(seedHostPort => {
@@ -268,6 +280,9 @@ trait ParReducibleRun[OutType] {
   }
 }
 
+/** Trait for parallel runs of MaBoSS, outputs being a probability distribution
+  *
+  */
 trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
  def linCombine(fpMap1 : Map[NetState,Double],fpMap2 : Map[NetState,Double]): Map[NetState,Double] =  {
    (fpMap1.toList ::: fpMap2.toList).groupBy(_._1).map(x=>(x._1,x._2.map(_._2).sum))
@@ -283,9 +298,30 @@ object ParReducibleFP extends ParReducibleProbDist
     map(line => {val lSplit = line.split("\t");(new NetState(lSplit(1),r.simulation),lSplit(0).toDouble)}).toMap
 }
 
+/** parallel runs with FP distribution output
+  *
+  * @param fp
+  */
 private class ParReducibleFP(val fp : Map[NetState,Double]) {
   def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
     this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
 }
 
+object ParReducibleLastLine extends ParReducibleProbDist
+{
+  def generate(r:Result) : Map[NetState,Double] = {
+    r.parsedResultData.prob_traj.split("\n").last.split("\t").
+    dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
+      map(x => (new NetState(x(0),r.simulation), x(1).toDouble)).toMap
+  }
+}
+
+/** parallel runs with last line probability distribution output
+  *
+  * @param fp
+  */
+private class ParReducibleLastLine(val fp : Map[NetState,Double]) {
+  def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
+    this(ParReducibleLastLine(cfgMbss,hints,seedHostPortSet))
+}
 
