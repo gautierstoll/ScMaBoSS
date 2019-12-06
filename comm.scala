@@ -143,12 +143,12 @@ object DataStreamer {
   * @param port
   */
 class MaBoSSClient (host : String = "localhost", port : Int) {
-  val socket : Socket =
+  val socket : java.net.Socket =
     try {
-      new Socket("localhost",port)
+      new java.net.Socket(host,port)
     }
     catch {
-      case e: Throwable => {System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
+      case e: Throwable => {println(e);System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
     }
     private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
     private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
