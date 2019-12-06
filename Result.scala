@@ -91,6 +91,7 @@ object Result {
     val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
     val data: String = DataStreamer.buildStreamData(clientData, hints)
     val outputData: String = mbcli.send(data)
+    mbcli.close()
     outputData
     //new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
@@ -268,7 +269,7 @@ trait ParReducibleRun[OutType] {
     * @param seedHostPortSet parralel set containing seed and (port,host) for MaBoSS servers
     * @return
     */
-  def parRunMaBoSS(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
+  def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
     multiply(
       seedHostPortSet.map(seedHostPort => {
       val newCfg = cfgMbss.update((("seed_pseudorandom",seedHostPort._1.toString) :: Nil).toMap)
@@ -284,12 +285,12 @@ trait ParReducibleRun[OutType] {
   *
   */
 trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
- def linCombine(fpMap1 : Map[NetState,Double],fpMap2 : Map[NetState,Double]): Map[NetState,Double] =  {
-   (fpMap1.toList ::: fpMap2.toList).groupBy(_._1).map(x=>(x._1,x._2.map(_._2).sum))
- }
-  def multiply(fpMap : Map[NetState,Double],d:Double) : Map[NetState,Double] = {fpMap.map(x=>(x._1,x._2*d))}
-  def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : Map[NetState,Double] =
-    parRunMaBoSS(cfgMbss, hints, seedHostPortSet)
+  def linCombine(fpMap1: Map[NetState, Double], fpMap2: Map[NetState, Double]): Map[NetState, Double] = {
+    (fpMap1.toList ::: fpMap2.toList).groupBy(_._1).map(x => (x._1, x._2.map(_._2).sum))
+  }
+  def multiply(fpMap: Map[NetState, Double], d: Double): Map[NetState, Double] = {
+    fpMap.map(x => (x._1, x._2 * d))
+  }
 }
 
 object ParReducibleFP extends ParReducibleProbDist

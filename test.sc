@@ -16,7 +16,7 @@ val simulation : CfgMbss = CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg", BndMbss.fr
 val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
 println("Start Simulation")
 val result_test : Result = mcli.run(simulation,hints) // could also write val result_test = new Result(mcli,simulation,hints)
-mcli.close()
+
 println("Finished simulation")
 
 //val simulation : CfgMbss = CfgMbss.fromFile("Tests/CellFateModel.cfg",

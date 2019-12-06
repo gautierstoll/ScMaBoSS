@@ -46,17 +46,17 @@ object UPMaBoSS {
     * @return
     */
   def upProbFromInitCond(initCondProb : List[(String,Double)] , upProb : String,hex :Boolean = false) : String = {
-    println("upProb: "+upProb)
+    //println("upProb: "+upProb)
     val nodes = try upProb.split("=").head catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
     val boolState = try upProb.split("=").tail.head catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
     val nodeList = "\\s*\\)\\s*".r.replaceAllIn("p\\[\\s*\\(\\s*".r.replaceAllIn(nodes,""),"").split(",").
       map(x=> "\\s*".r.replaceAllIn(x,"")).toList
-    println("nodeList: "+nodeList)
+    //println("nodeList: "+nodeList)
     val boolStateList : List[Boolean] = "\\s*\\)\\s*\\]".r.replaceAllIn("\\s*\\(\\s*".r.replaceAllIn(boolState,""),"").split(",").
       map(x=> if("\\s*".r.replaceAllIn(x,"") == "1") true else false).toList
-    println("boolStateList: "+boolStateList)
+    //println("boolStateList: "+boolStateList)
     val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1).toSet
     val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1).toSet
     val probOut = initCondProb.filter(prob => {
@@ -107,7 +107,6 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     val updateVarProb = updateVar.map(line => {
       val listReplaceProb : List[String] =
         "p\\[[^\\]]+\\]".r.findAllIn(line).map(x=>UPMaBoSS.upProbFromInitCond(probDistRelSize._1,x,hexUP)).toList
-      //println("Replace strings: "+listReplaceProb)
       def recReplace(regex: Regex,s:String,lReplace : List[String]):String = {
         lReplace match {
           case Nil => s
@@ -136,7 +135,6 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     if (upStep.relSize == 0) UpStep(null,null,0) else {
       val mcli = new MaBoSSClient("localhost",portMbss)
       val newResult = mcli.run(upStep.cfgMbss, hints)
-      mcli.close()
       val newInitCond = newResult.updateLastLine(divNode, deathNode,verbose)
       val newRelSize = upStep.relSize * newInitCond._2
       println("New relative size: "+newRelSize)
@@ -203,7 +201,6 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       }
       val mcli = new MaBoSSClient("localhost",portMbss)
       val result = mcli.run(newCfg, hints)
-      mcli.close()
       UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)
     }
   }

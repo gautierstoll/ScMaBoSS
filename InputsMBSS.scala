@@ -63,7 +63,7 @@ class NetState (val state: Map[String,Boolean]) {
     this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList))
 
 
-  /**
+  /** Careful! It uses Cfg external nodes.
     *
     * @param stateString active nodes separates by " -- "
     * @param cfgMbSS list of nodes from external nodes in CfgMbss
@@ -84,14 +84,14 @@ class NetState (val state: Map[String,Boolean]) {
   override def equals(that: Any): Boolean = {
     that match {
       case that:NetState => {
-        this.canEqual(that) && (that.state.keySet == this.state.keySet)
+        this.canEqual(that) && (that.state == this.state)
       }
       case _ => false
     }
   }
 
   override def hashCode(): Int = {
-    state.filter(_._2).keySet.hashCode() + this.state.keySet.hashCode()
+    state.hashCode()
   }
 }
 
@@ -242,14 +242,14 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     val firstStateNodes : Set[String] = probDist.head._1.nodeSet
     if (probDist.tail.exists(x=> (x._1.nodeSet != firstStateNodes)))
       throw new IllegalArgumentException("States of probdist are not compatible")
-    if (firstStateNodes.toSet.union(bndMbss.nodeList.toSet).size > bndMbss.nodeList.length)
+    if (firstStateNodes.union(bndMbss.nodeList.toSet).size > bndMbss.nodeList.length)
       throw new IllegalArgumentException("States of probdist are not compatible with bnd")
-    val newCfg : String = cfg.split("\n").filter(x => "istate".r.findFirstIn(x) == None).mkString("\n") + "\n" +
-    "["+firstStateNodes.mkString(",")+"].istate = "+probDist.map(x=> (if (hex) java.lang.Double.toHexString(x._2) else x._2.toString) +
+    val firstStateNodeList = firstStateNodes.toList
+    val newCfg : String = cfg.split("\n").filter(x => "istate".r.findFirstIn(x).isEmpty).mkString("\n") + "\n" +
+    "["+firstStateNodeList.mkString(",")+"].istate = "+probDist.map(x=> (if (hex) java.lang.Double.toHexString(x._2) else x._2.toString) +
     " ["+
-      firstStateNodes.map(node => if (x._1.state(node)) 1 else 0).mkString(",")
+      firstStateNodeList.map(node => if (x._1.state(node)) 1 else 0).mkString(",")
     + "]").mkString(" , ") +";\n"
-    println("New cfg string created of length: "+newCfg.length.toString)
     new CfgMbss(bndMbss,newCfg)
   }
 
