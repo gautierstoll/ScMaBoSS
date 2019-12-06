@@ -10,7 +10,7 @@ import jdk.nashorn.internal.runtime.regexp.RegExp
 
 import scala.io.Source
 
-/**Manage errors when reading file
+/** Manage errors when reading file
   *
   */
 object ManageInputFile {
@@ -25,23 +25,24 @@ object ManageInputFile {
   }
 }
 
-/**Method used in different NetState constructors
+/** Method used in different NetState constructors
   *
   */
 object NetState {
   private def stringToBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
+    if (activeNodeList.toSet.intersect(nodeList.toSet).toSet !=  activeNodeList.toSet)
+      throw new IllegalArgumentException("Network state has unkonw nodes.")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
 }
 
-/**Network state, with associated node list and error handling
+/** Network state, with associated node list and error handling
   *
   * @param state
-  * @param nodeList
   */
-class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
-
+class NetState (val state: Map[String,Boolean]) {
+  val nodeSet = state.keySet
   /**
     *
     * @param stateString active nodes separates by " -- "
@@ -49,24 +50,8 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
     * @return
     */
   def this(stateString : String,nodeList : List[String]) =
-  this(NetState.stringToBoolMap(stateString,nodeList),nodeList)
+  this(NetState.stringToBoolMap(stateString,nodeList))
 
-
-  /**
-    *
-    * @param state
-    * @param bndMbss list of nodes from bnd
-    * @return
-    */
-   def this(state : Map[String,Boolean],bndMbss : BndMbss) = this(state,bndMbss.nodeList)
-
-  /**
-    *
-    * @param state
-    * @param cfgMbss list of nodes from external nodes in CfgMbss
-    * @return
-    */
-  def this(state : Map[String,Boolean],cfgMbss : CfgMbss) = this(state,cfgMbss.extNodeList)
 
   /**
     *
@@ -75,7 +60,8 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
     * @return
     */
   def this(stateString : String,bndMbSS : BndMbss) =
-    this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList),bndMbSS.nodeList)
+    this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList))
+
 
   /**
     *
@@ -84,8 +70,7 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
     * @return
     */
   def this(stateString : String,cfgMbSS : CfgMbss) =
-    this(NetState.stringToBoolMap(stateString,cfgMbSS.extNodeList),cfgMbSS.extNodeList)
-  if (state.keys.toSet != nodeList.toSet) throw new IllegalArgumentException("Network state has wrong nodes.")
+    this(NetState.stringToBoolMap(stateString, cfgMbSS.extNodeList))
 
   /**
     *
@@ -99,15 +84,14 @@ class NetState (val state: Map[String,Boolean],val nodeList : List[String]) {
   override def equals(that: Any): Boolean = {
     that match {
       case that:NetState => {
-        this.canEqual(that) && (that.nodeList.toSet == this.nodeList.toSet) &&
-          (that.state.filter(_._2).keySet == this.state.filter(_._2).keySet)
+        this.canEqual(that) && (that.state.keySet == this.state.keySet)
       }
       case _ => false
     }
   }
 
   override def hashCode(): Int = {
-    nodeList.toSet.hashCode() + this.state.filter(_._2).keySet.hashCode()
+    state.filter(_._2).keySet.hashCode() + this.state.keySet.hashCode()
   }
 }
 
@@ -248,15 +232,15 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
   }
 
-  /**Generate new CfgMbss with initial condition from probability distribution
+  /** Generate new CfgMbss with initial condition from probability distribution
     *
     * @param probDist
     * @param hex write Double in hexString?
     * @return
     */
   def setInitCond(probDist : List[(NetState,Double)],hex : Boolean = false) : CfgMbss = {
-    val firstStateNodes : List[String] = probDist.head._1.nodeList
-    if (probDist.tail.exists(x=> (x._1.nodeList.toSet != firstStateNodes.toSet)))
+    val firstStateNodes : Set[String] = probDist.head._1.nodeSet
+    if (probDist.tail.exists(x=> (x._1.nodeSet != firstStateNodes)))
       throw new IllegalArgumentException("States of probdist are not compatible")
     if (firstStateNodes.toSet.union(bndMbss.nodeList.toSet).size > bndMbss.nodeList.length)
       throw new IllegalArgumentException("States of probdist are not compatible with bnd")
