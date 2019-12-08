@@ -25,13 +25,13 @@ object ManageInputFile {
   }
 }
 
-/** Method used in different NetState constructors
+/** Method used in different NetState constructors, for handling error
   *
   */
 object NetState {
   private def stringToBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
-    if (activeNodeList.toSet.intersect(nodeList.toSet).toSet !=  activeNodeList.toSet)
+    if (!activeNodeList.toSet.subsetOf(nodeList.toSet))
       throw new IllegalArgumentException("Network state has unkonw nodes.")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
@@ -51,7 +51,6 @@ class NetState (val state: Map[String,Boolean]) {
     */
   def this(stateString : String,nodeList : List[String]) =
   this(NetState.stringToBoolMap(stateString,nodeList))
-
 
   /**
     *
