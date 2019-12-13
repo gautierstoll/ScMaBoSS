@@ -156,15 +156,19 @@
                           NetState
                         </a>
                       </li><li class="current-entities indented1">
-                        <span class="separator"></span>
                         <a class="object" href="ParReducibleFP$.html" title="Concrete application of ParReducible run for fixed point distribution"></a>
-                        <a href="ParReducibleFP$.html" title="Concrete application of ParReducible run for fixed point distribution">
+                        <a class="class" href="ParReducibleFP.html" title="parallel runs with FP distribution output
+"></a>
+                        <a href="ParReducibleFP.html" title="parallel runs with FP distribution output
+">
                           ParReducibleFP
                         </a>
                       </li><li class="current-entities indented1">
-                        <span class="separator"></span>
                         <a class="object" href="ParReducibleLastLine$.html" title="Concrete application of ParReducible run for last probability distribution"></a>
-                        <a href="ParReducibleLastLine$.html" title="Concrete application of ParReducible run for last probability distribution">
+                        <a class="class" href="ParReducibleLastLine.html" title="parallel runs with last line probability distribution output
+"></a>
+                        <a href="ParReducibleLastLine.html" title="parallel runs with last line probability distribution output
+">
                           ParReducibleLastLine
                         </a>
                       </li><li class="current-entities indented1">
@@ -308,7 +312,7 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="ScMaBoSS.ParReducibleRun#generate" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="ScMaBoSS.ParReducibleRun#generate" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="generate(r:ScMaBoSS.Result):OutType"></a><a id="generate(Result):Map[NetState,Double]"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/ParReducibleProbDist.html#generate(r:ScMaBoSS.Result):OutType" title="Permalink">
@@ -323,7 +327,9 @@
         <span class="name">generate</span><span class="params">(<span name="r">r: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+      <p class="shortcomment cmt">Generation of an OutType from a MaBoSS Result
+</p><div class="fullcomment"><div class="comment cmt"><p>Generation of an OutType from a MaBoSS Result
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -395,7 +401,7 @@
       
       <p class="shortcomment cmt">parallel runs
 </p><div class="fullcomment"><div class="comment cmt"><p>parallel runs
-</p></div><dl class="paramcmts block"><dt class="param">seedHostPortSet</dt><dd class="cmt"><p>parralel set containing seed and (port,host) for MaBoSS servers</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">seedHostPortSet</dt><dd class="cmt"><p>parallel set containing seed and (port,host) for MaBoSS servers</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -536,7 +542,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="ScMaBoSS.ParReducibleProbDist#linCombine" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="ScMaBoSS.ParReducibleProbDist#linCombine" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="linCombine(fpMap1:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],fpMap2:scala.collection.immutable.Map[ScMaBoSS.NetState,Double]):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="linCombine(Map[NetState,Double],Map[NetState,Double]):Map[NetState,Double]"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/ParReducibleProbDist.html#linCombine(fpMap1:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],fpMap2:scala.collection.immutable.Map[ScMaBoSS.NetState,Double]):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
@@ -551,8 +557,10 @@
         <span class="name">linCombine</span><span class="params">(<span name="fpMap1">fpMap1: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="fpMap2">fpMap2: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
-    </li><li name="ScMaBoSS.ParReducibleProbDist#multiply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Linear combinaison of two OutType
+</p><div class="fullcomment"><div class="comment cmt"><p>Linear combinaison of two OutType
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+    </li><li name="ScMaBoSS.ParReducibleProbDist#multiply" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="multiply(fpMap:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],d:Double):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="multiply(Map[NetState,Double],Double):Map[NetState,Double]"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/ParReducibleProbDist.html#multiply(fpMap:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],d:Double):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
@@ -567,7 +575,9 @@
         <span class="name">multiply</span><span class="params">(<span name="fpMap">fpMap: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="d">d: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+      <p class="shortcomment cmt">multiplication of an OutType with a real for normalization
+</p><div class="fullcomment"><div class="comment cmt"><p>multiplication of an OutType with a real for normalization
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
