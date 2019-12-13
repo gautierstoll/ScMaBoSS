@@ -258,15 +258,34 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
   * @tparam OutType
   */
 trait ParReducibleRun[OutType] {
+  /** Linear combinaison of two OutType
+    *
+    * @param o1
+    * @param o2
+    * @return
+    */
   def linCombine(o1:OutType,o2:OutType) : OutType
+
+  /** multiplication of an OutType with a real for normalization
+    *
+    * @param o
+    * @param d
+    * @return
+    */
   def multiply(o: OutType,d:Double) : OutType
+
+  /** Generation of an OutType from a MaBoSS Result
+    *
+    * @param r
+    * @return
+    */
   def generate(r:Result) : OutType
 
   /** parallel runs
     *
     * @param cfgMbss
     * @param hints
-    * @param seedHostPortSet parralel set containing seed and (port,host) for MaBoSS servers
+    * @param seedHostPortSet parallel set containing seed and (port,host) for MaBoSS servers
     * @return
     */
   def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
