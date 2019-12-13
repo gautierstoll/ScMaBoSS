@@ -293,6 +293,9 @@ trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
   }
 }
 
+/** Concrete application of ParReducible run for fixed point distribution
+  *
+  */
 object ParReducibleFP extends ParReducibleProbDist
 {
   def generate(r:Result) : Map[NetState,Double] = r.parsedResultData.FP.split("\n").tail.tail.
@@ -308,6 +311,9 @@ private class ParReducibleFP(val fp : Map[NetState,Double]) {
     this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
 }
 
+/** Concrete application of ParReducible run for last probability distribution
+  *
+  */
 object ParReducibleLastLine extends ParReducibleProbDist
 {
   def generate(r:Result) : Map[NetState,Double] = {
