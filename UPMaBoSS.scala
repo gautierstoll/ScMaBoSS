@@ -11,13 +11,9 @@ import scala.util.matching.Regex
   *
   */
 object UPMaBoSS {
-  /** for instancing class from file
-    *
-    * @param upFile
-    * @param cfg
-    * @return
-    */
-  def fromFiles(upFile: String, cfg: CfgMbss,port : Int, hexUP:Boolean = false,verbose : Boolean = false): UPMaBoSS = {
+
+  private def fromFiles(upFile: String, cfg: CfgMbss,port : Int, hexUP:Boolean,verbose : Boolean):
+    (String,String,List[String],Int, Int,CfgMbss,Int ,Boolean,Boolean) = {
     val upLines : List[String] = ManageInputFile.file_get_content(upFile).split("\n").toList
     val deathNode : String = upLines.filter(x => "death\\s*=".r.findFirstIn(x).isDefined) match {
       case Nil => ""
@@ -36,8 +32,10 @@ object UPMaBoSS {
       case seedList: List[String] => "[\\s;]*".r.replaceAllIn("\\s*seed\\s*=\\s*".r.replaceAllIn(seedList.head,""),"").toInt
     }
     val updateVar : List[String]= upLines.filter(x => "u=".r.findFirstIn(x).isDefined)
-    new UPMaBoSS(divisionNode,deathNode,updateVar,steps,seed,cfg,port,hexUP,verbose)
+    (divisionNode,deathNode,updateVar,steps,seed,cfg,port,hexUP,verbose)
   }
+
+
 
   /** Applies init condition for updating external variables
     *
@@ -45,7 +43,7 @@ object UPMaBoSS {
     * @param upProb
     * @return
     */
-  def upProbFromInitCond(initCondProb : List[(String,Double)] , upProb : String,hex :Boolean = false) : String = {
+  private def upProbFromInitCond(initCondProb : List[(String,Double)] , upProb : String,hex :Boolean = false) : String = {
     //println("upProb: "+upProb)
     val nodes = try upProb.split("=").head catch
       {case _:Throwable => throw new IllegalArgumentException("cannot parse "+upProb)}
@@ -81,6 +79,42 @@ object UPMaBoSS {
   */
 class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : List[String], val steps : Int,
                val seed:Int, val cfgMbss : CfgMbss, portMbss : Int , hexUP : Boolean = false,verbose:Boolean = false) {
+  private def this(t : (String,String,List[String],Int, Int,CfgMbss,Int ,Boolean,Boolean)) =
+    this(t._1,t._2,t._3,t._4,t._5,t._6,t._7,t._8,t._9)
+
+  /** Constructor from files
+    *
+    * @param upFile
+    * @param cfg
+    * @param port
+    * @param hexUP
+    * @param verbose
+    * @return
+    */
+  def this(upFile: String, cfg: CfgMbss,port : Int, hexUP:Boolean,verbose : Boolean) =
+    this(UPMaBoSS.fromFiles(upFile, cfg,port, hexUP,verbose))
+
+  /** Constructor from files, verbose is false
+    *
+    * @param upFile
+    * @param cfg
+    * @param port
+    * @param hexUP
+    * @return
+    */
+  def this(upFile: String, cfg: CfgMbss,port : Int, hexUP:Boolean) =
+    this(upFile, cfg,port, hexUP,false)
+
+  /** Constructor from files, hexUP and verbose are false
+    *
+    * @param upFile
+    * @param cfg
+    * @param port
+    * @return
+    */
+  def this(upFile: String, cfg: CfgMbss,port : Int) =
+    this(upFile, cfg,port,false)
+
   def writeToFile(filename : String) : Unit = {
     val pw = new PrintWriter(new File(filename))
     pw.write("death = "+deathNode+"\n")

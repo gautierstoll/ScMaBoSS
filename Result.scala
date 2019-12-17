@@ -170,7 +170,7 @@ object Result {
   */
 class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) {
 
-  /** Constructor of Result from MaBoSS server run
+  /** Constructor of Result from MaBoSS server run. Socket is closed after the run.
     *
     * @param mbcli
     * @param simulation
@@ -264,7 +264,7 @@ trait ParReducibleRun[OutType] {
     * @param o2
     * @return
     */
-  def linCombine(o1:OutType,o2:OutType) : OutType
+  protected def linCombine(o1:OutType,o2:OutType) : OutType
 
   /** multiplication of an OutType with a real for normalization
     *
@@ -272,14 +272,14 @@ trait ParReducibleRun[OutType] {
     * @param d
     * @return
     */
-  def multiply(o: OutType,d:Double) : OutType
+  protected def multiply(o: OutType,d:Double) : OutType
 
   /** Generation of an OutType from a MaBoSS Result
     *
     * @param r
     * @return
     */
-  def generate(r:Result) : OutType
+  protected def generate(r:Result) : OutType
 
   /** parallel runs
     *
@@ -304,10 +304,10 @@ trait ParReducibleRun[OutType] {
   *
   */
 trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
-  def linCombine(fpMap1: Map[NetState, Double], fpMap2: Map[NetState, Double]): Map[NetState, Double] = {
+  protected def linCombine(fpMap1: Map[NetState, Double], fpMap2: Map[NetState, Double]): Map[NetState, Double] = {
     (fpMap1.toList ::: fpMap2.toList).groupBy(_._1).map(x => (x._1, x._2.map(_._2).sum))
   }
-  def multiply(fpMap: Map[NetState, Double], d: Double): Map[NetState, Double] = {
+  protected def multiply(fpMap: Map[NetState, Double], d: Double): Map[NetState, Double] = {
     fpMap.map(x => (x._1, x._2 * d))
   }
 }
@@ -315,9 +315,9 @@ trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
 /** Concrete application of ParReducible run for fixed point distribution
   *
   */
-object ParReducibleFP extends ParReducibleProbDist
+private object ParReducibleFP extends ParReducibleProbDist
 {
-  def generate(r:Result) : Map[NetState,Double] = r.parsedResultData.FP.split("\n").tail.tail.
+  protected def generate(r:Result) : Map[NetState,Double] = r.parsedResultData.FP.split("\n").tail.tail.
     map(line => {val lSplit = line.split("\t");(new NetState(lSplit(1),r.simulation),lSplit(0).toDouble)}).toMap
 }
 
@@ -325,7 +325,7 @@ object ParReducibleFP extends ParReducibleProbDist
   *
   * @param fp
   */
-private class ParReducibleFP(val fp : Map[NetState,Double]) {
+class ParReducibleFP(val fp : Map[NetState,Double]) {
   def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
     this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
 }
@@ -333,9 +333,9 @@ private class ParReducibleFP(val fp : Map[NetState,Double]) {
 /** Concrete application of ParReducible run for last probability distribution
   *
   */
-object ParReducibleLastLine extends ParReducibleProbDist
+private object ParReducibleLastLine extends ParReducibleProbDist
 {
-  def generate(r:Result) : Map[NetState,Double] = {
+  protected def generate(r:Result) : Map[NetState,Double] = {
     r.parsedResultData.prob_traj.split("\n").last.split("\t").
     dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
       map(x => (new NetState(x(0),r.simulation), x(1).toDouble)).toMap
@@ -346,7 +346,7 @@ object ParReducibleLastLine extends ParReducibleProbDist
   *
   * @param fp
   */
-private class ParReducibleLastLine(val fp : Map[NetState,Double]) {
+class ParReducibleLastLine(val fp : Map[NetState,Double]) {
   def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
     this(ParReducibleLastLine(cfgMbss,hints,seedHostPortSet))
 }

@@ -74,7 +74,7 @@ Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
 ```scala
-    val upTest : UPMaBoSS = UPMaBoSS.fromFiles("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
+    val upTest : UPMaBoSS = new UPMaBoSS("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
 ```
 2. Run UPMaBoSS:
 ```scala

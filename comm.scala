@@ -160,7 +160,17 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     }
       scannerBis.next()
   }
+
+  def close(): Unit = {socket.close()}
+
+  /** Run a MaBoSS simulation and return a Result. Socket is closed after the run.
+    *
+    * @param simulation
+    * @param hints
+    * @return
+    */
   def run(simulation : CfgMbss,hints : Hints ) : Result =
   {new Result(this,simulation,hints)}
-  def close(): Unit = {socket.close()}
+
+
 }

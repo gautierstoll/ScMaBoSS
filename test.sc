@@ -14,21 +14,22 @@ val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide
 val simulation : CfgMbss = CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg", BndMbss.fromFile("Tests2/ToyModel4Sc.bnd"))
 
 val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
-println("Start Simulation")
-val result_test : Result = mcli.run(simulation,hints) // could also write val result_test = new Result(mcli,simulation,hints)
+//println("Start Simulation")
+//val result_test : Result = mcli.run(simulation,hints) // could also write val result_test = new Result(mcli,simulation,hints)
 
-println("Finished simulation")
+//println("Finished simulation")
 
 //val simulation : CfgMbss = CfgMbss.fromFile("Tests/CellFateModel.cfg",
 //  BndMbss.fromFile("Tests/CellFateModel.bnd"))
 
-//val upSimulation : UPMaBoSS = UPMaBoSS.fromFiles("Tests/CellFate.upp",simulation)
+val upMaBoSSTest2 : UPMaBoSS =
+  new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulation,4291,false,true)
 
-//val UPMaBoSSTest2 : UPMaBoSS = UPMaBoSS.fromFiles("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)
+val upMaBoSSTest3 : UPMaBoSS =
+  new UPMaBoSS("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)
+
 //val resUP3 : UPMbssOutLight = UPMaBoSSTest2.runLight(14)
 
 //val probStat = ((new NetState(simulation.extNodeList.zip(false :: true :: false :: true :: Nil).toMap,simulation),.5) ::
 //  (new NetState(simulation.extNodeList.zip(true :: true :: false :: true :: Nil).toMap,simulation),.2) ::
 //  (new NetState(simulation.extNodeList.zip(true :: true :: true :: true :: Nil).toMap,simulation),.3) :: Nil)
-
-
