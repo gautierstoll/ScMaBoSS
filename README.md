@@ -64,10 +64,7 @@ import ScMaBoSS._
 ```scala
     val result : Result = mcli.run(simulation,hints)
 ```
-5. Close socket:
-```scala
-    mcli.close()
-```
+
 Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
 ## Example for using UPMaBoSS:
