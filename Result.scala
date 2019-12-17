@@ -357,7 +357,7 @@ class ParReducibleFP(val fp : Map[NetState,Double]) {
 /** Concrete application of ParReducible run for last probability distribution
   *
   */
-private object ParReducibleLastLine extends ParReducibleProbDist
+object ParReducibleLastLine extends ParReducibleProbDist
 {
   protected def generate(r:Result) : Map[NetState,Double] = {
     r.parsedResultData.prob_traj.split("\n").last.split("\t").
@@ -368,9 +368,9 @@ private object ParReducibleLastLine extends ParReducibleProbDist
 
 /** parallel runs with last line probability distribution output
   *
-  * @param fp
+  * @param probState
   */
-class ParReducibleLastLine(val fp : Map[NetState,Double]) {
+class ParReducibleLastLine(val probState : Map[NetState,Double]) {
   def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
     this(ParReducibleLastLine(cfgMbss,hints,seedHostPortSet))
 }

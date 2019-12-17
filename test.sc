@@ -13,7 +13,7 @@ import ScMaBoSS._
 val hints : Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 val simulation : CfgMbss = CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg", BndMbss.fromFile("Tests2/ToyModel4Sc.bnd"))
 
-val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
+//val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
 //println("Start Simulation")
 //val result_test : Result = mcli.run(simulation,hints) // could also write val result_test = new Result(mcli,simulation,hints)
 
@@ -22,8 +22,8 @@ val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
 //val simulation : CfgMbss = CfgMbss.fromFile("Tests/CellFateModel.cfg",
 //  BndMbss.fromFile("Tests/CellFateModel.bnd"))
 
-val upMaBoSSTest2 : UPMaBoSS =
-  new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulation,4291,false,true)
+//val upMaBoSSTest2 : UPMaBoSS =
+//  new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulation,4291,false,true)
 
 //val upMaBoSSTest3 : UPMaBoSS =
 //  new UPMaBoSS("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)
