@@ -159,6 +159,30 @@ object Result {
     val pdfFile = new File(filename)
     pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
   }
+
+  /** Write tab-separated file of state probability trajectory
+    *
+    * @param netStates
+    * @param probTrajLines
+    * @param filename
+    */
+   def writeStateTraj(netStates : List[NetState],probTrajLines : List[String],filename : String): Unit = {
+     val pw = new PrintWriter(new File(filename))
+     val header = "Time\t"+netStates.map(x=>x.toString).mkString("\t")+"\n"
+     pw.write(header)
+     val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
+     val timeList : Vector[Double] = listTraj.head.map(_._1).toVector
+     val flatVectorProb : Vector[Double] = listTraj.flatten.map(_._2).toVector
+     (probTrajLines.indices).foreach(lineIndex =>
+     {
+       pw.write(timeList(lineIndex).toString)
+       (netStates.indices).foreach(stateIndex =>
+       pw.write("\t" + flatVectorProb(stateIndex *probTrajLines.length  +lineIndex)).toString)
+       pw.write("\n")
+     })
+     pw.close()
+   }
+
 }
 
 /** Results of MaBoSS server

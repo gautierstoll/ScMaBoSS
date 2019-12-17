@@ -25,8 +25,8 @@ val mcli : MaBoSSClient = new MaBoSSClient(port=4291)
 val upMaBoSSTest2 : UPMaBoSS =
   new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulation,4291,false,true)
 
-val upMaBoSSTest3 : UPMaBoSS =
-  new UPMaBoSS("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)
+//val upMaBoSSTest3 : UPMaBoSS =
+//  new UPMaBoSS("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)
 
 //val resUP3 : UPMbssOutLight = UPMaBoSSTest2.runLight(14)
 
