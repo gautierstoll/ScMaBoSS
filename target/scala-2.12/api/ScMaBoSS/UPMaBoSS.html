@@ -741,9 +741,9 @@
         <span class="name">run</span><span class="params">(<span name="nbSteps">nbSteps: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#steps:Int">steps</a></span></span></span>)</span><span class="result">: <a href="UPMbssOut.html" class="extype" name="ScMaBoSS.UPMbssOut">UPMbssOut</a></span>
       </span>
       
-      <p class="shortcomment cmt">Run UpMaBoSS
-</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>full outputs of UPMaBoSS</p></dd></dl></div>
+      <p class="shortcomment cmt">Run UpMaBoSS, with full list of configurations.</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS, with full list of configurations. Useful for model debugging. Because it uses the stream strRun,
+it can be relaunched with a larger number of steps.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>relative sizes and configuration for each step</p></dd></dl></div>
     </li><li name="ScMaBoSS.UPMaBoSS#runLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="runLight(nbSteps:Int):ScMaBoSS.UPMbssOutLight"></a><a id="runLight(Int):UPMbssOutLight"></a>
       <span class="permalink">
@@ -759,8 +759,8 @@
         <span class="name">runLight</span><span class="params">(<span name="nbSteps">nbSteps: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#steps:Int">steps</a></span></span></span>)</span><span class="result">: <a href="UPMbssOutLight.html" class="extype" name="ScMaBoSS.UPMbssOutLight">UPMbssOutLight</a></span>
       </span>
       
-      <p class="shortcomment cmt">Run UpMaBoSS, using minimal data
-</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS, using minimal data
+      <p class="shortcomment cmt">Run UpMaBoSS, with minimal output.</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS, with minimal output. Because it uses the stream strRunLight, it can be relaunched with a larger number of
+steps.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>minimal outputs of UPMaBoSS</p></dd></dl></div>
     </li><li name="ScMaBoSS.UPMaBoSS#seed" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="seed:Int"></a>
@@ -871,6 +871,22 @@
       </span>
       <span class="symbol">
         <span class="name">upRandom</span><span class="result">: <span class="extype" name="scala.util.Random">Random</span></span>
+      </span>
+      
+      
+    </li><li name="ScMaBoSS.UPMaBoSS#upRandom4Light" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="upRandom4Light:scala.util.Random"></a><a id="upRandom4Light:Random"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#upRandom4Light:scala.util.Random" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">upRandom4Light</span><span class="result">: <span class="extype" name="scala.util.Random">Random</span></span>
       </span>
       
       

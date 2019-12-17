@@ -42,7 +42,7 @@ object NetState {
   * @param state
   */
 class NetState (val state: Map[String,Boolean]) {
-  val nodeSet = state.keySet
+  val nodeSet : Set[String] = state.keySet
   /**
     *
     * @param stateString active nodes separates by " -- "
