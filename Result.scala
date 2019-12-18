@@ -246,7 +246,7 @@ object ParReducibleLastLine extends ParReducibleProbDist
     * @param r
     * @return
     */
-  protected def generate(r:Result) : Map[NetState,Double] = {
+  def generate(r:Result) : Map[NetState,Double] = {
     r.parsedResultData.prob_traj.split("\n").last.split("\t").
     dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
       map(x => (new NetState(x(0),r.simulation), x(1).toDouble)).toMap
