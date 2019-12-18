@@ -279,7 +279,4 @@ case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss
   val linesWithTime : List[String] = lastLines.zipWithIndex.
     map(lineIndex => {"^[\t]*".r.replaceAllIn(lineIndex._1,(lineIndex._2*stepTime).toString+"\t")})
 
-  //def plotStateTraj(netStates : List[NetState],filename : String) : File = {
-  //  Result.plotStateTraj(netStates,lastLinesWithTime,filename)
-  //}
 }

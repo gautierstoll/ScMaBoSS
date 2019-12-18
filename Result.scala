@@ -83,7 +83,6 @@ object Result {
     * @param hints
     * @return
     */
-  //def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Result = {
   private def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : String = {
     val command: String = if (hints.check) {
       GlCst.CHECK_COMMAND
@@ -95,94 +94,6 @@ object Result {
     outputData
     //new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
-
-  /*/** Boolean state probability trajectory, given a list of probtraj and a network state
-    *
-    * @param netState
-    * @param probTrajLines
-    * @return probability over time
-    */
-  def stateTrajectory(netState: NetState,probTrajLines : List[String]): List[(Double, Double)] = { // to be tested, the .isDefined
-    val activeNodes = netState.state.filter(nodeBool => nodeBool._2).keySet
-    val unactiveNodes = netState.state.filter(nodeBool => !nodeBool._2).keySet
-    probTrajLines.map(probTrajLine => {
-      val splitProbTrajLine = probTrajLine.split("\t")
-      val stateDistProb: List[(String, Double)] = splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-        sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
-      val prob = stateDistProb.filter(stateProb => {
-        val nodes = stateProb._1.split(" -- ").toSet
-        activeNodes.diff(nodes).isEmpty & unactiveNodes.intersect(nodes).isEmpty}).
-        map(_._2).sum
-      (splitProbTrajLine.toList.head.toDouble, prob)
-    })
-  }
-
-  /** Node state probability trajectory, given a list of probtraj and a node
-    *
-    * @param node
-    * @param probTrajLines
-    * @return probability over time
-    */
-  def nodeTrajectory(node: String,probTrajLines : List[String]): List[(Double, Double)] = // to be tested, the .isDefined
-  {
-    probTrajLines.map(probTrajLine => {
-      val splitProbTrajLine = probTrajLine.split("\t")
-      (splitProbTrajLine.head.toDouble,
-        splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-          sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
-    })
-  }
-
-  /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
-    *
-    * @param netStates
-    * @param probTrajLines
-    * @param filename
-    * @return
-    */
-  def plotStateTraj(netStates : List[NetState],probTrajLines : List[String],filename : String) : File = {
-    val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
-    val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) :: //matrix with x coordinates
-      listTraj.map(x => Vec(x.map( y=> y._2).toArray)) ::: // y coordinates
-      (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble-1).toArray)).toList).toArray) //and colors
-    val builtElement =
-      xyplot(Mat4Plot -> (
-        (1 to netStates.length).map(x => line(xCol = 0,yCol = x,colorCol = netStates.length+x, // lines given the column indices of the matrix
-          color = DiscreteColors(netStates.length - 1))).toList  :::
-          (1 to netStates.length).map(x => // points given the column indices of the matrix
-            point(xCol = 0,yCol = x, colorCol = netStates.length+x, sizeCol=3+2*netStates.length,
-              shapeCol=3+2*netStates.length, errorBottomCol =1+netStates.length , errorTopCol = 1+netStates.length , size = 4d,
-              color = DiscreteColors(netStates.length-1))).toList ) // careful, need to add zero to errorTop/Bottom
-      )(xlab = "Time",ylab="Probability",extraLegend =
-        netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
-          color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
-    val pdfFile = new File(filename)
-    pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
-  }
-
-  /** Write tab-separated file of state probability trajectory
-    *
-    * @param netStates
-    * @param probTrajLines
-    * @param filename
-    */
-   def writeStateTraj(netStates : List[NetState],probTrajLines : List[String],filename : String): Unit = {
-     val pw = new PrintWriter(new File(filename))
-     val header = "Time\t"+netStates.map(x=>x.toString).mkString("\t")+"\n"
-     pw.write(header)
-     val listTraj =netStates.map(x => stateTrajectory(x,probTrajLines))
-     val timeList : Vector[Double] = listTraj.head.map(_._1).toVector
-     val flatVectorProb : Vector[Double] = listTraj.flatten.map(_._2).toVector
-     (probTrajLines.indices).foreach(lineIndex =>
-     {
-       pw.write(timeList(lineIndex).toString)
-       (netStates.indices).foreach(stateIndex =>
-       pw.write("\t" + flatVectorProb(stateIndex *probTrajLines.length  +lineIndex)).toString)
-       pw.write("\n")
-     })
-     pw.close()
-   }
-*/
 }
 
 /** Results of MaBoSS server
@@ -246,35 +157,6 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
     pw.write(parsedResultData.stat_dist)
     pw.close()
   }
-
- /* /**  Boolean state probability trajectory, given a network state
-    *
-    * @param netState
-    * @return
-    */
-  def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
-    Result.stateTrajectory(netState,parsedResultData.prob_traj.split("\n").toList.tail)
-  }
-
-  /** Node state probability trajectory, given a node
-    *
-    * @param node
-    * @return
-    */
-  def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested, the .isDefined
-  {
-    Result.nodeTrajectory(node,parsedResultData.prob_traj.split("\n").toList.tail)
-  }
-
-  /** Plot Boolean state probability trajectories, given a list of network states
-    *
-    * @param netStates
-    * @param filename
-    * @return
-    */
-  def plotStateTraj(netStates : List[NetState],filename : String) : File = {
-    Result.plotStateTraj(netStates,parsedResultData.prob_traj.split("\n").toList.tail,filename)
-  }*/
 }
 
 /** Trait for parallel runs of MaBoSS with reduction
@@ -282,7 +164,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
   * @tparam OutType
   */
 trait ParReducibleRun[OutType] {
-  /** Linear combinaison of two OutType
+  /** Linear combination of two OutType
     *
     * @param o1
     * @param o2
@@ -359,6 +241,11 @@ class ParReducibleFP(val fp : Map[NetState,Double]) {
   */
 object ParReducibleLastLine extends ParReducibleProbDist
 {
+  /** Generate probability distribution from last line of probtraj
+    *
+    * @param r
+    * @return
+    */
   protected def generate(r:Result) : Map[NetState,Double] = {
     r.parsedResultData.prob_traj.split("\n").last.split("\t").
     dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
