@@ -1,0 +1,25 @@
+node A 
+{
+	rate_up = 0.0;
+	rate_down = 0.0 ;
+}
+node L
+{
+	rate_up = A ? $fast : 0.0;
+	rate_down = A ? 0.0 : $slow;
+}
+node R 
+{
+	rate_up = $extL ;
+	rate_down = A ? $degR : 0.0;
+}
+node Division 
+{
+	rate_up = L ? $divRate : 0.0;
+	rate_down = 0.0;
+}
+node Death
+{
+	rate_up = R ? $deathRate : 0.0;
+	rate_down = 0.0 ;
+}

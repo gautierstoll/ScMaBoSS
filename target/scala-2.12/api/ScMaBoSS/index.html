@@ -162,7 +162,7 @@
                           ParReducibleFP
                         </a>
                       </li><li class="current-entities indented1">
-                        <span class="separator"></span>
+                        <a class="object" href="ParReducibleLastLine$.html" title="Concrete application of ParReducible run for last probability distribution"></a>
                         <a class="class" href="ParReducibleLastLine.html" title="parallel runs with last line probability distribution output
 "></a>
                         <a href="ParReducibleLastLine.html" title="parallel runs with last line probability distribution output
@@ -198,6 +198,12 @@
                         <a href="ResultData.html" title="Parsed results from MaBoSS server
 ">
                           ResultData
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title=""></a>
+                        <a href="ResultProcessing.html" title="">
+                          ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
                         <a class="object" href="UPMaBoSS$.html" title="Methods for UPMaBoSS: instancing UPMaBoSS from file, update external variables"></a>
@@ -485,9 +491,9 @@
       <p class="shortcomment cmt">Trait for parallel runs of MaBoSS with reduction
 </p>
     </li><li name="ScMaBoSS.Result" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ResultextendsAnyRef"></a><a id="Result:Result"></a>
+      <a id="ResultextendsResultProcessing"></a><a id="Result:Result"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/index.html#ResultextendsAnyRef" title="Permalink">
+      <a href="../ScMaBoSS/index.html#ResultextendsResultProcessing" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -499,7 +505,7 @@
         <a title="Results of MaBoSS server
 " href="Result.html">
               <span class="name">Result</span>
-            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+            </a><span class="result"> extends <a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></span>
       </span>
       
       <p class="shortcomment cmt">Results of MaBoSS server
@@ -524,6 +530,24 @@
       
       <p class="shortcomment cmt">Parsed results from MaBoSS server
 </p>
+    </li><li name="ScMaBoSS.ResultProcessing" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResultProcessingextendsAnyRef"></a><a id="ResultProcessing:ResultProcessing"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/index.html#ResultProcessingextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ResultProcessing.html">
+              <span class="name">ResultProcessing</span>
+            </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
     </li><li name="ScMaBoSS.UPMaBoSS" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UPMaBoSSextendsAnyRef"></a><a id="UPMaBoSS:UPMaBoSS"></a>
       <span class="permalink">
@@ -565,9 +589,9 @@
       <p class="shortcomment cmt">Output of UPMaBoSS, including population size and CfgMbss for each time steps
 </p>
     </li><li name="ScMaBoSS.UPMbssOutLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UPMbssOutLightextendsProductwithSerializable"></a><a id="UPMbssOutLight:UPMbssOutLight"></a>
+      <a id="UPMbssOutLightextendsResultProcessingwithProductwithSerializable"></a><a id="UPMbssOutLight:UPMbssOutLight"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/index.html#UPMbssOutLightextendsProductwithSerializable" title="Permalink">
+      <a href="../ScMaBoSS/index.html#UPMbssOutLightextendsResultProcessingwithProductwithSerializable" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -579,7 +603,7 @@
         <a title="Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
 " href="UPMbssOutLight.html">
               <span class="name">UPMbssOutLight</span>
-            </a><span class="params">(<span name="sizes">sizes: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="lastLines">lastLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+            </a><span class="params">(<span name="sizes">sizes: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>, <span name="lastLines">lastLines: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>)</span><span class="result"> extends <a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       <p class="shortcomment cmt">Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
@@ -700,6 +724,24 @@
       </span>
       
       <p class="shortcomment cmt">Method used in different NetState constructors, for handling error</p>
+    </li><li name="ScMaBoSS.ParReducibleLastLine" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParReducibleLastLine"></a><a id="ParReducibleLastLine:ParReducibleLastLine"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/index.html#ParReducibleLastLine" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Concrete application of ParReducible run for last probability distribution" href="ParReducibleLastLine$.html">
+              <span class="name">ParReducibleLastLine</span>
+            </a><span class="result"> extends <a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Concrete application of ParReducible run for last probability distribution</p>
     </li><li name="ScMaBoSS.Result" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Result"></a><a id="Result:Result"></a>
       <span class="permalink">

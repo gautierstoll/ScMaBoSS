@@ -97,8 +97,7 @@ with verbose for UPMaBoSS steps:
     upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
 ```
 Methods of class [`UPMbssOutLight`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMbssOutLight.html)
-can be used for extracting output data. In particular, member `lastLinesWithTime` can be used within
-object [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result$.html).
+can be used for extracting output data.
 Note that [`UPMaBoSS`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMaBoSS.html) is a class
 that constructs a stream `strRunLight`. Therefore, the simulation can be relaunched with a larger number of steps, with no
 new calculation for the first steps.
