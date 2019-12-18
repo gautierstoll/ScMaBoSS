@@ -67,6 +67,24 @@ import ScMaBoSS._
 
 Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
+## Example of parallel run of MaBoSS servers, aggregating last line of prob_traj:
+1. Parameters for the server:
+```scala
+    val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
+```
+2. Constructing inputs from files:
+```scala
+    val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
+```
+3. Define the parallel set of seed,server_name and server_port:
+```scala
+val parSet = scala.collection.parallel.immutable.ParSet((seed1,server_name1,server_port1),(seed1,server_name1,server_port1),...)
+```
+4. Run MaBoSS and collect the aggregated last probability distribution
+```
+val redLastProb = ParReducibleLastLine(simulation,hints,parSet)
+```
+
 ## Example for using UPMaBoSS:
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
