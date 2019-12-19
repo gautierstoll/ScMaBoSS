@@ -45,7 +45,7 @@ sbt package
 ```scala
 import ScMaBoSS._
 ```
-
+for MacOSX, sbt console may return an error. In that case, one should launch [TERM=xterm-color] on the terminal before launching sbt
 
 ## Example for using MaBoSS server:
 1. Parameters for the server:

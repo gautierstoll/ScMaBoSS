@@ -197,6 +197,7 @@ trait ParReducibleRun[OutType] {
       val mbcli = new MaBoSSClient(seedHostPort._2,seedHostPort._3)
       val result = mbcli.run(newCfg,hints)
       mbcli.close()
+        println("Done for seed: "+seedHostPort._1+", host: "+seedHostPort._2+", port: "+seedHostPort._3)
       generate(result)
     }).reduce((x,y) => linCombine(x,y)),1/seedHostPortSet.size.toDouble)
   }
