@@ -83,7 +83,7 @@ scala.collection.parallel.immutable.ParSet((seed1,server_name1,server_port1),(se
 ```
 4. Run MaBoSS and collect the aggregated last probability distribution
 ```
-val redLastProb : ParReducibleLastLine = ParReducibleLastLine(simulation,hints,parSet)
+val redLastProb : ParReducibleLastLine = new ParReducibleLastLine(simulation,hints,parSet)
 ```
 
 ## Example for using UPMaBoSS:

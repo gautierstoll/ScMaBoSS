@@ -45,6 +45,12 @@ object GlCst {
   *
   */
 object DataStreamer {
+  /** build data to be sent to MaBoSS server
+    *
+    * @param client_data
+    * @param hints
+    * @return
+    */
   def buildStreamData(client_data: ClientData, hints: Hints = null): String = {
     val flags: Int = 0 | (if (hints.hexfloat) GlCst.HEXFLOAT_FLAG else 0) |
       (if (hints.overRide) GlCst.OVERRIDE_FLAG else 0) | (if (hints.augment) GlCst.AUGMENT_FLAG else 0)
@@ -64,6 +70,13 @@ object DataStreamer {
     }
     headerConfigNetwork + "\n" + dataConfigNetwork
   }
+
+  /** parse data received by MaBoSS server
+    *
+    * @param ret_data
+    * @param verbose
+    * @return
+    */
   def parseStreamData(ret_data : String, verbose : Boolean): ResultData = {
     val magic : String = GlCst.RETURN + " " + GlCst.MABOSS_MAGIC
     val magic_len : Int = magic.length
@@ -79,16 +92,16 @@ object DataStreamer {
           print("======= receiving header \n" + header)
           print("======= receiving data[0:200]\n" + data.substring(0, 200) + "\n[...]\n")
         }
-        var resStatus : Int = 0
-        var resErrmsg : String = ""
-        var resStat_dist : String = null
-        var resProb_traj : String = null
-        var resTraj : String = null
-        var resFP : String = null
-        var resRunlog : String = null
-        var oposLoop : Int = 0
-        var posLoop : Int = 0
-        var loop : Boolean = true
+        var resStatus: Int = 0
+        var resErrmsg: String = ""
+        var resStat_dist: String = null
+        var resProb_traj: String = null
+        var resTraj: String = null
+        var resFP: String = null
+        var resRunlog: String = null
+        var oposLoop: Int = 0
+        var posLoop: Int = 0
+        var loop: Boolean = true
         while(loop)
         {
           posLoop = header.indexOf(":",oposLoop)
@@ -142,8 +155,8 @@ object DataStreamer {
   * @param host
   * @param port
   */
-class MaBoSSClient (host : String = "localhost", port : Int) {
-  val socket : java.net.Socket =
+class MaBoSSClient (host: String = "localhost", port : Int) {
+  val socket: java.net.Socket =
     try {
       new java.net.Socket(host,port)
     }
@@ -152,7 +165,7 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     }
     private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
     private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
-  def send(inputData : String):String =  {
+  def send(inputData: String):String =  {
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try bos.flush() catch {
@@ -169,8 +182,6 @@ class MaBoSSClient (host : String = "localhost", port : Int) {
     * @param hints
     * @return
     */
-  def run(simulation : CfgMbss,hints : Hints ) : Result =
+  def run(simulation: CfgMbss,hints: Hints ): Result =
   {new Result(this,simulation,hints)}
-
-
 }

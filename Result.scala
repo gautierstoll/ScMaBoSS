@@ -15,24 +15,24 @@ import org.nspl.awtrenderer._
 import org.saddle.io._
 import org.saddle.io.CsvImplicits._
 
-/** Data sent to MaBoSS server
+/** Data sent to MaBoSS server, need to be transformed by DataStreamer.buildStreamData
   *
   * @param network
   * @param config
   * @param command
   */
-case class ClientData(network : String = null, config : String = null, command : String = "Run") {}
+case class ClientData(network : String = null, config: String = null, command: String = "Run") {}
 
 /** Parameters for MaBoSS server
   *
-  * @param check
-  * @param hexfloat
+  * @param check if true, just check coherence of network and config
+  * @param hexfloat hif true, double a represented in hexfloat format
   * @param augment
   * @param overRide
   * @param verbose
   */
-case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : Boolean =  true,
-                 overRide : Boolean = false , verbose : Boolean = false) {}
+case class Hints(check: Boolean = false, hexfloat: Boolean = false, augment: Boolean =  true,
+                 overRide: Boolean = false , verbose: Boolean = false) {}
 
 /** Parsed results from MaBoSS server
   *
@@ -44,21 +44,22 @@ case class Hints(check : Boolean = false, hexfloat : Boolean = false, augment : 
   * @param FP
   * @param runlog
   */
-case class ResultData(status : Int = 0, errmsg : String = "" , stat_dist : String = null,
-                      prob_traj : String = null, traj : String = null, FP : String = null, runlog : String = null) {}
+case class ResultData(status: Int = 0, errmsg: String = "" , stat_dist: String = null,
+                      prob_traj: String = null, traj: String = null, FP: String = null, runlog: String = null) {}
 
 /** Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run
   *
   */
 object Result {
-  /** initial condition and normalization factor from last line of probtraj, usefull for UPMaBoSS
+  /** initial condition and normalization factor from last line of probtraj, useful for UPMaBoSS
+    * Not private because UPStepLight of UPMaBoSS uses it
     *
     * @param line
     * @param divNode
     * @param deathNode
     * @return
     */
-  def updateLine(line : String,divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = {
+  def updateLine(line: String,divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = {
     val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
       sliding(3, 3).map(x => (x(0), x(1).toDouble)).
       filter(x => !x._1.split(" -- ").contains(deathNode)).
@@ -122,12 +123,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
   def doubleToMbssString(double: Double): String = { // not yet used for writing files
     if (hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
-  // val command: String = if (hints.check) {
-  //  GlCst.CHECK_COMMAND
-  //} else GlCst.RUN_COMMAND
-  //val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
-  //val data: String = DataStreamer.buildStreamData(clientData, hints)
-  //val outputData: String = mbcli.send(data)
+
   val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime : List[String] = parsedResultData.prob_traj.split("\n").toList.tail
   /** updates last probability distribution for UPMaBoSS
@@ -172,7 +168,7 @@ trait ParReducibleRun[OutType] {
     */
   protected def linCombine(o1:OutType,o2:OutType) : OutType
 
-  /** multiplication of an OutType with a real for normalization
+  /** multiplication of an OutType with a real number for normalization
     *
     * @param o
     * @param d
@@ -194,7 +190,7 @@ trait ParReducibleRun[OutType] {
     * @param seedHostPortSet parallel set containing seed and (port,host) for MaBoSS servers
     * @return
     */
-  def apply(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) : OutType = {
+  def apply(cfgMbss : CfgMbss,hints: Hints,seedHostPortSet: ParSet[(Int,String,Int)]): OutType = {
     multiply(
       seedHostPortSet.map(seedHostPort => {
       val newCfg = cfgMbss.update((("seed_pseudorandom",seedHostPort._1.toString) :: Nil).toMap)
@@ -221,7 +217,7 @@ trait ParReducibleProbDist extends ParReducibleRun[Map[NetState,Double]] {
 /** Concrete application of ParReducible run for fixed point distribution
   *
   */
-private object ParReducibleFP extends ParReducibleProbDist
+object ParReducibleFP extends ParReducibleProbDist
 {
   protected def generate(r:Result) : Map[NetState,Double] = r.parsedResultData.FP.split("\n").tail.tail.
     map(line => {val lSplit = line.split("\t");(new NetState(lSplit(1),r.simulation),lSplit(0).toDouble)}).toMap
@@ -231,8 +227,8 @@ private object ParReducibleFP extends ParReducibleProbDist
   *
   * @param fp
   */
-class ParReducibleFP(val fp : Map[NetState,Double]) {
-  def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
+class ParReducibleFP(val fp: Map[NetState,Double]) {
+  def this(cfgMbss : CfgMbss,hints: Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
     this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
 }
 
@@ -332,7 +328,7 @@ trait ResultProcessing {
     * @param netStates
     * @param filename
     */
-  def writeStateTraj(netStates : List[NetState],filename : String): Unit = {
+  def writeStateTraj(netStates: List[NetState],filename : String): Unit = {
     val pw = new PrintWriter(new File(filename))
     val header = "Time\t"+netStates.map(x=>x.toString).mkString("\t")+"\n"
     pw.write(header)
