@@ -78,8 +78,8 @@ Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala
 ```
 3. Define the parallel set of seed,server_name and server_port:
 ```scala
-val parSet : scala.collection.parallel.immutable.ParSet =
-scala.collection.parallel.immutable.ParSet((seed1,server_name1,server_port1),(seed1,server_name1,server_port1),...)
+val parSet =
+scala.collection.parallel.immutable.ParSet((seed1,server_name1,server_port1),(seed1,server_name2,server_port2),...)
 ```
 4. Run MaBoSS and collect the aggregated last probability distribution
 ```
