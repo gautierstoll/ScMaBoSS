@@ -232,6 +232,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   }
 
   /** Generate new CfgMbss with initial condition from probability distribution
+    * For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can be used via toList
     *
     * @param probDist
     * @param hex write Double in hexString?

@@ -159,7 +159,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
     * @param index
     * @return
     */
-  def probTrajLine2Dist(index: Int): Map[NetState, Double] = super.probTrajLine2Dist(index, simulation)
+  def probTrajLine2Dist(index: Int): Array[(NetState, Double)] = super.probTrajLine2Dist(index, simulation)
 }
 
 /** Trait for parallel runs of MaBoSS with reduction
@@ -362,9 +362,9 @@ trait ResultProcessing {
     * @param simulation
     * @return
     */
-  def probTrajLine2Dist(index: Int,simulation: CfgMbss): Map[NetState,Double]  = {
+  def probTrajLine2Dist(index: Int,simulation: CfgMbss): Array[(NetState,Double)]  = {
     linesWithTime(index).split("\t").
     dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
-      map(x => (new NetState(x(0),simulation), x(1).toDouble)).toMap
+      map(x => (new NetState(x(0),simulation), x(1).toDouble))
   }
 }

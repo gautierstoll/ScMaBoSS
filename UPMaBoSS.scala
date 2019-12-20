@@ -285,6 +285,6 @@ case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss
     * @param index
     * @return
     */
-  def probTrajLine2Dist(index: Int): Map[NetState, Double] = super.probTrajLine2Dist(index, cfgMbss)
+  def probTrajLine2Dist(index: Int): Array[(NetState, Double)] = super.probTrajLine2Dist(index, cfgMbss)
 
 }
