@@ -41,11 +41,13 @@ sbt package
 5. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
 ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl))
 
-6. ScMaBoSS can be used in a scala REPL (like an sbt console) with
-```scala
+6. ScMaBoSS can be used in a scala REPL. For instance, in a sbt console: (like an sbt console) with
+```sbt
+console
 import ScMaBoSS._
 ```
-for MacOSX, sbt console may return an error. In that case, one should launch [TERM=xterm-color] on the terminal before launching sbt
+for MacOSX, sbt console may return an error. In that case, one should launch `TERM=xterm-color` on the terminal before launching `sbt`.
+In an sbt console, the memory can be set like in java when launching sbt, eg `sbt -J-Xmx4G -J-Xms4G`.
 
 ## Example for using MaBoSS server:
 1. Parameters for the server:
