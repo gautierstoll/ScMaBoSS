@@ -280,7 +280,7 @@ case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss
   val linesWithTime : List[String] = lastLines.zipWithIndex.
     map(lineIndex => {"^[\t]*".r.replaceAllIn(lineIndex._1,(lineIndex._2*stepTime).toString+"\t")})
 
-  /** Distribution from given probtraj line index
+  /** Distribution from given line index
     *
     * @param index
     * @return
