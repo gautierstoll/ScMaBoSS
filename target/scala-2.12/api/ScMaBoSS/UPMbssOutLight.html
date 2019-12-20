@@ -571,8 +571,8 @@
         <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Node state probability trajectory, given a list of probtraj and a node
-</p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a list of probtraj and a node
+      <p class="shortcomment cmt">Node state probability trajectory, given a node
+</p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a node
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -624,6 +624,41 @@
       <p class="shortcomment cmt">Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
 </p><div class="fullcomment"><div class="comment cmt"><p>Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></dd></dl></div>
+    </li><li name="ScMaBoSS.UPMbssOutLight#probTrajLine2Dist" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probTrajLine2Dist(index:Int):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="probTrajLine2Dist(Int):Map[NetState,Double]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMbssOutLight.html#probTrajLine2Dist(index:Int):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probTrajLine2Dist</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Distribution from given probtraj line index
+</p>
+    </li><li name="ScMaBoSS.ResultProcessing#probTrajLine2Dist" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probTrajLine2Dist(index:Int,simulation:ScMaBoSS.CfgMbss):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="probTrajLine2Dist(Int,CfgMbss):Map[NetState,Double]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMbssOutLight.html#probTrajLine2Dist(index:Int,simulation:ScMaBoSS.CfgMbss):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probTrajLine2Dist</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Distribution from given probtraj line index
+</p><div class="fullcomment"><div class="comment cmt"><p>Distribution from given probtraj line index
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></dd></dl></div>
     </li><li name="ScMaBoSS.UPMbssOutLight#sizes" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="sizes:List[Double]"></a>
       <span class="permalink">
@@ -655,8 +690,8 @@
         <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
-      <p class="shortcomment cmt">Boolean state probability trajectory, given a list of probtraj and a network state
-</p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a list of probtraj and a network state
+      <p class="shortcomment cmt">Boolean state probability trajectory, given a network state
+</p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a network state
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></dd></dl></div>
     </li><li name="ScMaBoSS.UPMbssOutLight#stepTime" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stepTime:Double"></a>

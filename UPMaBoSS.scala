@@ -4,6 +4,7 @@ import org.apache.commons.lang.ObjectUtils.Null
 import scalatags.Text.short.*
 import java.io._
 
+import scala.collection.immutable.Map
 import scala.util.Random
 import scala.util.matching.Regex
 
@@ -278,5 +279,12 @@ case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss
     */
   val linesWithTime : List[String] = lastLines.zipWithIndex.
     map(lineIndex => {"^[\t]*".r.replaceAllIn(lineIndex._1,(lineIndex._2*stepTime).toString+"\t")})
+
+  /** Distribution from given probtraj line index
+    *
+    * @param index
+    * @return
+    */
+  def probTrajLine2Dist(index: Int): Map[NetState, Double] = super.probTrajLine2Dist(index, cfgMbss)
 
 }

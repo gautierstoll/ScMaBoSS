@@ -153,6 +153,13 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
     pw.write(parsedResultData.stat_dist)
     pw.close()
   }
+
+  /** Distribution from given probtraj line index
+    *
+    * @param index
+    * @return
+    */
+  def probTrajLine2Dist(index: Int): Map[NetState, Double] = super.probTrajLine2Dist(index, simulation)
 }
 
 /** Trait for parallel runs of MaBoSS with reduction
@@ -263,7 +270,7 @@ trait ResultProcessing {
 
   def linesWithTime : List[String]
 
-  /** Boolean state probability trajectory, given a list of probtraj and a network state
+  /** Boolean state probability trajectory, given a network state
     *
     * @param netState
     * @return probability over time
@@ -283,7 +290,7 @@ trait ResultProcessing {
     })
   }
 
-  /** Node state probability trajectory, given a list of probtraj and a node
+  /** Node state probability trajectory, given a node
     *
     * @param node
     * @return probability over time
@@ -347,5 +354,17 @@ trait ResultProcessing {
       pw.write("\n")
     })
     pw.close()
+  }
+
+  /** Distribution from given probtraj line index
+    *
+    * @param index
+    * @param simulation
+    * @return
+    */
+  def probTrajLine2Dist(index: Int,simulation: CfgMbss): Map[NetState,Double]  = {
+    linesWithTime(index).split("\t").
+    dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
+      map(x => (new NetState(x(0),simulation), x(1).toDouble)).toMap
   }
 }
