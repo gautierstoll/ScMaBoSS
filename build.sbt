@@ -8,8 +8,8 @@ name := "ScMaBoSS"
 
 version := "0.3" // version of tested UPMaBoSS, and tested parallel runs
 
-scalaVersion := "2.12.1"
-crossScalaVersions := Seq("2.12.1","2.13.0")
+scalaVersion := "2.12.10"
+crossScalaVersions := Seq("2.12.10")//,"2.13.1")
 
 
 

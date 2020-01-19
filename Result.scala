@@ -363,8 +363,11 @@ trait ResultProcessing {
     * @return
     */
   def probTrajLine2Dist(index: Int,simulation: CfgMbss): Array[(NetState,Double)]  = {
-    linesWithTime(index).split("\t").
-    dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
-      map(x => (new NetState(x(0),simulation), x(1).toDouble))
+    linesWithTime(index)
+      .split("\t")
+      .dropWhile("^[0-9].*".r.findFirstIn(_).isDefined)
+      .sliding(3, 3)
+      .map(x => (new NetState(x(0),simulation), x(1).toDouble))
+      .toArray
   }
 }
