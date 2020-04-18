@@ -32,7 +32,7 @@ object NetState {
   private def stringToBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
     if (!activeNodeList.toSet.subsetOf(nodeList.toSet))
-      throw new IllegalArgumentException("Network state has unkonw nodes.")
+      println("No node found, take <nil>")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
 }

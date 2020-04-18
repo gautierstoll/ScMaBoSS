@@ -96,7 +96,7 @@ with verbose for UPMaBoSS steps:
 ```
 2. Run UPMaBoSS:
 ```scala
-    upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
+   val upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
 ```
 Methods of class [`UPMbssOutLight`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMbssOutLight.html)
 can be used for extracting output data.
