@@ -1,15 +1,9 @@
-//import org.apache.logging.log4j.core.config.composite.MergeStrategy
-import org.apache.logging.log4j.core.config.composite.MergeStrategy._
-import org.apache.logging.log4j.core.config.composite.MergeStrategy
-import sun.security.tools.PathList
-import sun.security.tools.PathList._
-
 name := "ScMaBoSS"
 
 version := "0.3" // version of tested UPMaBoSS, and tested parallel runs
 
-scalaVersion := "2.12.10"
-crossScalaVersions := Seq("2.12.10")//,"2.13.1")
+scalaVersion := "2.12.11"
+crossScalaVersions := Seq("2.12.11")//,"2.13.1")
 
 
 
