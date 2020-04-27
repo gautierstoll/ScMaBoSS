@@ -68,8 +68,8 @@ If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise
 ```scala
     val result : Result = optMcli match {case Some(mcli) => mcli.run(simulation,hints);case _ => null}
 ```
-Note that because `optMcli` is an option, there is a need for `match case`. The socket is now closed. A new one needs to be created,
-otherwise an error occurs and the sbt console crashes.
+Note that because `optMcli` is an option, there is a need for `match case`. The socket is now closed. For a new simuation, a
+new one needs to be created, otherwise an error occurs and the sbt console crashes.
 
 Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
