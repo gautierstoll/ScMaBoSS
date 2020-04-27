@@ -162,7 +162,7 @@ class MaBoSSClient (val socket : java.net.Socket) {
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try bos.flush() catch {
-      case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server");sys.exit(1)}
+      case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server, socket may be closed ");sys.exit(1)}
     }
     scannerBis.next()
   }
