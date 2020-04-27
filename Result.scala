@@ -173,7 +173,7 @@ trait ParReducibleRun[OutType] {
     * @param o2
     * @return
     */
-  protected def linCombine(o1:OutType,o2:OutType) : OutType
+  protected def linCombine(o1: OutType, o2: OutType): OutType
 
   /** multiplication of an OutType with a real number for normalization
     *
@@ -181,14 +181,14 @@ trait ParReducibleRun[OutType] {
     * @param d
     * @return
     */
-  protected def multiply(o: OutType,d:Double) : OutType
+  protected def multiply(o: OutType, d: Double): OutType
 
   /** Generation of an OutType from a MaBoSS Result
     *
     * @param r
     * @return
     */
-  protected def generate(r:Result) : OutType
+  protected def generate(r: Result): OutType
 
   /** parallel runs
     *
@@ -197,19 +197,26 @@ trait ParReducibleRun[OutType] {
     * @param seedHostPortSet parallel set containing seed and (port,host) for MaBoSS servers
     * @return
     */
-  def apply(cfgMbss : CfgMbss,hints: Hints,seedHostPortSet: ParSet[(Int,String,Int)]): OutType = {
-    multiply(
-      seedHostPortSet.map(seedHostPort => {
-      val newCfg = cfgMbss.update((("seed_pseudorandom",seedHostPort._1.toString) :: Nil).toMap)
-      val mbcli = new MaBoSSClient(seedHostPort._2,seedHostPort._3)
-      val result = mbcli.run(newCfg,hints)
-      mbcli.close()
-        println("Done for seed: "+seedHostPort._1+", host: "+seedHostPort._2+", port: "+seedHostPort._3)
-      generate(result)
-    }).reduce((x,y) => linCombine(x,y)),1/seedHostPortSet.size.toDouble)
+  def apply(cfgMbss: CfgMbss, hints: Hints, seedHostPortSet: ParSet[(Int, String, Int)]): Option[OutType] = {
+    val pSetOptRes: ParSet[OutType] =
+      seedHostPortSet.flatMap(seedHostPort => { //flatMap reduces the collection of Option[OutType] in collection of OutType
+        MaBoSSClient(seedHostPort._2, seedHostPort._3) match {
+          case None => None: Option[OutType]
+          case Some(mbcli) => {
+            val newCfg = cfgMbss.update((("seed_pseudorandom", seedHostPort._1.toString) :: Nil).toMap)
+            val result = mbcli.run(newCfg, hints)
+            mbcli.close()
+            println("Done for seed: " + seedHostPort._1 + ", host: " + seedHostPort._2 + ", port: " + seedHostPort._3)
+            Some(generate(result))
+          }
+        }
+      })
+    if (pSetOptRes.isEmpty) None else {
+      Some(
+        multiply(pSetOptRes.reduce((x, y) => linCombine(x, y)), 1 / pSetOptRes.size.toDouble))
+    }
   }
 }
-
 /** Trait for parallel runs of MaBoSS, outputs being a probability distribution
   *
   */
@@ -231,15 +238,6 @@ object ParReducibleFP extends ParReducibleProbDist
     map(line => {val lSplit = line.split("\t");(new NetState(lSplit(1),r.simulation),lSplit(0).toDouble)}).toMap
 }
 
-/** parallel runs with FP distribution output
-  *
-  * @param fp
-  */
-class ParReducibleFP(val fp: Map[NetState,Double]) {
-  def this(cfgMbss : CfgMbss,hints: Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
-    this(ParReducibleFP(cfgMbss,hints,seedHostPortSet))
-}
-
 /** Concrete application of ParReducible run for last probability distribution
   *
   */
@@ -257,14 +255,6 @@ object ParReducibleLastLine extends ParReducibleProbDist
   }
 }
 
-/** parallel runs with last line probability distribution output
-  *
-  * @param probState
-  */
-class ParReducibleLastLine(val probState : Map[NetState,Double]) {
-  def this(cfgMbss : CfgMbss,hints : Hints,seedHostPortSet : ParSet[(Int,String,Int)]) =
-    this(ParReducibleLastLine(cfgMbss,hints,seedHostPortSet))
-}
 
 trait ResultProcessing {
 

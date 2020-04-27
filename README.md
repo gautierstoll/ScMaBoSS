@@ -60,12 +60,15 @@ In an sbt console, the memory can be set like in java when launching sbt, eg `sb
 ```
 3. Open server socket on port port_number:
 ```scala
-    val mcli : MaBoSSClient = new MaBoSSClient(port=port_number)
+    val optMcli = MaBoSSClient("localhost",port=port_number)
 ```
+If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise
+
 4. Run MaBoSS:
 ```scala
-    val result : Result = mcli.run(simulation,hints)
+    val result : Result = optMcli match {case Some(mcli) => mcli.run(simulation,hints);case _ => null}
 ```
+Note that because `optMcli` is an option, there is a need for `match case`.
 
 Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
 
@@ -85,8 +88,9 @@ scala.collection.parallel.immutable.ParSet((seed1,server_name1,server_port1),(se
 ```
 4. Run MaBoSS and collect the aggregated last probability distribution
 ```
-val redLastProb : ParReducibleLastLine = new ParReducibleLastLine(simulation,hints,parSet)
+val redLastProb = ParReducibleLastLine(simulation,hints,parSet)
 ```
+An option is returned.
 
 ## Example for using UPMaBoSS:
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,

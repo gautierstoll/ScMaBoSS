@@ -150,28 +150,21 @@ object DataStreamer {
   }
 }
 
-/**Socket communication with MaBoSS server
+/** Socket communication with MaBoSS server
   *
-  * @param host
-  * @param port
+  * @param socket
   */
-class MaBoSSClient (host: String = "localhost", port : Int) {
-  val socket: java.net.Socket =
-    try {
-      new java.net.Socket(host,port)
-    }
-    catch {
-      case e: Throwable => {println(e);System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
-    }
-    private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
-    private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
+class MaBoSSClient (val socket : java.net.Socket) {
+
+  private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
+  private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData: String):String =  {
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try bos.flush() catch {
       case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server");sys.exit(1)}
     }
-      scannerBis.next()
+    scannerBis.next()
   }
 
   def close(): Unit = {socket.close()}
@@ -184,4 +177,28 @@ class MaBoSSClient (host: String = "localhost", port : Int) {
     */
   def run(simulation: CfgMbss,hints: Hints ): Result =
   {new Result(this,simulation,hints)}
+}
+
+/** Factory object
+  *
+  */
+object MaBoSSClient {
+  /** Construct socket from server host and port
+    *
+    * @param host
+    * @param port
+    * @return
+    */
+  def apply(host: String = "localhost", port: Int): Option[MaBoSSClient] = {
+      try {
+        Some(new MaBoSSClient(new java.net.Socket(host, port)))
+      } catch {
+        //case e: Throwable => {println(e);System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
+        case e: Exception => {
+          println(e)
+          System.err.println("error trying to connect to port " + port + " and host "+ host)
+          None
+        }
+      }
+  }
 }
