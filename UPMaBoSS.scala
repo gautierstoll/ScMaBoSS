@@ -171,22 +171,26 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     if (upStep.relSize == 0) UpStep(null, null, 0) else {
       MaBoSSClient("localhost", portMbss) match {
         case Some(mcli) => {
-          val newResult = mcli.run(upStep.cfgMbss, hints)
-          val newInitCond = newResult.updateLastLine(divNode, deathNode, verbose)
-          val newRelSize = upStep.relSize * newInitCond._2
-          println("New relative size: " + newRelSize)
-          val newInitCondCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
-          println("New initial condition")
-          val newCfgString = updateVarNames match {
-            case Nil => newInitCondCfg.cfg + "\n" +
-              setUpdateVar(newInitCond, upRandom)
-            case l => newInitCondCfg.cfg.split("\n").
-              filter(x => !updateVarNames.map(name => ("\\" + name + "\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _)).
-              mkString("\n") + "\n" + setUpdateVar(newInitCond, upRandom)
-          }
-          println("External variable updated")
-          val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
-          UpStep(newCfg, newResult, newRelSize)
+            mcli.run(upStep.cfgMbss, hints) match {
+              case Some(newResult) => {
+                val newInitCond = newResult.updateLastLine(divNode, deathNode, verbose)
+                val newRelSize = upStep.relSize * newInitCond._2
+                println("New relative size: " + newRelSize)
+                val newInitCondCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
+                println("New initial condition")
+                val newCfgString = updateVarNames match {
+                  case Nil => newInitCondCfg.cfg + "\n" +
+                    setUpdateVar(newInitCond, upRandom)
+                  case l => newInitCondCfg.cfg.split("\n").
+                    filter(x => !updateVarNames.map(name => ("\\" + name + "\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _)).
+                    mkString("\n") + "\n" + setUpdateVar(newInitCond, upRandom)
+                }
+                println("External variable updated")
+                val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
+                UpStep(newCfg, newResult, newRelSize)
+              }
+              case None => UpStep(null, null, 1d)
+            }
         }
         case None => UpStep(null, null, 1d)
       }
@@ -244,8 +248,10 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       MaBoSSClient("localhost",portMbss) match {
         case Some(mcli) => {
           //val mcli = new MaBoSSClient("localhost",portMbss)
-          val result = mcli.run(newCfg, hints)
-          UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)
+            mcli.run(newCfg, hints) match {
+              case Some(result) => UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)
+              case None => UpStepLight(None,1d)
+            }
         }
         case None => UpStepLight(None,1d)
       }

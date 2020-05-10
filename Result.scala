@@ -77,25 +77,30 @@ object Result {
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
   }
 
-  /** for overloaded Constructor from MaBoSS server run
+  /** for Constructor from MaBoSS server run with option
     *
     * @param mbcli
     * @param simulation
     * @param hints
     * @return
     */
-  private def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : String = {
+  def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Option[Result] = {
     val command: String = if (hints.check) {
       GlCst.CHECK_COMMAND
     } else GlCst.RUN_COMMAND
     val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
     val data: String = DataStreamer.buildStreamData(clientData, hints)
-    val outputData: String = mbcli.send(data)
-    mbcli.close()
-    outputData
+    //val outputData: Option[String] =
+
+      mbcli.send(data) match {
+        case Some(s) => Some(new Result(simulation,hints.verbose,hints.hexfloat,s))
+        case None => None
+      }
+    //mbcli.close()
+    //outputData
     //new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
-}
+ }
 
 /** Results of MaBoSS server
   *
@@ -106,15 +111,15 @@ object Result {
   */
 class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outputData : String) extends ResultProcessing {
 
-  /** Constructor of Result from MaBoSS server run. Socket is closed after the run.
-    *
-    * @param mbcli
-    * @param simulation
-    * @param hints
-    * @return
-    */
-  def this(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
-    this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
+  ///** Constructor of Result from MaBoSS server run. Socket is closed after the run.
+  //  *
+  //  * @param mbcli
+  //  * @param simulation
+  //  * @param hints
+  //  * @return
+  //  */
+  //def this(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
+    //this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
   /**Generates String or hexString from Double, according to hexfloat
     *
     * @param double
@@ -204,10 +209,15 @@ trait ParReducibleRun[OutType] {
           case None => None: Option[OutType]
           case Some(mbcli) => {
             val newCfg = cfgMbss.update((("seed_pseudorandom", seedHostPort._1.toString) :: Nil).toMap)
-            val result = mbcli.run(newCfg, hints)
+            val oResult = mbcli.run(newCfg, hints)
             mbcli.close()
-            println("Done for seed: " + seedHostPort._1 + ", host: " + seedHostPort._2 + ", port: " + seedHostPort._3)
-            Some(generate(result))
+            oResult match {
+              case Some(result) => {
+                println("Done for seed: " + seedHostPort._1 + ", host: " + seedHostPort._2 + ", port: " + seedHostPort._3)
+                Some(generate(result))
+              }
+              case None => None
+            }
           }
         }
       })

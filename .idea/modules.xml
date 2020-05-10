@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scmaboss.iml" filepath="$PROJECT_DIR$/.idea/modules/scmaboss.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scmaboss-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scmaboss-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ScMaBoSS.iml" filepath="$PROJECT_DIR$/.idea/modules/ScMaBoSS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ScMaBoSS-build.iml" filepath="$PROJECT_DIR$/.idea/modules/ScMaBoSS-build.iml" />
     </modules>
   </component>
 </project>

@@ -155,18 +155,25 @@ object DataStreamer {
   * @param socket
   */
 class MaBoSSClient (val socket : java.net.Socket) {
-
   private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
   private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
-  def send(inputData: String):String =  {
+  def send(inputData: String,tOut : Option[Int] = None):Option[String] =  {
+    tOut match {
+    case None => {}
+    case Some(i) => socket.setSoTimeout(i)}
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try bos.flush() catch {
-      case e:Throwable => {System.err.print("IOerror by flushing buffer to MaBoSS server, socket may be closed ");sys.exit(1)}
+      case e: Throwable => {
+        System.err.print("IOerror by flushing buffer to MaBoSS server, socket may be closed ")
+        None
+      }
     }
-    scannerBis.next()
+    try Some(scannerBis.next()) catch {
+      case e: SocketTimeoutException => println("Timeout server reached"); None
+      case e: Throwable => System.err.print(e.toString);None
+    }
   }
-
   def close(): Unit = {socket.close()}
 
   /** Run a MaBoSS simulation and return a Result. Socket is closed after the run.
@@ -175,8 +182,8 @@ class MaBoSSClient (val socket : java.net.Socket) {
     * @param hints
     * @return
     */
-  def run(simulation: CfgMbss,hints: Hints ): Result =
-  {new Result(this,simulation,hints)}
+  def run(simulation: CfgMbss,hints: Hints ): Option[Result] =
+  {Result.fromInputsMBSS(this,simulation,hints)}
 }
 
 /** Factory object

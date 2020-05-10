@@ -1,6 +1,6 @@
 //import org.apache.logging.log4j.core.config.composite.MergeStrategy
-import org.apache.logging.log4j.core.config.composite.MergeStrategy._
-import org.apache.logging.log4j.core.config.composite.MergeStrategy
+//import org.apache.logging.log4j.core.config.composite.MergeStrategy._
+//import org.apache.logging.log4j.core.config.composite.MergeStrategy
 import sun.security.tools.PathList
 import sun.security.tools.PathList._
 
