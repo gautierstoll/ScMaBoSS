@@ -7,7 +7,14 @@ import java.io._
 import java.util._
 import java.net._
 import java.io.InterruptedIOException
+import scala.collection.JavaConverters._
+//import scala.collection.JavaConversions._
 
+
+import scala.concurrent.{Await, ExecutionContext, Future, Promise, duration}
+import scala.util.{Success, Failure}
+import scala.concurrent.duration._
+import ExecutionContext.Implicits.global
 import ScMaBoSS.{CfgMbss, ClientData, Hints, ResultData}
 
 import scala.sys.process
@@ -159,8 +166,8 @@ class MaBoSSClient (val socket : java.net.Socket) {
   private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData: String,tOut : Option[Int] = None):Option[String] =  {
     tOut match {
-    case None => {}
-    case Some(i) => socket.setSoTimeout(i)}
+      case None => {}
+      case Some(i) => socket.setSoTimeout(i)}
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
     try bos.flush() catch {
@@ -207,5 +214,50 @@ object MaBoSSClient {
           None
         }
       }
+  }
+}
+
+/**
+  * MaBoSS client queue
+  * @param hostName
+  * @param port
+  */
+class QueueMbssClient(val hostName : String = "localhost", port : Int) {
+  private val queueSim = scala.collection.mutable.ListBuffer[(String, Future[Option[Result]])]()
+
+  /**
+    *
+    * @param name name of the job
+    * @param cfgMaBoSS
+    * @param hints
+    * @return
+    */
+  def sendSimulation(name: String, cfgMaBoSS: CfgMbss, hints: Hints): Future[Option[Result]] = this.synchronized {
+    val precFuture: Option[(String, Future[Option[Result]])] = queueSim.lastOption
+    val futureMbSS: Future[Option[Result]] = Future {
+      precFuture match {
+        case Some((s, f)) => {
+          println("Wait until "+ s +" is done")
+          Await.result(f, Duration.Inf)
+          queueSim.remove(0)
+        }
+        case None => {}
+      }
+      println("Send "+name+ " to MaBoSS Server")
+      MaBoSSClient(hostName, port) match {
+        case Some(mcli) => mcli.run(cfgMaBoSS, hints)
+        case _ => None
+      }
+    }
+    queueSim.+=((name, futureMbSS))
+    futureMbSS
+  }
+
+  /** get the list of current job, first one is on MaBoSS server
+    *
+    * @return
+    */
+  def getQueue(): scala.collection.immutable.List[String]= {
+    queueSim.map(_._1).toList
   }
 }

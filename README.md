@@ -44,6 +44,8 @@ sbt package
 6. ScMaBoSS can be used in a scala REPL. For instance, in a sbt console: (like an sbt console) with
 ```sbt
 console
+```
+```scala
 import ScMaBoSS._
 ```
 for MacOSX, sbt console may return an error. In that case, one should launch `TERM=xterm-color` on the terminal before launching `sbt`.
@@ -66,12 +68,14 @@ If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise
 
 4. Run MaBoSS:
 ```scala
-    val result : Result = optMcli match {case Some(mcli) => mcli.run(simulation,hints);case _ => null}
+    val oResult : Option[Result] = optMcli match {case Some(mcli) => mcli.run(simulation,hints);case _ => null}
 ```
-Note that because `optMcli` is an option, there is a need for `match case`. The socket is now closed. For a new simuation, a
-new one needs to be created, otherwise an error occurs and the sbt console crashes.
+Note that because `optMcli` is an option, there is a need for `match -- case`. The socket is now closed. For a new simulation, a
+new one needs to be created, otherwise an error occurs and the sbt console crashes. Again, `oResult` is an option, because modeling
+may have crashed; the result has aslo to be extraced with a `match -- case`. 
 
-Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be used for extracting ouput data.
+Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be 
+used for extracting ouput data.
 
 ## Example of parallel run of MaBoSS servers, aggregating last line of prob_traj:
 1. Parameters for the server:
