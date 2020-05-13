@@ -182,6 +182,12 @@
                           ParReducibleRun
                         </a>
                       </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                          QueueMbssClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <a class="object" href="Result$.html" title="Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run"></a>
                         <a class="class" href="Result.html" title="Results of MaBoSS server
 "></a>
@@ -587,9 +593,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ScMaBoSS.MaBoSSClient#run" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="run(simulation:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints):ScMaBoSS.Result"></a><a id="run(CfgMbss,Hints):Result"></a>
+      <a id="run(simulation:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints):Option[ScMaBoSS.Result]"></a><a id="run(CfgMbss,Hints):Option[Result]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/MaBoSSClient.html#run(simulation:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints):ScMaBoSS.Result" title="Permalink">
+      <a href="../ScMaBoSS/MaBoSSClient.html#run(simulation:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints):Option[ScMaBoSS.Result]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -598,15 +604,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="params">(<span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>)</span><span class="result">: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a></span>
+        <span class="name">run</span><span class="params">(<span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a>]</span>
       </span>
       
       <p class="shortcomment cmt">Run a MaBoSS simulation and return a Result.</p><div class="fullcomment"><div class="comment cmt"><p>Run a MaBoSS simulation and return a Result. Socket is closed after the run.
 </p></div></div>
     </li><li name="ScMaBoSS.MaBoSSClient#send" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="send(inputData:String):String"></a><a id="send(String):String"></a>
+      <a id="send(inputData:String,tOut:Option[Int]):Option[String]"></a><a id="send(String,Option[Int]):Option[String]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/MaBoSSClient.html#send(inputData:String):String" title="Permalink">
+      <a href="../ScMaBoSS/MaBoSSClient.html#send(inputData:String,tOut:Option[Int]):Option[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -615,7 +621,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">send</span><span class="params">(<span name="inputData">inputData: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">send</span><span class="params">(<span name="inputData">inputData: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tOut">tOut: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       
