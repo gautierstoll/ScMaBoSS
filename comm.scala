@@ -7,7 +7,9 @@ import java.io._
 import java.util._
 import java.net._
 import java.io.InterruptedIOException
+
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 //import scala.collection.JavaConversions._
 
 
@@ -224,7 +226,7 @@ object MaBoSSClient {
   */
 class QueueMbssClient(val hostName : String = "localhost", port : Int) {
   private val queueSim = scala.collection.mutable.ListBuffer[(String, Future[Option[Result]])]()
-
+  private val logStr = new scala.collection.mutable.StringBuilder
   /**
     *
     * @param name name of the job
@@ -237,13 +239,13 @@ class QueueMbssClient(val hostName : String = "localhost", port : Int) {
     val futureMbSS: Future[Option[Result]] = Future {
       precFuture match {
         case Some((s, f)) => {
-          println("Wait until "+ s +" is done")
+          logStr.++=(name +  "wait until "+ s +" is done\n")
           Await.result(f, Duration.Inf)
           queueSim.remove(0)
         }
         case None => {}
       }
-      println("Send "+name+ " to MaBoSS Server")
+      logStr ++= ("Send "+ name + " to MaBoSS Server\n")
       MaBoSSClient(hostName, port) match {
         case Some(mcli) => mcli.run(cfgMaBoSS, hints)
         case _ => None
@@ -252,12 +254,10 @@ class QueueMbssClient(val hostName : String = "localhost", port : Int) {
     queueSim.+=((name, futureMbSS))
     futureMbSS
   }
-
-  /** get the list of current job, first one is on MaBoSS server
+  /** get the list of current job, first one is on MaBoSS server or finished
     *
     * @return
     */
-  def getQueue(): scala.collection.immutable.List[String]= {
-    queueSim.map(_._1).toList
-  }
+  def getQueue: scala.collection.immutable.List[String]= queueSim.map(_._1).toList
+  def getLog: String = logStr.toString
 }
