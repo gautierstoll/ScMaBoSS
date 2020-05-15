@@ -10,6 +10,7 @@ import java.io.InterruptedIOException
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
+import scala.io.BufferedSource
 //import scala.collection.JavaConversions._
 
 
@@ -239,7 +240,7 @@ class QueueMbssClient(val hostName : String = "localhost", port : Int) {
     val futureMbSS: Future[Option[Result]] = Future {
       precFuture match {
         case Some((s, f)) => {
-          logStr.++=(name +  "wait until "+ s +" is done\n")
+          logStr.++=(name +  " wait until "+ s +" is done\n")
           Await.result(f, Duration.Inf)
           queueSim.remove(0)
         }
@@ -254,10 +255,15 @@ class QueueMbssClient(val hostName : String = "localhost", port : Int) {
     queueSim.+=((name, futureMbSS))
     futureMbSS
   }
-  /** get the list of current job, first one is on MaBoSS server or finished
+  /** get the list of current job, first one is on MaBoSS server (or finished)
     *
     * @return
     */
   def getQueue: scala.collection.immutable.List[String]= queueSim.map(_._1).toList
+
+  /** get the log of the queue
+    *
+    * @return
+    */
   def getLog: String = logStr.toString
 }

@@ -90,9 +90,7 @@ object Result {
     } else GlCst.RUN_COMMAND
     val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
     val data: String = DataStreamer.buildStreamData(clientData, hints)
-    //val outputData: Option[String] =
-
-      mbcli.send(data) match {
+          mbcli.send(data) match {
         case Some(s) => Some(new Result(simulation,hints.verbose,hints.hexfloat,s))
         case None => None
       }
@@ -131,6 +129,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
 
   val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime : List[String] = parsedResultData.prob_traj.split("\n").toList.tail
+  val sizes : List[Double] = List.fill(linesWithTime.length)(1.0)
   /** updates last probability distribution for UPMaBoSS
     *
     * @param divNode   division node
@@ -270,15 +269,18 @@ trait ResultProcessing {
 
   def linesWithTime : List[String]
 
+  def sizes : List[Double] // carfull: concrete class need to have same length with linesWithTime
+
   /** Boolean state probability trajectory, given a network state
     *
     * @param netState
+    * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
     */
-  def stateTrajectory(netState: NetState): List[(Double, Double)] = { // to be tested, the .isDefined
+  def stateTrajectory(netState: NetState,normWithSize : Boolean = false): List[(Double, Double)] = { // to be tested, the .isDefined
     val activeNodes = netState.state.filter(nodeBool => nodeBool._2).keySet
     val unactiveNodes = netState.state.filter(nodeBool => !nodeBool._2).keySet
-    linesWithTime.map(probTrajLine => {
+    val stateTrajList = linesWithTime.map(probTrajLine => {
       val splitProbTrajLine = probTrajLine.split("\t")
       val stateDistProb: List[(String, Double)] = splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
         sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
@@ -288,31 +290,42 @@ trait ResultProcessing {
         map(_._2).sum
       (splitProbTrajLine.toList.head.toDouble, prob)
     })
+    if (normWithSize) stateTrajList.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
+    else stateTrajList
   }
 
   /** Node state probability trajectory, given a node
     *
     * @param node
+    * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
     */
-  def nodeTrajectory(node: String): List[(Double, Double)] = // to be tested, the .isDefined
+  def nodeTrajectory(node: String,normWithSize : Boolean = false): List[(Double, Double)] = // to be tested, the .isDefined
   {
-    linesWithTime.map(probTrajLine => {
+    val nodeTrajList = linesWithTime.map(probTrajLine => {
       val splitProbTrajLine = probTrajLine.split("\t")
       (splitProbTrajLine.head.toDouble,
         splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
           sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
     })
+    if (normWithSize) nodeTrajList.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
+    else nodeTrajList
   }
 
   /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
     *
     * @param netStates
+    * @param firstLast first (start at 1) and last elements to take in the trajectory
+    * @param normWithSize if true probabilities are multiplied by sizes
     * @param filename
     * @return
     */
-  def plotStateTraj(netStates : List[NetState],filename : String) : File = {
-    val listTraj =netStates.map(x => stateTrajectory(x))
+  def plotStateTraj(netStates : List[NetState],
+                    firstLast : (Int,Int) = (1,linesWithTime.length),
+                    normWithSize : Boolean = false,filename : String) : File = {
+    val yLim = if (normWithSize) None else Some(0.0,1.0)
+    val yLab = if (normWithSize) "Rel. Size" else "Probability"
+    val listTraj = netStates.map(x => stateTrajectory(x,normWithSize).slice(firstLast._1-1,firstLast._2))
     val Mat4Plot : Mat[Double]= Mat((Vec(listTraj.head.map(_._1).toArray) :: //matrix with x coordinates
       listTraj.map(x => Vec(x.map( y=> y._2).toArray)) ::: // y coordinates
       (1 to netStates.length).map(x=>Vec(List.fill(listTraj.head.length)(x.toDouble-1).toArray)).toList).toArray) //and colors
@@ -326,7 +339,7 @@ trait ResultProcessing {
               color = DiscreteColors(netStates.length-1))).toList ) // careful, need to add zero to errorTop/Bottom
       )(xlab = "Time",ylab="Probability",extraLegend =
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
-          color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = Some(0,1),xWidth = RelFontSize(40d))
+          color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = yLim,xWidth = RelFontSize(40d))
     val pdfFile = new File(filename)
     pdfToFile(pdfFile,sequence(builtElement :: Nil,FreeLayout).build)
   }
