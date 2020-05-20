@@ -165,8 +165,8 @@ object DataStreamer {
   * @param socket
   */
 class MaBoSSClient (val socket : java.net.Socket) {
-  private val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
-  private val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
+  protected val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
+  protected val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData: String,tOut : Option[Int] = None):Option[String] =  {
     tOut match {
       case None => {}
@@ -196,6 +196,7 @@ class MaBoSSClient (val socket : java.net.Socket) {
   {Result.fromInputsMBSS(this,simulation,hints)}
 }
 
+
 /** Factory object
   *
   */
@@ -220,15 +221,58 @@ object MaBoSSClient {
   }
 }
 
+/** socket communication with intermediate queuing sokcet server
+  *
+  * @param socket
+  */
+class MaBoSSQuClient(override val socket : java.net.Socket) extends MaBoSSClient(socket) {
+  /** send simulation to queuing socket server with a jobName. Socket is closed after the run
+    *
+    * @param simulation
+    * @param hints
+    * @param jobName
+    * @return
+    */
+  def run(simulation: CfgMbss,hints: Hints,jobName : String ): Option[Result] =
+  {
+    Result.fromInputsMBSS(this,simulation,hints,jobName)
+  }
+  override def run(simulation: CfgMbss,hints: Hints ): Option[Result] = {println("No job name");None}
+}
+
+/** Factory object
+  *
+  */
+object MaBoSSQuClient {
+  /**
+    *
+    * @param host
+    * @param port
+    * @return
+    */
+  def apply(host: String = "localhost", port: Int): Option[MaBoSSQuClient] = {
+    try {
+      Some(new MaBoSSQuClient(new java.net.Socket(host, port)))
+    } catch {
+      //case e: Throwable => {println(e);System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
+      case e: Exception => {
+        println(e)
+        System.err.println("error trying to connect to port " + port + " and host " + host)
+        None
+      }
+    }
+  }
+}
+
 /**
-  * MaBoSS client queue
+  * MaBoSS client queue for MaBoSS server.
   * @param hostName
   * @param port
   */
 class QueueMbssClient(val hostName : String = "localhost", port : Int) {
   private val queueSim = scala.collection.mutable.ListBuffer[(String, Future[Option[Result]])]()
   private val logStr = new scala.collection.mutable.StringBuilder
-  /**
+  /** send simulation, received Future
     *
     * @param name name of the job
     * @param cfgMaBoSS

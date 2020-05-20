@@ -36,7 +36,7 @@ import scala.concurrent.duration._
 
 val upMaBoSSTest2 : UPMaBoSS =
   new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulationL,43291,false,true)
-val resUP2 : UPMbssOutLight = upMaBoSSTest2.runLight(8)
+//val resUP2 : UPMbssOutLight = upMaBoSSTest2.runLight(8)
 
 //val upMaBoSSTest3 : UPMaBoSS =
 //  new UPMaBoSS("Tests2/ToyModel4Sc.upp",CfgMbss.fromFile("Tests2/ToyModel4Sc.cfg",BndMbss.fromFile("Tests2/ToyModel4Sc.bnd")),4291,false,true)

@@ -36,8 +36,6 @@ object UPMaBoSS {
     (divisionNode,deathNode,updateVar,steps,seed,cfg,port,hexUP,verbose)
   }
 
-
-
   /** Applies init condition for updating external variables
     *
     * @param initCondProb
@@ -126,21 +124,13 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
     pw.write("seed = "+seed.toString+"\n")
     pw.close()
   }
-  val updateVarNames : List[String] = updateVar.map(x => "\\s*".r.replaceAllIn("u=.*".r.replaceAllIn(x,""),""))
+  val updateVarNames : List[String] = updateVar.map(x => "\\s*".r.replaceAllIn("u=.*".r.replaceAllIn(x,""),"")) //same order than updateVar
   val upRandom: Random = new Random(seed) // for UPMaBoSS producing full data
   val upRandom4Light: Random = new Random(seed) // for UPMaBoSS producing light data
   val hints : Hints = Hints(hexfloat = hexUP)
 
-  private def setUpdateVar(probDistRelSize : (List[(String,Double)],Double),upRnd : Random,verbose:Boolean = verbose) : String = {
-    def recReplaceRand(s:String) : String = {
-      "#rand".r.findFirstIn(s) match {
-        case None => s
-        case Some(c) =>
-          recReplaceRand("#rand".r.replaceFirstIn(s,
-            if (hexUP) java.lang.Double.toHexString(upRnd.nextDouble()) else upRnd.nextDouble().toString))
-      }
-    }
-    val updateVarProb = updateVar.map(line => {
+  private def setUpdateVar(probDistRelSize : (List[(String,Double)],Double)) : List[String] = { // same order than updateVar and updateVarNames
+    updateVar.map(line => {
       val listReplaceProb : List[String] =
         "p\\[[^\\]]+\\]".r.findAllIn(line).map(x=>UPMaBoSS.upProbFromInitCond(probDistRelSize._1,x,hexUP)).toList
       def recReplace(regex: Regex,s:String,lReplace : List[String]):String = {
@@ -150,13 +140,27 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
         }
       }
         recReplace("p\\[[^\\]]+\\]".r,line,listReplaceProb)
-      }).map(x=>"u=".r.replaceAllIn(x,"=")).mkString("\n")
-    val updatePopRatio = "#pop_ratio".r.replaceAllIn(updateVarProb,if (hexUP) java.lang.Double.toHexString(probDistRelSize._2) else probDistRelSize._2.toString)
-    if (verbose) {
-      val replaceString = recReplaceRand(updatePopRatio)
-      println("Update variables: "+replaceString)
-      replaceString
-    } else recReplaceRand(updatePopRatio)
+      }).map(line =>"u=".r.replaceAllIn(line,"=")).
+      map(line => "#pop_ratio".r.replaceAllIn(line,if (hexUP) java.lang.Double.toHexString(probDistRelSize._2) else probDistRelSize._2.toString))}
+  private def recReplaceRand(s:String,upRnd : Random) : String = {
+    "#rand".r.findFirstIn(s) match {
+      case None => s
+      case Some(c) =>
+        recReplaceRand("#rand".r.replaceFirstIn(s,
+          if (hexUP) java.lang.Double.toHexString(upRnd.nextDouble()) else upRnd.nextDouble().toString),upRnd)
+    }
+  }
+  private def updateCfg(cfg : String,updatedVar : List[String],upRnd : Random): String = {
+    val nameUpdateVar = updateVarNames.zip(updatedVar) // updated var is in same order that updataVarName
+    val newCfg = cfg.split("\n").map(line => {
+    val varName = "\\s*".r.replaceAllIn("=.*".r.replaceAllIn(line,""),"")
+      val updateVarCatch = nameUpdateVar.filter(n => (n._1 == varName))
+      if (updateVarCatch.isEmpty) line else {
+        updateVarCatch.head._2
+      }
+    }
+    ).mkString("\n")
+    recReplaceRand(newCfg,upRnd)
   }
 
   /** Steps of UPMaBoSS
@@ -176,16 +180,14 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
                 val newInitCond = newResult.updateLastLine(divNode, deathNode, verbose)
                 val newRelSize = upStep.relSize * newInitCond._2
                 println("New relative size: " + newRelSize)
-                val newInitCondCfg = upStep.cfgMbss.setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
+                val newInitCondCfg = upStep.cfgMbss.
+                  setInitCond(newInitCond._1.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
                 println("New initial condition")
-                val newCfgString = updateVarNames match {
-                  case Nil => newInitCondCfg.cfg + "\n" +
-                    setUpdateVar(newInitCond, upRandom)
-                  case l => newInitCondCfg.cfg.split("\n").
-                    filter(x => !updateVarNames.map(name => ("\\" + name + "\\s*=").r.findFirstIn(x).isDefined).reduce(_ | _)).
-                    mkString("\n") + "\n" + setUpdateVar(newInitCond, upRandom)
-                }
+                val newCfgString = updateCfg(newInitCondCfg.cfg,setUpdateVar(newInitCond._1,newRelSize),upRandom)
                 println("External variable updated")
+                if (verbose) newCfgString.split("\n").
+                    filter(line => updateVarNames.contains("\\s*".r.replaceAllIn("=.*".r.replaceAllIn(line,""),""))).
+                    foreach(line => println(line))
                 val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
                 UpStep(newCfg, newResult, newRelSize)
               }
@@ -235,13 +237,10 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
         case None => cfgMbss
         case Some((dist, ratio)) => {
           val newInitCondCfg = cfgMbss.setInitCond(dist.map(x => (new NetState(x._1, cfgMbss), x._2)), hex = hexUP)
-          val newCfgString = updateVarNames match {
-            case Nil => newInitCondCfg.cfg + "\n" +
-              setUpdateVar((dist, ratio),upRandom4Light)
-            case l => newInitCondCfg.cfg.split("\n").
-              filter(x => !updateVarNames.map(name => name.r.findFirstIn(x).isDefined).reduce(_ | _)).
-              mkString("\n") + "\n" + setUpdateVar((dist, ratio),upRandom4Light)
-          }
+          val newCfgString = updateCfg(newInitCondCfg.cfg,setUpdateVar((dist, newRelSize)),upRandom4Light)
+          if (verbose) newCfgString.split("\n").
+            filter(line => updateVarNames.contains("\\s*".r.replaceAllIn("=.*".r.replaceAllIn(line,""),""))).
+            foreach(line => println(line))
           new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
         }
       }
@@ -286,7 +285,7 @@ case class UPMbssOut(sizes : List[Double], configurations : List[CfgMbss]) {}
   * @param sizes
   * @param lastLines
   */
-case class UPMbssOutLight(sizes : List[Double], lastLines : List[String],cfgMbss : CfgMbss ) extends ResultProcessing {
+case class UPMbssOutLight(sizes : List[Double],lastLines : List[String],cfgMbss : CfgMbss ) extends ResultProcessing {
   val stepTime : Double = "=(.*);".r.findAllIn(cfgMbss.noCommentCfg.split("\n").filter("max_time".r.findFirstMatchIn(_).isDefined).head).
     matchData.map(_.group(1).toDouble).next()
   /** Last probtraj line with UPMaBoSS time

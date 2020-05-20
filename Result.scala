@@ -3,46 +3,41 @@ package ScMaBoSS
 import java.io.PrintWriter
 import java.io._
 import scala.collection.parallel.immutable._
-  import scala.collection.immutable._
+import scala.collection.immutable._
 
-import ScMaBoSS.CfgMbss
 import org.saddle._
-import org.nspl
 import org.nspl._
 import org.nspl.saddle._
-import org.nspl.data._
 import org.nspl.awtrenderer._
-import org.saddle.io._
-import org.saddle.io.CsvImplicits._
 
 /** Data sent to MaBoSS server, need to be transformed by DataStreamer.buildStreamData
   *
-  * @param network
-  * @param config
-  * @param command
+  * @param network bnd in String
+  * @param config cfg in String
+  * @param command command sent to server
   */
 case class ClientData(network : String = null, config: String = null, command: String = "Run") {}
 
 /** Parameters for MaBoSS server
   *
   * @param check if true, just check coherence of network and config
-  * @param hexfloat hif true, double a represented in hexfloat format
-  * @param augment
-  * @param overRide
-  * @param verbose
+  * @param hexfloat if true, double a represented in hexfloat format
+  * @param augment server parameter
+  * @param overRide server paramteer
+  * @param verbose server parameter
   */
 case class Hints(check: Boolean = false, hexfloat: Boolean = false, augment: Boolean =  true,
                  overRide: Boolean = false , verbose: Boolean = false) {}
 
 /** Parsed results from MaBoSS server
   *
-  * @param status
-  * @param errmsg
-  * @param stat_dist
-  * @param prob_traj
-  * @param traj
-  * @param FP
-  * @param runlog
+  * @param status status
+  * @param errmsg error message
+  * @param stat_dist stationary distribution estimates
+  * @param prob_traj trajectory of probabilities
+  * @param traj Markov process trajectories
+  * @param FP fixed points
+  * @param runlog log of run
   */
 case class ResultData(status: Int = 0, errmsg: String = "" , stat_dist: String = null,
                       prob_traj: String = null, traj: String = null, FP: String = null, runlog: String = null) {}
@@ -51,12 +46,12 @@ case class ResultData(status: Int = 0, errmsg: String = "" , stat_dist: String =
   *
   */
 object Result {
-  /** initial condition and normalization factor from last line of probtraj, useful for UPMaBoSS
+  /** initial condition and normalization factor from a line of probtraj, useful for UPMaBoSS
     * Not private because UPStepLight of UPMaBoSS uses it
     *
-    * @param line
-    * @param divNode
-    * @param deathNode
+    * @param line line of probtraj
+    * @param divNode division node
+    * @param deathNode death node
     * @return
     */
   def updateLine(line: String,divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = {
@@ -79,24 +74,25 @@ object Result {
 
   /** for Constructor from MaBoSS server run with option
     *
-    * @param mbcli
-    * @param simulation
-    * @param hints
+    * @param mbcli MaBoSS (queuing) client
+    * @param simulation cfg with associated bnd
+    * @param hints hints for server
+    * @param jobName used only if mbcli is an intermediate queuing soket server
     * @return
     */
-  def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) : Option[Result] = {
+  def fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints,jobName : String = "") : Option[Result] = {
     val command: String = if (hints.check) {
       GlCst.CHECK_COMMAND
     } else GlCst.RUN_COMMAND
     val clientData: ClientData = ClientData(simulation.bndMbss.bnd, simulation.cfg, command)
-    val data: String = DataStreamer.buildStreamData(clientData, hints)
+    val data: String = mbcli match  {
+      case _ : MaBoSSQuClient   => jobName + "\n" + DataStreamer.buildStreamData(clientData, hints)
+      case _ => DataStreamer.buildStreamData(clientData, hints)
+    }
           mbcli.send(data) match {
         case Some(s) => Some(new Result(simulation,hints.verbose,hints.hexfloat,s))
         case None => None
       }
-    //mbcli.close()
-    //outputData
-    //new Result(simulation,hints.verbose,hints.hexfloat,outputData)
   }
  }
 
@@ -120,7 +116,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
     //this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
   /**Generates String or hexString from Double, according to hexfloat
     *
-    * @param double
+    * @param double input double
     * @return
     */
   def doubleToMbssString(double: Double): String = { // not yet used for writing files
@@ -160,7 +156,7 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
 
   /** Distribution from given probtraj line index
     *
-    * @param index
+    * @param index index of line
     * @return
     */
   def probTrajLine2Dist(index: Int): Array[(NetState, Double)] = super.probTrajLine2Dist(index, simulation)
@@ -168,36 +164,36 @@ class Result(val simulation : CfgMbss, verbose : Boolean,hexfloat : Boolean,outp
 
 /** Trait for parallel runs of MaBoSS with reduction
   *
-  * @tparam OutType
+  * @tparam OutType generic of output
   */
 trait ParReducibleRun[OutType] {
   /** Linear combination of two OutType
     *
-    * @param o1
-    * @param o2
+    * @param o1 left member
+    * @param o2 right member
     * @return
     */
   protected def linCombine(o1: OutType, o2: OutType): OutType
 
   /** multiplication of an OutType with a real number for normalization
     *
-    * @param o
-    * @param d
+    * @param o output
+    * @param d real number
     * @return
     */
   protected def multiply(o: OutType, d: Double): OutType
 
   /** Generation of an OutType from a MaBoSS Result
     *
-    * @param r
+    * @param r Result
     * @return
     */
   protected def generate(r: Result): OutType
 
   /** parallel runs
     *
-    * @param cfgMbss
-    * @param hints
+    * @param cfgMbss input of simulation
+    * @param hints hint for server
     * @param seedHostPortSet parallel set containing seed and (port,host) for MaBoSS servers
     * @return
     */
@@ -254,7 +250,7 @@ object ParReducibleLastLine extends ParReducibleProbDist
 {
   /** Generate probability distribution from last line of probtraj
     *
-    * @param r
+    * @param r Result
     * @return
     */
   protected def generate(r:Result) : Map[NetState,Double] = {
@@ -273,7 +269,7 @@ trait ResultProcessing {
 
   /** Boolean state probability trajectory, given a network state
     *
-    * @param netState
+    * @param netState network state
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
     */
@@ -296,7 +292,7 @@ trait ResultProcessing {
 
   /** Node state probability trajectory, given a node
     *
-    * @param node
+    * @param node network node
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
     */
@@ -314,10 +310,10 @@ trait ResultProcessing {
 
   /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
     *
-    * @param netStates
+    * @param netStates network state
     * @param firstLast first (start at 1) and last elements to take in the trajectory
     * @param normWithSize if true probabilities are multiplied by sizes
-    * @param filename
+    * @param filename file name
     * @return
     */
   def plotStateTraj(netStates : List[NetState],
@@ -337,7 +333,7 @@ trait ResultProcessing {
             point(xCol = 0,yCol = x, colorCol = netStates.length+x, sizeCol=3+2*netStates.length,
               shapeCol=3+2*netStates.length, errorBottomCol =1+netStates.length , errorTopCol = 1+netStates.length , size = 4d,
               color = DiscreteColors(netStates.length-1))).toList ) // careful, need to add zero to errorTop/Bottom
-      )(xlab = "Time",ylab="Probability",extraLegend =
+      )(xlab = "Time",ylab=yLab,extraLegend =
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
           color = DiscreteColors(netStates.length-1)(x._2.toDouble) )),ylim = yLim,xWidth = RelFontSize(40d))
     val pdfFile = new File(filename)
@@ -346,8 +342,8 @@ trait ResultProcessing {
 
   /** Write tab-separated file of state probability trajectory
     *
-    * @param netStates
-    * @param filename
+    * @param netStates network state
+    * @param filename file name
     */
   def writeStateTraj(netStates: List[NetState],filename : String): Unit = {
     val pw = new PrintWriter(new File(filename))
@@ -359,10 +355,10 @@ trait ResultProcessing {
     ))
     val timeList : Vector[Double] = listTraj.head.map(_._1).toVector
     val flatVectorProb : Vector[Double] = listTraj.flatten.map(_._2).toVector
-    (linesWithTime.indices).foreach(lineIndex =>
+    linesWithTime.indices.foreach(lineIndex =>
     {
       pw.write(timeList(lineIndex).toString)
-      (netStates.indices).foreach(stateIndex =>
+      netStates.indices.foreach(stateIndex =>
         pw.write("\t" + flatVectorProb(stateIndex *linesWithTime.length  +lineIndex)).toString)
       pw.write("\n")
     })
@@ -371,8 +367,8 @@ trait ResultProcessing {
 
   /** Distribution from given probtraj line index
     *
-    * @param index
-    * @param simulation
+    * @param index line index (start at 0)
+    * @param simulation simulation for output nodes that define network states
     * @return
     */
   def probTrajLine2Dist(index: Int,simulation: CfgMbss): Array[(NetState,Double)]  = {
