@@ -260,12 +260,42 @@ object ParReducibleLastLine extends ParReducibleProbDist
   }
 }
 
-
+/** trait for handling results
+  *
+  */
 trait ResultProcessing {
 
+  /** raw output lines
+    *
+    * @return
+    */
   def linesWithTime : List[String]
 
+  /** write lines to file
+    *
+    * @param filename name of file
+    */
+  def writeLinesWithTime(filename : String): Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(linesWithTime.mkString("\n"))
+    pw.close()
+  }
+
+  /** list of size, usefull for UPMaBoSS
+    *
+    * @return
+    */
   def sizes : List[Double] // carfull: concrete class need to have same length with linesWithTime
+
+  /** write size to file
+    *
+    * @param filename name of file
+    */
+  def writeSizes(filename : String): Unit = {
+    val pw = new PrintWriter(new File(filename))
+    pw.write(sizes.mkString("\n"))
+    pw.close()
+  }
 
   /** Boolean state probability trajectory, given a network state
     *
@@ -345,14 +375,13 @@ trait ResultProcessing {
     * @param netStates network state
     * @param filename file name
     */
-  def writeStateTraj(netStates: List[NetState],filename : String): Unit = {
+  def writeStateTraj(netStates: List[NetState],
+                     firstLast : (Int,Int) = (1,linesWithTime.length),
+                     normWithSize : Boolean = false, filename : String): Unit = {
     val pw = new PrintWriter(new File(filename))
     val header = "Time\t"+netStates.map(x=>x.toString).mkString("\t")+"\n"
     pw.write(header)
-    val listTraj =netStates.map(x => stateTrajectory(x
-
-
-    ))
+    val listTraj =netStates.map(x => stateTrajectory(x,normWithSize).slice(firstLast._1-1,firstLast._2))
     val timeList : Vector[Double] = listTraj.head.map(_._1).toVector
     val flatVectorProb : Vector[Double] = listTraj.flatten.map(_._2).toVector
     linesWithTime.indices.foreach(lineIndex =>

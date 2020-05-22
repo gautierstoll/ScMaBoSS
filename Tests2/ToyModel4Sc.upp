@@ -1,6 +1,6 @@
 death = Death;
 division = Division ;
-$extL u= p[(L,Death) = (1,0)];
+$extL u= p[(L,Death) = (1,0)]*#pop_ratio;
 steps = 10;
 MaBoSS = MaBoSS
 
