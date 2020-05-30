@@ -55,18 +55,32 @@ object Result {
     * @return
     */
   def updateLine(line: String,divNode: String, deathNode: String,verbose:Boolean = false): (List[(String, Double)], Double) = {
-    val nonNormDist = line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
-      sliding(3, 3).map(x => (x(0), x(1).toDouble)).
-      filter(x => !x._1.split(" -- ").contains(deathNode)).
+    updateProb(line.split("\t").dropWhile("^[0-9]".r.findFirstIn(_).isDefined).
+      sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList,divNode,deathNode,verbose)
+  }
+
+  /** initial condition and normalization factor from a probablity distribution, useful for UPMaBoSS
+    * Useful for parralelization of UPMaBoSS
+    *
+    * @param probDist List of states (repsented by a string) vs probability
+    * @param divNode
+    * @param deathNode
+    * @param verbose
+    * @return
+    */
+  def updateProb(probDist : List[(String, Double)],divNode: String, deathNode: String,verbose:Boolean = false) :
+  (List[(String, Double)], Double) = {
+    val nonNormDist = probDist.map(x=> (x._1.split(" -- ").toList,x._2)).
+      filter(x => ! x._1.contains(deathNode)).
       map(x => {
-        if (x._1.split(" -- ").contains(divNode)) {
-          x._1.split(" -- ").filter(x => x != divNode).toList match {
-            case Nil => ("<nil>",x._2*2)
-            case l => (l.mkString(" -- "),x._2*2)
+        if (x._1.contains(divNode)) {
+          x._1.filter(x => x != divNode) match {
+            case Nil => (List("<nil>"),x._2*2)
+            case l => (l,x._2*2)
           }
         } else (x._1 , x._2)
-      }).toList.
-      groupBy(_._1.split(" -- ").toSet).map(x=> (x._1,x._2.map(_._2).sum)).toList.map(x=>(x._1.mkString(" -- "),x._2)) // group states
+      }).
+      groupBy(x =>x._1.toSet).map(x=> (x._1,x._2.map(_._2).sum)).toList.map(x=>(x._1.mkString(" -- "),x._2)) // group states
     val normFactor = nonNormDist.map(x => x._2).sum
     if (verbose) println("Norm. factor: "+normFactor)
     (nonNormDist.map(x => (x._1, x._2 / normFactor)), normFactor)
@@ -405,4 +419,10 @@ trait ResultProcessing {
     dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
       map(x => (new NetState(x(0),simulation), x(1).toDouble)).toArray
   }
+
+class ResultFromFile(val filenameLinesWithTime : String,val filenameSize : String) extends ResultProcessing {
+val linesWithTime = ManageInputFile.file_get_content(filenameLinesWithTime).split("\n").toList
+val sizes = ManageInputFile.file_get_content(filenameSize).split("\n").toList.map(_.toDouble)
+}
+
 }

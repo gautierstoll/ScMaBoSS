@@ -141,7 +141,8 @@ class UPMaBoSS(val divNode : String, val deathNode : String, val updateVar : Lis
       }
         recReplace("p\\[[^\\]]+\\]".r,line,listReplaceProb)
       }).map(line =>"u=".r.replaceAllIn(line,"=")).
-      map(line => "#pop_ratio".r.replaceAllIn(line,if (hexUP) java.lang.Double.toHexString(probDistRelSize._2) else probDistRelSize._2.toString))}
+      map(line => "#pop_ratio".r.replaceAllIn(line,if (hexUP) java.lang.Double.toHexString(probDistRelSize._2) else probDistRelSize._2.toString))
+  }
   private def recReplaceRand(s:String,upRnd : Random) : String = {
     "#rand".r.findFirstIn(s) match {
       case None => s
