@@ -43,6 +43,8 @@ object NetState {
   */
 class NetState (val state: Map[String,Boolean]) {
   val nodeSet : Set[String] = state.keySet
+  val activeNodes : Set[String] = state.filter(_._2).keySet
+  val inactiveNodes : Set[String] = state.filter(!_._2).keySet
   /**
     *
     * @param stateString active nodes separates by " -- "
@@ -92,6 +94,9 @@ class NetState (val state: Map[String,Boolean]) {
   override def hashCode(): Int = {
     state.hashCode()
   }
+
+  def isSubStateOf(netState : NetState) : Boolean =
+    this.activeNodes.subsetOf(netState.activeNodes) & this.inactiveNodes.subsetOf(netState.inactiveNodes)
 }
 
 /**Companion object, for using input file and generating default configuration
@@ -119,7 +124,7 @@ object BndMbss {
 
 /**Boolean Network Descriptor for MaBoSS
   *
-  * @param bnd
+  * @param bnd bnd
   */
 class BndMbss(val bnd : String) {
   private val noCommentBnd = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
@@ -130,7 +135,7 @@ class BndMbss(val bnd : String) {
 
   /**Generate BndMbss with mutations controlled by external variables
     *
-    * @param mutNodes
+    * @param mutNodes node that can be mutated
     * @return
     */
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
@@ -192,11 +197,11 @@ object CfgMbss {
 
 /**Configuration for MaBoSS (including bnd)
   *
-  * @param bndMbss
-  * @param cfg
+  * @param bndMbss bnd
+  * @param cfg cfg
   */
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
-  val noCommentCfg = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
+  val noCommentCfg : String = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   /** List of external nodes
     *
     */
@@ -206,7 +211,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
 
   /**Generate CfgMbss with mutations controlled by external variables
     *
-    * @param mutNodes
+    * @param mutNodes node that can be mutated
     * @return
     */
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {

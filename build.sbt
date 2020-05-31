@@ -6,7 +6,7 @@ import sun.security.tools.PathList._
 
 name := "ScMaBoSS"
 
-version := "0.4" // version of tested UPMaBoSS, and tested parallel runs, server with future, queuing server socket not done yet
+version := "0.5" // version with new results processing, for parralizing UPMaBoSS
 
 scalaVersion := "2.12.1"
 crossScalaVersions := Seq("2.12.1","2.13.0")
