@@ -35,7 +35,7 @@ import scala.concurrent.duration._
 //  BndMbss.fromFile("Tests/CellFateModel.bnd"))
 
 val upMaBoSSTest2 : UPMaBoSS =
-  new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulationL,43291,false,true)
+  new UPMaBoSS("Tests2/ToyModel4Sc.upp",simulationL,"localhost",43291,false,true)
 //val resUP2 : UPMbssOutLight = upMaBoSSTest2.runLight(8)
 
 //val upMaBoSSTest3 : UPMaBoSS =
