@@ -52,8 +52,7 @@ object UPMaBoSS {
     * @param hex          true if HexString
     * @return probability value written in String or in HexString
     */
-  private def upProbFromInitCond(initCondProb: Map[NetState, Double], upProb: String, hex: Boolean = false): String = {
-    //println("upProb: "+upProb)
+  private def upProbFromInitCond(initCondProb: List[(List[String], Double)], upProb: String, hex: Boolean = false): String = {
     val nodes = try upProb.split("=").head catch {
       case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb)
     }
@@ -62,19 +61,15 @@ object UPMaBoSS {
     }
     val nodeList = "\\s*\\)\\s*".r.replaceAllIn("p\\[\\s*\\(\\s*".r.replaceAllIn(nodes, ""), "").split(",").
       map(x => "\\s*".r.replaceAllIn(x, "")).toList
-    //println("nodeList: "+nodeList)
     val boolStateList: List[Boolean] = "\\s*\\)\\s*\\]".r.replaceAllIn("\\s*\\(\\s*".r.replaceAllIn(boolState, ""), "").split(",").
       map(x => if ("\\s*".r.replaceAllIn(x, "") == "1") true else false).toList
-    //println("boolStateList: "+boolStateList)
-    val upProbNetState = new NetState(nodeList.zip(boolStateList).toMap)
-    val probOut: Double = initCondProb.filter(x => upProbNetState.isSubStateOf(x._1)).values.sum
-    //
-    //    val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1).toSet
-    //    val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1).toSet
-    //    val probOut = initCondProb.filter(prob => {
-    //      val activeProbNodes = prob._1.split(" -- ").toSet
-    //      activeNodes.subsetOf(activeProbNodes) & activeProbNodes.intersect(inactiveNodes).isEmpty
-    //    }).map(_._2).sum
+    //val upProbNetState = new NetState(nodeList.zip(boolStateList).toMap)
+    val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1)
+    val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1)
+    //println("Not filter "+ initCondProb)
+    //println("filter "+ initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)))
+    val probOut: Double = initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)).map(_._2).sum
+   // println("probout" + probOut)
     if (hex) java.lang.Double.toHexString(probOut) else probOut.toString
   }
 }
@@ -134,7 +129,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
     * @param probDistRelSize probability distribtion and relative size
     * @return
     */
-  private def setUpdateVar(probDistRelSize: (Map[NetState, Double], Double)): List[String] = { // same order than updateVar and updateVarNames
+  private def setUpdateVar(probDistRelSize: (List[(List[String], Double)], Double)): List[String] = { // same order than updateVar and updateVarNames
     updateVar.map(line => {
       val listReplaceProb: List[String] =
         "p\\[[^\\]]+\\]".r.findAllIn(line).map(x => UPMaBoSS.upProbFromInitCond(probDistRelSize._1, x, hexUP)).toList
@@ -204,7 +199,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
               val newRelSize = upStep.relSize * newInitCond._2
               println("New relative size: " + newRelSize)
               val newInitCondCfg = upStep.cfgMbss.
-                setInitCond(newInitCond._1.toList, hex = hexUP)
+                setInitCond(newInitCond._1, hex = hexUP)
               println("New initial condition")
               val newCfgString = updateCfg(newInitCondCfg.cfg, setUpdateVar(newInitCond._1, newRelSize), upRandom)
               println("External variable updated")
@@ -252,7 +247,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
     if (upStep.relSize == 0) UpStepLight(None, 0) else {
       val newInitCond = upStep.lastLineProbTraj match {
         case None => None
-        case Some(line) => Some(Result.updateLine(line, cfgMbss.extNodeList, divNode, deathNode, verbose))
+        case Some(line) => Some(Result.updateLine(line, divNode, deathNode, verbose))
       }
       val newRelSize = newInitCond match {
         case None => upStep.relSize
@@ -261,7 +256,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
       val newCfg = newInitCond match {
         case None => cfgMbss
         case Some((dist, ratio)) => {
-          val newInitCondCfg = cfgMbss.setInitCond(dist.toList, hex = hexUP)
+          val newInitCondCfg = cfgMbss.setInitCond(dist, hex = hexUP)
           val newCfgString = this.updateCfg(newInitCondCfg.cfg, this.setUpdateVar((dist, newRelSize)), upRandom4Light)
           if (verbose) newCfgString.split("\n").
             filter(line => updateVarNames.contains("\\s*".r.replaceAllIn("=.*".r.replaceAllIn(line, ""), ""))).
@@ -326,8 +321,8 @@ case class UPMbssOutLight(sizes: List[Double], lastLines: List[String], cfgMbss:
       "^[\t]*".r.replaceAllIn(lineIndex._1, (lineIndex._2 * stepTime).toString + "\t")
     })
 
-  val probDistTrajectory: List[(Double, Map[NetState, Double])] = lastLines.zipWithIndex.map(lineIndex =>
-    (lineIndex._2 * stepTime, Result.lineToTimeProb(lineIndex._1, cfgMbss.extNodeList)._2))
+  val probDistTrajectory: List[(Double, List[(List[String], Double)])] = lastLines.zipWithIndex.map(lineIndex =>
+    (lineIndex._2 * stepTime, Result.lineToTimeProb(lineIndex._1)._2))
 
 
   //  /** Distribution from given line index
