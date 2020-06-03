@@ -52,7 +52,7 @@ object UPMaBoSS {
     * @param hex          true if HexString
     * @return probability value written in String or in HexString
     */
-  private def upProbFromInitCond(initCondProb: List[(List[String], Double)], upProb: String, hex: Boolean = false): String = {
+  private def upProbFromInitCond(initCondProb: Map[Set[String], Double], upProb: String, hex: Boolean = false): String = {
     val nodes = try upProb.split("=").head catch {
       case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb)
     }
@@ -64,11 +64,11 @@ object UPMaBoSS {
     val boolStateList: List[Boolean] = "\\s*\\)\\s*\\]".r.replaceAllIn("\\s*\\(\\s*".r.replaceAllIn(boolState, ""), "").split(",").
       map(x => if ("\\s*".r.replaceAllIn(x, "") == "1") true else false).toList
     //val upProbNetState = new NetState(nodeList.zip(boolStateList).toMap)
-    val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1)
-    val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1)
+    val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1).toSet
+    val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1).toSet
     //println("Not filter "+ initCondProb)
     //println("filter "+ initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)))
-    val probOut: Double = initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)).map(_._2).sum
+    val probOut: Double = initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)).values.sum
    // println("probout" + probOut)
     if (hex) java.lang.Double.toHexString(probOut) else probOut.toString
   }
@@ -129,7 +129,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
     * @param probDistRelSize probability distribtion and relative size
     * @return
     */
-  private def setUpdateVar(probDistRelSize: (List[(List[String], Double)], Double)): List[String] = { // same order than updateVar and updateVarNames
+  private def setUpdateVar(probDistRelSize: (Map[Set[String], Double], Double)): List[String] = { // same order than updateVar and updateVarNames
     updateVar.map(line => {
       val listReplaceProb: List[String] =
         "p\\[[^\\]]+\\]".r.findAllIn(line).map(x => UPMaBoSS.upProbFromInitCond(probDistRelSize._1, x, hexUP)).toList
@@ -321,7 +321,7 @@ case class UPMbssOutLight(sizes: List[Double], lastLines: List[String], cfgMbss:
       "^[\t]*".r.replaceAllIn(lineIndex._1, (lineIndex._2 * stepTime).toString + "\t")
     })
 
-  val probDistTrajectory: List[(Double, List[(List[String], Double)])] = lastLines.zipWithIndex.map(lineIndex =>
+  val probDistTrajectory: List[(Double, Map[Set[String], Double])] = lastLines.zipWithIndex.map(lineIndex =>
     (lineIndex._2 * stepTime, Result.lineToTimeProb(lineIndex._1)._2))
 
 

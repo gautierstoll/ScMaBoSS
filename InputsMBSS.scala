@@ -244,7 +244,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     * @param nodeList List of node on which
     * @return
     */
-  def setInitCond(probDist : List[(List[String],Double)],hex : Boolean = false,nodeList : List[String] = this.bndMbss.nodeList) : CfgMbss = {
+  def setInitCond(probDist : Map[Set[String],Double],hex : Boolean = false,nodeList : List[String] = this.bndMbss.nodeList) : CfgMbss = {
     //val firstStateNodes : Set[String] = probDist.head._1.nodeSet
     //if (probDist.tail.exists(x=> (x._1.nodeSet != firstStateNodes)))
     //  throw new IllegalArgumentException("States of probdist are not compatible")

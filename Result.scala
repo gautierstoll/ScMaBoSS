@@ -56,7 +56,7 @@ object Result {
     * @return
     */
   def updateLine(line: String, divNode: String, deathNode: String, verbose: Boolean = false):
-  (List[(List[String], Double)], Double) =
+  (Map[Set[String], Double], Double) =
     updateProb(lineToTimeProb(line)._2, divNode, deathNode, verbose)
 
   /**
@@ -67,17 +67,17 @@ object Result {
     * @param verbose   true for printing updating process
     * @return
     */
-  def updateProb(probDist: List[(List[String], Double)], divNode: String, deathNode: String,
-                 verbose: Boolean = false): (List[(List[String], Double)], Double) = {
-    val nonNormDist = probDist.filter(x => ! x._1.contains(deathNode)).
-      map(x => {
-        if (x._1.contains(divNode)) {
-          (x._1.filter(n => !(n ==divNode)), x._2 * 2)
-        } else (x._1, x._2)
-      }).groupBy(_._1.toSet).map(x => (x._2.head._1,x._2.map(_._2).sum)) // group states
+  def updateProb(probDist: Map[Set[String], Double], divNode: String, deathNode: String,
+                 verbose: Boolean = false): (Map[Set[String], Double], Double) = {
+
+    probDist.groupBy(x => (x._1 - divNode)).map(x=> (x._1 -> x._2.values.sum))
+    val nonNormDist : Map[Set[String], Double] = probDist.
+      filter(x => ! x._1.contains(deathNode)).
+      map(x => (if(x._1.contains(divNode)){x._1 -> x._2*2}else{x._1 -> x._2})).
+      groupBy(x => (x._1 - divNode)).map(x => (x._1 -> (x._2.values.sum)))
     val normFactor = nonNormDist.values.sum
     if (verbose) println("Norm. factor: " + normFactor)
-    (nonNormDist.toList.map(x => (x._1, x._2 / normFactor)), normFactor)
+    (nonNormDist.map(x => (x._1 -> (x._2 / normFactor))), normFactor)
   }
 
   /**
@@ -85,12 +85,12 @@ object Result {
     * @param line      probtraj line
     * @return
     */
-  def lineToTimeProb(line: String): (Double, List[(List[String], Double)]) = {
+  def lineToTimeProb(line: String): (Double, Map[Set[String], Double]) = {
     val splitLine = line.split("\t")
     (line.head.toDouble,
       splitLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
         map(x => (
-          if (x(0) == "<nil>")(Nil : List[String])else(x(0).split(" -- ").toList), x(1).toDouble)).toList)
+          (if(x(0) == "<nil>"){Set[String]()}else(x(0).split(" -- ").toSet)) -> x(1).toDouble)).toMap)
   }
 
   /** for Constructor from MaBoSS server run with option
@@ -146,7 +146,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
 
   val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime: List[String] = parsedResultData.prob_traj.split("\n").toList.tail
-  val probDistTrajectory: List[(Double,List[(List[String], Double)])] = linesWithTime.map(line => Result.lineToTimeProb(line))
+  val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => Result.lineToTimeProb(line))
   val sizes: List[Double] = List.fill(linesWithTime.length)(1.0)
 
   /** updates last probability distribution for UPMaBoSS
@@ -155,7 +155,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode: String, deathNode: String, verbose: Boolean = false): (List[(List[String], Double)], Double) = { // to be tested
+  def updateLastLine(divNode: String, deathNode: String, verbose: Boolean = false): (Map[Set[String], Double], Double) = { // to be tested
     Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last, divNode, deathNode, verbose)
   }
 
@@ -249,13 +249,13 @@ trait ParReducibleRun[OutType] {
 /** Trait for parallel runs of MaBoSS, outputs being a probability distribution
   *
   */
-trait ParReducibleProbDist extends ParReducibleRun[List[(List[String], Double)]] {
-  protected def linCombine(fpMap1: List[(List[String], Double)], fpMap2: List[(List[String], Double)]): List[(List[String], Double)] = {
-    (fpMap1 ::: fpMap2).groupBy(_._1.toSet).map(x => (x._2.head._1,x._2.map(_._2).sum)).toList
+trait ParReducibleProbDist extends ParReducibleRun[Map[Set[String], Double]] {
+  protected def linCombine(fpMap1: Map[Set[String], Double], fpMap2: Map[Set[String], Double]): Map[Set[String], Double] = {
+    (fpMap1.toList ::: fpMap2.toList).groupBy(_._1.toSet).map(x => (x._2.head._1 -> x._2.map(_._2).sum))
   }
 
-  protected def multiply(fpMap: List[(List[String], Double)], d: Double): List[(List[String], Double)] = {
-    fpMap.map(x => (x._1, x._2 * d))
+  protected def multiply(fpMap: Map[Set[String], Double], d: Double): Map[Set[String], Double] = {
+    fpMap.map(x => (x._1 -> x._2 * d))
   }
 }
 
@@ -263,11 +263,11 @@ trait ParReducibleProbDist extends ParReducibleRun[List[(List[String], Double)]]
   *
   */
 object ParReducibleFP extends ParReducibleProbDist {
-  protected def generate(r: Result): List[(List[String], Double)] = r.parsedResultData.FP.split("\n").tail.tail.
+  protected def generate(r: Result): Map[Set[String], Double] = r.parsedResultData.FP.split("\n").tail.tail.
     map(line => {
       val lSplit = line.split("\t");
-      (if (lSplit(1) == "<nil>")(Nil : List[String])else(lSplit(1).split(" -- ").toList), lSplit(0).toDouble)
-    }).toList
+      ((if (lSplit(1) == "<nil>"){Set[String]()}else{lSplit(1).split(" -- ").toSet}) -> lSplit(0).toDouble)
+    }).toMap
 }
 
 /** Concrete application of ParReducible run for last probability distribution
@@ -279,7 +279,7 @@ object ParReducibleLastLine extends ParReducibleProbDist {
     * @param r Result
     * @return
     */
-  protected def generate(r: Result): List[(List[String], Double)] = {
+  protected def generate(r: Result): Map[Set[String], Double] = {
     Result.lineToTimeProb(r.parsedResultData.prob_traj.split("\n").last)._2
   }
 }
@@ -293,7 +293,7 @@ trait ResultProcessing {
     *
     * @return
     */
-  def probDistTrajectory: List[(Double, List[(List[String], Double)])]
+  def probDistTrajectory: List[(Double, Map[Set[String], Double])]
 
 
   /** write probability trajectory to file. Careful, probability variance is not written
@@ -345,7 +345,7 @@ trait ResultProcessing {
       (timeProbDist._1,
         timeProbDist._2.
           filter(prob =>
-            (netState.activeNodes.diff(prob._1.toSet).isEmpty & netState.inactiveNodes.intersect(prob._1.toSet).isEmpty)).
+            (netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty)).
           map(_._2).sum))
     if (normWithSize) res.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
     else res
@@ -377,7 +377,7 @@ trait ResultProcessing {
       (timeProbDist._1,
         timeProbDist._2.
           filter(prob =>
-            prob._1.contains(node)).map(_._2).sum))
+            prob._1.contains(node)).values.sum))
     if (normWithSize) res.zip(sizes).map(x => (x._1._1, x._1._2 * x._2))
     else res
   }
@@ -469,11 +469,11 @@ trait ResultProcessing {
   * @param listNodes             list of nodes for constructing NetState
   */
 class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String, val listNodes: List[String]) extends ResultProcessing {
-  val probDistTrajectory: List[(Double, List[(List[String], Double)])] = ManageInputFile.file_get_content(filenameLinesWithTime).
+  val probDistTrajectory: List[(Double, Map[Set[String], Double])] = ManageInputFile.file_get_content(filenameLinesWithTime).
     split("\n").map(line => {
     val lineSplit = line.split("\t")
     (lineSplit.head.toDouble, lineSplit.tail.sliding(2, 2).
-      map(stateProb => (if (stateProb(0) == "<nil>"){Nil : List[String]}else{stateProb(0).split(" -- ").toList},stateProb(1).toDouble)).toList)
+      map(stateProb => ((if (stateProb(0) == "<nil>"){Set[String]()}else{stateProb(0).split(" -- ").toSet}) -> stateProb(1).toDouble)).toMap)
   }).toList
   val sizes: List[Double] = ManageInputFile.file_get_content(filenameSize).split("\n").toList.map(_.toDouble)
 }
