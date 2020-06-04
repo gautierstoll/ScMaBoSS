@@ -101,7 +101,7 @@ An option is returned.
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
 ```scala
-    val upTest : UPMaBoSS = new UPMaBoSS("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),port_number,false,true)
+    val upTest : UPMaBoSS = new UPMaBoSS("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),"localhost",port_number,false,true)
 ```
 2. Run UPMaBoSS:
 ```scala
