@@ -126,15 +126,6 @@ object Result {
   */
 class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outputData: String) extends ResultProcessing {
 
-  ///** Constructor of Result from MaBoSS server run. Socket is closed after the run.
-  //  *
-  //  * @param mbcli
-  //  * @param simulation
-  //  * @param hints
-  //  * @return
-  //  */
-  //def this(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints) {
-  //this(simulation,hints.verbose,hints.hexfloat,Result.fromInputsMBSS(mbcli : MaBoSSClient, simulation : CfgMbss, hints : Hints))}
   /** Generates String or hexString from Double, according to hexfloat
     *
     * @param double input double
@@ -143,10 +134,9 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
   def doubleToMbssString(double: Double): String = { // not yet used for writing files
     if (hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
-
-  val parsedResultData: ResultData = DataStreamer.parseStreamData(outputData, verbose)
+  var parsedResultData: ResultData =  DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime: List[String] = parsedResultData.prob_traj.split("\n").toList.tail
-  val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => Result.lineToTimeProb(line))
+  lazy val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => Result.lineToTimeProb(line))
   val sizes: List[Double] = List.fill(linesWithTime.length)(1.0)
 
   /** updates last probability distribution for UPMaBoSS
@@ -177,12 +167,6 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
     pw.close()
   }
 
-  //  /** Distribution from given probtraj line index
-  //    *
-  //    * @param index index of line
-  //    * @return
-  //    */
-  //  def probTrajLine2Dist(index: Int): Array[(NetState, Double)] = super.probTrajLine2Dist(index, simulation)
 }
 
 /** Trait for parallel runs of MaBoSS with reduction
@@ -351,21 +335,6 @@ trait ResultProcessing {
     else res
   }
 
-  //
-  //    val stateTrajList = linesWithTime.map(probTrajLine => {
-  //      val splitProbTrajLine = probTrajLine.split("\t")
-  //      val stateDistProb: List[(String, Double)] = splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-  //        sliding(3, 3).map(x => (x(0), x(1).toDouble)).toList
-  //      val prob = stateDistProb.filter(stateProb => {
-  //        val nodes = stateProb._1.split(" -- ").toSet
-  //        activeNodes.diff(nodes).isEmpty & unactiveNodes.intersect(nodes).isEmpty}).
-  //        map(_._2).sum
-  //      (splitProbTrajLine.toList.head.toDouble, prob)
-  //    })
-  //    if (normWithSize) stateTrajList.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
-  //    else stateTrajList
-  //  }
-
   /** Node state probability trajectory, given a node
     *
     * @param node         network node
@@ -381,18 +350,6 @@ trait ResultProcessing {
     if (normWithSize) res.zip(sizes).map(x => (x._1._1, x._1._2 * x._2))
     else res
   }
-  /*
-
-  {
-    val nodeTrajList = linesWithTime.map(probTrajLine => {
-      val splitProbTrajLine = probTrajLine.split("\t")
-      (splitProbTrajLine.head.toDouble,
-        splitProbTrajLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).
-          sliding(3, 3).map(x => (x(0), x(1).toDouble)).filter(_._1.split(" -- ").contains(node)).map(_._2).sum)
-    })
-    if (normWithSize) nodeTrajList.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
-    else nodeTrajList
-  }*/
 
   /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
     *
@@ -449,17 +406,6 @@ trait ResultProcessing {
     pw.close()
   }
 
-  /* /** Distribution from given probtraj line index
-    *
-    * @param index line index (start at 0)
-    * @param simulation simulation for output nodes that define network states
-    * @return
-    */
-  def probTrajLine2Dist(index: Int,simulation: CfgMbss): Array[(NetState,Double)]  = {
-    linesWithTime(index).split("\t").
-    dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
-      map(x => (new NetState(x(0),simulation), x(1).toDouble)).toArray
-  }*/
 }
 
 /** Concrete class of result from files (probDistTrajectory and sizes). Careful, probDistTrajectory file does not contains probability variance.

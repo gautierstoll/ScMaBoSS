@@ -90,7 +90,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
                val seed: Int, val cfgMbss: CfgMbss, val hostMbss: String, portMbss: Int,
                hexUP: Boolean, verbose: Boolean) {
   private def this(t: (String, String, List[String], Int, Int, CfgMbss, String, Int, Boolean, Boolean)) =
-    this(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10)
+    this(t._1, t._2, t._3, t._4, t._5, t._6: CfgMbss, t._7, t._8, t._9, t._10)
 
   /** Constructor from files
     *
@@ -123,7 +123,8 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
   val upRandom: Random = new Random(seed) // for UPMaBoSS producing full data
   val upRandom4Light: Random = new Random(seed) // for UPMaBoSS producing light data
   val hints: Hints = Hints(hexfloat = hexUP)
-
+  var timeMaBoSS : Long = 0
+  var timeMaBoSSServer : Long = 0
   /** return a list of string containing the updated variables with their values, in same order than updateVar, to be put in cfg
     *
     * @param probDistRelSize probability distribtion and relative size
@@ -190,11 +191,11 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
   case class UpStep(cfgMbss: CfgMbss, result: Result = null, relSize: Double = 1d) {}
 
   private def upDate(upStep: UpStep): UpStep = {
-    if (upStep.relSize == 0) UpStep(null, null, 0) else {
+    if (upStep.relSize == 0) UpStep(null : CfgMbss, null, 0) else {
       MaBoSSClient(hostMbss, portMbss) match {
         case Some(mcli) => {
           mcli.run(upStep.cfgMbss, hints) match {
-            case Some(newResult) => {
+            case Some(newResult : Result) => {
               val newInitCond = newResult.updateLastLine(divNode, deathNode, verbose)
               val newRelSize = upStep.relSize * newInitCond._2
               println("New relative size: " + newRelSize)
@@ -207,12 +208,12 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
                 filter(line => updateVarNames.contains("\\s*".r.replaceAllIn("=.*".r.replaceAllIn(line, ""), ""))).
                 foreach(line => println(line))
               val newCfg = new CfgMbss(newInitCondCfg.bndMbss, newCfgString)
-              UpStep(newCfg, newResult, newRelSize)
+              UpStep(newCfg, newResult: Result, newRelSize)
             }
-            case None => UpStep(null, null, 1d)
+            case None => UpStep(null : CfgMbss, null, 1d)
           }
         }
-        case None => UpStep(null, null, 1d)
+        case None => UpStep(null: CfgMbss, null, 1d)
       }
     }
   }
@@ -267,8 +268,11 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
       MaBoSSClient(hostMbss, portMbss) match {
         case Some(mcli) => {
           //val mcli = new MaBoSSClient("localhost",portMbss)
+          val sysTime = System.currentTimeMillis()
           mcli.run(newCfg, hints) match {
-            case Some(result) => UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)
+            case Some(result) => {timeMaBoSS += (System.currentTimeMillis()-sysTime)
+              timeMaBoSSServer += mcli.timeNext
+              UpStepLight(Some(result.parsedResultData.prob_traj.split("\n").toList.last), newRelSize)}
             case None => UpStepLight(None, 1d)
           }
         }
@@ -323,13 +327,4 @@ case class UPMbssOutLight(sizes: List[Double], lastLines: List[String], cfgMbss:
 
   val probDistTrajectory: List[(Double, Map[Set[String], Double])] = lastLines.zipWithIndex.map(lineIndex =>
     (lineIndex._2 * stepTime, Result.lineToTimeProb(lineIndex._1)._2))
-
-
-  //  /** Distribution from given line index
-  //    *
-  //    * @param index
-  //    * @return
-  //    */
-  //  def probTrajLine2Dist(index: Int): Array[(NetState, Double)] = super.probTrajLine2Dist(index, cfgMbss)
-
 }

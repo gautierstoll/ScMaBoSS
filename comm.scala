@@ -165,6 +165,7 @@ object DataStreamer {
   * @param socket
   */
 class MaBoSSClient (val socket : java.net.Socket) {
+  var timeNext : Long = 0
   protected val bos : BufferedOutputStream = new BufferedOutputStream(socket.getOutputStream)
   protected val scannerBis : Scanner = new Scanner(new BufferedInputStream(socket.getInputStream)).useDelimiter(0.toChar.toString)
   def send(inputData: String,tOut : Option[Int] = None):Option[String] =  {
@@ -173,16 +174,20 @@ class MaBoSSClient (val socket : java.net.Socket) {
       case Some(i) => socket.setSoTimeout(i)}
     bos.write(inputData.getBytes())
     bos.write(0.toChar)
+    val startTime = System.currentTimeMillis()
     try bos.flush() catch {
       case e: Throwable => {
         System.err.print("IOerror by flushing buffer to MaBoSS server, socket may be closed ")
         None
       }
     }
-    try Some(scannerBis.next()) catch {
+    val t : Long = System.currentTimeMillis()
+    val res = try Some(scannerBis.next()) catch {
       case e: SocketTimeoutException => println("Timeout server reached"); None
       case e: Throwable => System.err.print(e.toString);None
     }
+    timeNext = System.currentTimeMillis() - t
+    res
   }
   def close(): Unit = {socket.close()}
 
