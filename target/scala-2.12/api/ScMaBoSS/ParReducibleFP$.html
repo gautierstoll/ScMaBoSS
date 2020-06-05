@@ -142,6 +142,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -183,8 +191,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
-                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -205,8 +213,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="ResultProcessing.html" title=""></a>
-                        <a href="ResultProcessing.html" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title="trait for handling results"></a>
+                        <a href="ResultProcessing.html" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -265,7 +279,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a>, <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a>, <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -367,7 +381,7 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="ScMaBoSS.ParReducibleRun#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(cfgMbss:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints,seedHostPortSet:scala.collection.parallel.immutable.ParSet[(Int,String,Int)]):Option[OutType]"></a><a id="apply(CfgMbss,Hints,ParSet[(Int,String,Int)]):Option[Map[NetState,Double]]"></a>
+      <a id="apply(cfgMbss:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints,seedHostPortSet:scala.collection.parallel.immutable.ParSet[(Int,String,Int)]):Option[OutType]"></a><a id="apply(CfgMbss,Hints,ParSet[(Int,String,Int)]):Option[Map[Set[String],Double]]"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/ParReducibleFP$.html#apply(cfgMbss:ScMaBoSS.CfgMbss,hints:ScMaBoSS.Hints,seedHostPortSet:scala.collection.parallel.immutable.ParSet[(Int,String,Int)]):Option[OutType]" title="Permalink">
         <i class="material-icons"></i>
@@ -378,12 +392,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>, <span name="seedHostPortSet">seedHostPortSet: <span class="extype" name="scala.collection.parallel.immutable.ParSet">ParSet</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]]</span>
+        <span class="name">apply</span><span class="params">(<span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>, <span name="seedHostPortSet">seedHostPortSet: <span class="extype" name="scala.collection.parallel.immutable.ParSet">ParSet</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">parallel runs
 </p><div class="fullcomment"><div class="comment cmt"><p>parallel runs
-</p></div><dl class="paramcmts block"><dt class="param">seedHostPortSet</dt><dd class="cmt"><p>parallel set containing seed and (port,host) for MaBoSS servers</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">cfgMbss</dt><dd class="cmt"><p>input of simulation</p></dd><dt class="param">hints</dt><dd class="cmt"><p>hint for server</p></dd><dt class="param">seedHostPortSet</dt><dd class="cmt"><p>parallel set containing seed and (port,host) for MaBoSS servers</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -477,9 +491,9 @@
               
         </dd></dl></div>
     </li><li name="ScMaBoSS.ParReducibleFP#generate" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="generate(r:ScMaBoSS.Result):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="generate(Result):Map[NetState,Double]"></a>
+      <a id="generate(r:ScMaBoSS.Result):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]"></a><a id="generate(Result):Map[Set[String],Double]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ParReducibleFP$.html#generate(r:ScMaBoSS.Result):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
+      <a href="../ScMaBoSS/ParReducibleFP$.html#generate(r:ScMaBoSS.Result):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -488,12 +502,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">generate</span><span class="params">(<span name="r">r: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">generate</span><span class="params">(<span name="r">r: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Generation of an OutType from a MaBoSS Result
 </p><div class="fullcomment"><div class="comment cmt"><p>Generation of an OutType from a MaBoSS Result
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleFP">ParReducibleFP</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">r</dt><dd class="cmt"><p>Result</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="ScMaBoSS.ParReducibleFP">ParReducibleFP</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -543,9 +557,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="ScMaBoSS.ParReducibleProbDist#linCombine" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="linCombine(fpMap1:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],fpMap2:scala.collection.immutable.Map[ScMaBoSS.NetState,Double]):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="linCombine(Map[NetState,Double],Map[NetState,Double]):Map[NetState,Double]"></a>
+      <a id="linCombine(fpMap1:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],fpMap2:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]"></a><a id="linCombine(Map[Set[String],Double],Map[Set[String],Double]):Map[Set[String],Double]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ParReducibleFP$.html#linCombine(fpMap1:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],fpMap2:scala.collection.immutable.Map[ScMaBoSS.NetState,Double]):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
+      <a href="../ScMaBoSS/ParReducibleFP$.html#linCombine(fpMap1:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],fpMap2:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -554,16 +568,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">linCombine</span><span class="params">(<span name="fpMap1">fpMap1: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="fpMap2">fpMap2: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">linCombine</span><span class="params">(<span name="fpMap1">fpMap1: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="fpMap2">fpMap2: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Linear combination of two OutType
 </p><div class="fullcomment"><div class="comment cmt"><p>Linear combination of two OutType
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="ScMaBoSS.ParReducibleProbDist#multiply" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="multiply(fpMap:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],d:Double):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]"></a><a id="multiply(Map[NetState,Double],Double):Map[NetState,Double]"></a>
+      <a id="multiply(fpMap:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],d:Double):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]"></a><a id="multiply(Map[Set[String],Double],Double):Map[Set[String],Double]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ParReducibleFP$.html#multiply(fpMap:scala.collection.immutable.Map[ScMaBoSS.NetState,Double],d:Double):scala.collection.immutable.Map[ScMaBoSS.NetState,Double]" title="Permalink">
+      <a href="../ScMaBoSS/ParReducibleFP$.html#multiply(fpMap:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],d:Double):scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -572,12 +586,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">multiply</span><span class="params">(<span name="fpMap">fpMap: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>, <span name="d">d: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]</span>
+        <span class="name">multiply</span><span class="params">(<span name="fpMap">fpMap: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="d">d: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
       <p class="shortcomment cmt">multiplication of an OutType with a real number for normalization
 </p><div class="fullcomment"><div class="comment cmt"><p>multiplication of an OutType with a real number for normalization
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">d</dt><dd class="cmt"><p>real number</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a> → <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -737,7 +751,7 @@
         <div class="parent" name="ScMaBoSS.ParReducibleProbDist">
               <h3>Inherited from <a href="ParReducibleProbDist.html" class="extype" name="ScMaBoSS.ParReducibleProbDist">ParReducibleProbDist</a></h3>
             </div><div class="parent" name="ScMaBoSS.ParReducibleRun">
-              <h3>Inherited from <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]]</h3>
+              <h3>Inherited from <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

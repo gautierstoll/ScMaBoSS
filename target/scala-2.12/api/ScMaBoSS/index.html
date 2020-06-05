@@ -140,6 +140,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -181,8 +189,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
-                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -203,8 +211,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="ResultProcessing.html" title=""></a>
-                        <a href="ResultProcessing.html" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title="trait for handling results"></a>
+                        <a href="ResultProcessing.html" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -334,7 +348,7 @@
       
       <p class="shortcomment cmt">Configuration for MaBoSS (including bnd)
 </p>
-    </li><li name="ScMaBoSS.ClientData" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.ClientData" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ClientDataextendsProductwithSerializable"></a><a id="ClientData:ClientData"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/index.html#ClientDataextendsProductwithSerializable" title="Permalink">
@@ -353,7 +367,8 @@
       </span>
       
       <p class="shortcomment cmt">Data sent to MaBoSS server, need to be transformed by DataStreamer.buildStreamData
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Data sent to MaBoSS server, need to be transformed by DataStreamer.buildStreamData
+</p></div><dl class="paramcmts block"><dt class="param">network</dt><dd class="cmt"><p>bnd in String</p></dd><dt class="param">config</dt><dd class="cmt"><p>cfg in String</p></dd><dt class="param">command</dt><dd class="cmt"><p>command sent to server</p></dd></dl></div>
     </li><li name="ScMaBoSS.Hints" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HintsextendsProductwithSerializable"></a><a id="Hints:Hints"></a>
       <span class="permalink">
@@ -374,7 +389,7 @@
       
       <p class="shortcomment cmt">Parameters for MaBoSS server
 </p><div class="fullcomment"><div class="comment cmt"><p>Parameters for MaBoSS server
-</p></div><dl class="paramcmts block"><dt class="param">check</dt><dd class="cmt"><p>if true, just check coherence of network and config</p></dd><dt class="param">hexfloat</dt><dd class="cmt"><p>hif true, double a represented in hexfloat format</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">check</dt><dd class="cmt"><p>if true, just check coherence of network and config</p></dd><dt class="param">hexfloat</dt><dd class="cmt"><p>if true, double a represented in hexfloat format</p></dd><dt class="param">augment</dt><dd class="cmt"><p>server parameter</p></dd><dt class="param">overRide</dt><dd class="cmt"><p>server parameter</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>server parameter</p></dd></dl></div>
     </li><li name="ScMaBoSS.MaBoSSClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MaBoSSClientextendsAnyRef"></a><a id="MaBoSSClient:MaBoSSClient"></a>
       <span class="permalink">
@@ -394,6 +409,26 @@
       </span>
       
       <p class="shortcomment cmt">Socket communication with MaBoSS server
+</p>
+    </li><li name="ScMaBoSS.MaBoSSQuClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MaBoSSQuClientextendsMaBoSSClient"></a><a id="MaBoSSQuClient:MaBoSSQuClient"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/index.html#MaBoSSQuClientextendsMaBoSSClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="socket communication with intermediate queuing socket server
+" href="MaBoSSQuClient.html">
+              <span class="name">MaBoSSQuClient</span>
+            </a><span class="result"> extends <a href="MaBoSSClient.html" class="extype" name="ScMaBoSS.MaBoSSClient">MaBoSSClient</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">socket communication with intermediate queuing socket server
 </p>
     </li><li name="ScMaBoSS.NetState" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NetStateextendsAnyRef"></a><a id="NetState:NetState"></a>
@@ -416,9 +451,9 @@
       <p class="shortcomment cmt">Network state, with associated node list and error handling
 </p>
     </li><li name="ScMaBoSS.ParReducibleProbDist" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ParReducibleProbDistextendsParReducibleRun[scala.collection.immutable.Map[ScMaBoSS.NetState,Double]]"></a><a id="ParReducibleProbDist:ParReducibleProbDist"></a>
+      <a id="ParReducibleProbDistextendsParReducibleRun[scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]]"></a><a id="ParReducibleProbDist:ParReducibleProbDist"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/index.html#ParReducibleProbDistextendsParReducibleRun[scala.collection.immutable.Map[ScMaBoSS.NetState,Double]]" title="Permalink">
+      <a href="../ScMaBoSS/index.html#ParReducibleProbDistextendsParReducibleRun[scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -429,11 +464,11 @@
       <span class="symbol">
         <a title="Trait for parallel runs of MaBoSS, outputs being a probability distribution" href="ParReducibleProbDist.html">
               <span class="name">ParReducibleProbDist</span>
-            </a><span class="result"> extends <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>]]</span>
+            </a><span class="result"> extends <a href="ParReducibleRun.html" class="extype" name="ScMaBoSS.ParReducibleRun">ParReducibleRun</a>[<span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]]</span>
       </span>
       
       <p class="shortcomment cmt">Trait for parallel runs of MaBoSS, outputs being a probability distribution</p>
-    </li><li name="ScMaBoSS.ParReducibleRun" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.ParReducibleRun" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ParReducibleRun[OutType]extendsAnyRef"></a><a id="ParReducibleRun[OutType]:ParReducibleRun[OutType]"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/index.html#ParReducibleRun[OutType]extendsAnyRef" title="Permalink">
@@ -452,7 +487,8 @@
       </span>
       
       <p class="shortcomment cmt">Trait for parallel runs of MaBoSS with reduction
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Trait for parallel runs of MaBoSS with reduction
+</p></div><dl class="paramcmts block"><dt class="tparam">OutType</dt><dd class="cmt"><p>generic of output</p></dd></dl></div>
     </li><li name="ScMaBoSS.QueueMbssClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="QueueMbssClientextendsAnyRef"></a><a id="QueueMbssClient:QueueMbssClient"></a>
       <span class="permalink">
@@ -465,12 +501,12 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="MaBoSS client queue" href="QueueMbssClient.html">
+        <a title="MaBoSS client queue for MaBoSS server." href="QueueMbssClient.html">
               <span class="name">QueueMbssClient</span>
             </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <p class="shortcomment cmt">MaBoSS client queue</p>
+      <p class="shortcomment cmt">MaBoSS client queue for MaBoSS server.</p>
     </li><li name="ScMaBoSS.Result" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ResultextendsResultProcessing"></a><a id="Result:Result"></a>
       <span class="permalink">
@@ -491,7 +527,7 @@
       
       <p class="shortcomment cmt">Results of MaBoSS server
 </p>
-    </li><li name="ScMaBoSS.ResultData" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.ResultData" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ResultDataextendsProductwithSerializable"></a><a id="ResultData:ResultData"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/index.html#ResultDataextendsProductwithSerializable" title="Permalink">
@@ -510,7 +546,27 @@
       </span>
       
       <p class="shortcomment cmt">Parsed results from MaBoSS server
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Parsed results from MaBoSS server
+</p></div><dl class="paramcmts block"><dt class="param">status</dt><dd class="cmt"><p>status</p></dd><dt class="param">errmsg</dt><dd class="cmt"><p>error message</p></dd><dt class="param">stat_dist</dt><dd class="cmt"><p>stationary distribution estimates</p></dd><dt class="param">prob_traj</dt><dd class="cmt"><p>trajectory of probabilities</p></dd><dt class="param">traj</dt><dd class="cmt"><p>Markov process trajectories</p></dd><dt class="param">FP</dt><dd class="cmt"><p>fixed points</p></dd><dt class="param">runlog</dt><dd class="cmt"><p>log of run</p></dd></dl></div>
+    </li><li name="ScMaBoSS.ResultFromFile" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ResultFromFileextendsResultProcessing"></a><a id="ResultFromFile:ResultFromFile"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/index.html#ResultFromFileextendsResultProcessing" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Concrete class of result from files (probDistTrajectory and sizes)." href="ResultFromFile.html">
+              <span class="name">ResultFromFile</span>
+            </a><span class="result"> extends <a href="ResultProcessing.html" class="extype" name="ScMaBoSS.ResultProcessing">ResultProcessing</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Concrete class of result from files (probDistTrajectory and sizes).</p><div class="fullcomment"><div class="comment cmt"><p>Concrete class of result from files (probDistTrajectory and sizes). Careful, probDistTrajectory file does not contains probability variance.
+</p></div></div>
     </li><li name="ScMaBoSS.ResultProcessing" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ResultProcessingextendsAnyRef"></a><a id="ResultProcessing:ResultProcessing"></a>
       <span class="permalink">
@@ -523,12 +579,12 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="ResultProcessing.html">
+        <a title="trait for handling results" href="ResultProcessing.html">
               <span class="name">ResultProcessing</span>
             </a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">trait for handling results</p>
     </li><li name="ScMaBoSS.UPMaBoSS" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UPMaBoSSextendsAnyRef"></a><a id="UPMaBoSS:UPMaBoSS"></a>
       <span class="permalink">
@@ -549,7 +605,7 @@
       
       <p class="shortcomment cmt">UPMaBoSS in scala, using MaBoSS server
 </p>
-    </li><li name="ScMaBoSS.UPMbssOut" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.UPMbssOut" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UPMbssOutextendsProductwithSerializable"></a><a id="UPMbssOut:UPMbssOut"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/index.html#UPMbssOutextendsProductwithSerializable" title="Permalink">
@@ -568,8 +624,9 @@
       </span>
       
       <p class="shortcomment cmt">Output of UPMaBoSS, including population size and CfgMbss for each time steps
-</p>
-    </li><li name="ScMaBoSS.UPMbssOutLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+</p><div class="fullcomment"><div class="comment cmt"><p>Output of UPMaBoSS, including population size and CfgMbss for each time steps
+</p></div><dl class="paramcmts block"><dt class="param">sizes</dt><dd class="cmt"><p>list of relative sizes</p></dd><dt class="param">configurations</dt><dd class="cmt"><p>list of cfg</p></dd></dl></div>
+    </li><li name="ScMaBoSS.UPMbssOutLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UPMbssOutLightextendsResultProcessingwithProductwithSerializable"></a><a id="UPMbssOutLight:UPMbssOutLight"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/index.html#UPMbssOutLightextendsResultProcessingwithProductwithSerializable" title="Permalink">
@@ -588,7 +645,8 @@
       </span>
       
       <p class="shortcomment cmt">Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
+</p></div><dl class="paramcmts block"><dt class="param">sizes</dt><dd class="cmt"><p>list of relaitve sizes</p></dd><dt class="param">lastLines</dt><dd class="cmt"><p>list of probtraj last lines</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -683,6 +741,24 @@
       <span class="symbol">
         <a title="Factory object" href="MaBoSSClient$.html">
               <span class="name">MaBoSSClient</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">Factory object</p>
+    </li><li name="ScMaBoSS.MaBoSSQuClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MaBoSSQuClient"></a><a id="MaBoSSQuClient:MaBoSSQuClient"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/index.html#MaBoSSQuClient" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Factory object" href="MaBoSSQuClient$.html">
+              <span class="name">MaBoSSQuClient</span>
             </a>
       </span>
       

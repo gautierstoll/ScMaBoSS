@@ -142,6 +142,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -183,8 +191,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
-                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -205,8 +213,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="" title=""></a>
-                        <a href="" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="" title="trait for handling results"></a>
+                        <a href="" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -261,7 +275,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>trait for handling results</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -270,7 +284,7 @@
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a>, <a href="UPMbssOutLight.html" class="extype" name="ScMaBoSS.UPMbssOutLight">UPMbssOutLight</a></div>
+            <div class="subClasses hiddenContent"><a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a>, <a href="ResultFromFile.html" class="extype" name="ScMaBoSS.ResultFromFile">ResultFromFile</a>, <a href="UPMbssOutLight.html" class="extype" name="ScMaBoSS.UPMbssOutLight">UPMbssOutLight</a></div>
           </div></div>
         
 
@@ -320,10 +334,10 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="ScMaBoSS.ResultProcessing#linesWithTime" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="linesWithTime:List[String]"></a>
+              <ol><li name="ScMaBoSS.ResultProcessing#probDistTrajectory" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="probDistTrajectory:List[(Double,scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double])]"></a><a id="probDistTrajectory:List[(Double,Map[Set[String],Double])]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#linesWithTime:List[String]" title="Permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#probDistTrajectory:List[(Double,scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double])]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -332,10 +346,28 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">linesWithTime</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">probDistTrajectory</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>])]</span>
       </span>
       
+      <p class="shortcomment cmt">list of probability distribution with time
+</p>
+    </li><li name="ScMaBoSS.ResultProcessing#sizes" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="sizes:List[Double]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#sizes:List[Double]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sizes</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
       
+      <p class="shortcomment cmt">list of size, useful for UPMaBoSS
+</p>
     </li></ol>
             </div>
 
@@ -547,9 +579,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ScMaBoSS.ResultProcessing#nodeTrajectory" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="nodeTrajectory(node:String):List[(Double,Double)]"></a><a id="nodeTrajectory(String):List[(Double,Double)]"></a>
+      <a id="nodeTrajectory(node:String,normWithSize:Boolean):List[(Double,Double)]"></a><a id="nodeTrajectory(String,Boolean):List[(Double,Double)]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#nodeTrajectory(node:String):List[(Double,Double)]" title="Permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#nodeTrajectory(node:String,normWithSize:Boolean):List[(Double,Double)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -558,12 +590,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">nodeTrajectory</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="normWithSize">normWithSize: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
       <p class="shortcomment cmt">Node state probability trajectory, given a node
 </p><div class="fullcomment"><div class="comment cmt"><p>Node state probability trajectory, given a node
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">node</dt><dd class="cmt"><p>network node</p></dd><dt class="param">normWithSize</dt><dd class="cmt"><p>if true probabilities are multiplied by sizes</p></dd><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -596,10 +628,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="ScMaBoSS.ResultProcessing#plotStateTraj" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="plotStateTraj(netStates:List[ScMaBoSS.NetState],filename:String):java.io.File"></a><a id="plotStateTraj(List[NetState],String):File"></a>
+    </li><li name="ScMaBoSS.ResultProcessing#plotStateTraj" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="plotStateTraj(netStates:List[ScMaBoSS.NetState],firstLast:(Int,Int),normWithSize:Boolean,filename:String):java.io.File"></a><a id="plotStateTraj(List[NetState],(Int,Int),Boolean,String):File"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#plotStateTraj(netStates:List[ScMaBoSS.NetState],filename:String):java.io.File" title="Permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#plotStateTraj(netStates:List[ScMaBoSS.NetState],firstLast:(Int,Int),normWithSize:Boolean,filename:String):java.io.File" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -608,32 +640,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">plotStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.io.File">File</span></span>
+        <span class="name">plotStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="firstLast">firstLast: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) = <span class="symbol"><span class="name"><a href="#probDistTrajectory:List[(Double,scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double])]">(1, probDistTrajectory.length)</a></span></span></span>, <span name="normWithSize">normWithSize: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.io.File">File</span></span>
       </span>
       
       <p class="shortcomment cmt">Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
-</p>
-    </li><li name="ScMaBoSS.ResultProcessing#probTrajLine2Dist" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="probTrajLine2Dist(index:Int,simulation:ScMaBoSS.CfgMbss):Array[(ScMaBoSS.NetState,Double)]"></a><a id="probTrajLine2Dist(Int,CfgMbss):Array[(NetState,Double)]"></a>
-      <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#probTrajLine2Dist(index:Int,simulation:ScMaBoSS.CfgMbss):Array[(ScMaBoSS.NetState,Double)]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">probTrajLine2Dist</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="simulation">simulation: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[(<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>)]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Distribution from given probtraj line index
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
+</p></div><dl class="paramcmts block"><dt class="param">netStates</dt><dd class="cmt"><p>network state</p></dd><dt class="param">firstLast</dt><dd class="cmt"><p>first (start at 1) and last elements to take in the trajectory</p></dd><dt class="param">normWithSize</dt><dd class="cmt"><p>if true probabilities are multiplied by sizes</p></dd><dt class="param">filename</dt><dd class="cmt"><p>file name</p></dd></dl></div>
     </li><li name="ScMaBoSS.ResultProcessing#stateTrajectory" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stateTrajectory(netState:ScMaBoSS.NetState):List[(Double,Double)]"></a><a id="stateTrajectory(NetState):List[(Double,Double)]"></a>
+      <a id="stateTrajectory(netState:ScMaBoSS.NetState,normWithSize:Boolean):List[(Double,Double)]"></a><a id="stateTrajectory(NetState,Boolean):List[(Double,Double)]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#stateTrajectory(netState:ScMaBoSS.NetState):List[(Double,Double)]" title="Permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#stateTrajectory(netState:ScMaBoSS.NetState,normWithSize:Boolean):List[(Double,Double)]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -642,12 +658,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+        <span class="name">stateTrajectory</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="normWithSize">normWithSize: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
       </span>
       
       <p class="shortcomment cmt">Boolean state probability trajectory, given a network state
 </p><div class="fullcomment"><div class="comment cmt"><p>Boolean state probability trajectory, given a network state
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">netState</dt><dd class="cmt"><p>network state</p></dd><dt class="param">normWithSize</dt><dd class="cmt"><p>if true probabilities are multiplied by sizes</p></dd><dt>returns</dt><dd class="cmt"><p>probability over time</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -746,10 +762,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="ScMaBoSS.ResultProcessing#writeStateTraj" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="writeStateTraj(netStates:List[ScMaBoSS.NetState],filename:String):Unit"></a><a id="writeStateTraj(List[NetState],String):Unit"></a>
+    </li><li name="ScMaBoSS.ResultProcessing#writeLinesWithTime" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeLinesWithTime(filename:String,hexString:Boolean):Unit"></a><a id="writeLinesWithTime(String,Boolean):Unit"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/ResultProcessing.html#writeStateTraj(netStates:List[ScMaBoSS.NetState],filename:String):Unit" title="Permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#writeLinesWithTime(filename:String,hexString:Boolean):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -758,11 +774,47 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeLinesWithTime</span><span class="params">(<span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="hexString">hexString: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">write probability trajectory to file.</p><div class="fullcomment"><div class="comment cmt"><p>write probability trajectory to file. Careful, probability variance is not written
+</p></div><dl class="paramcmts block"><dt class="param">filename</dt><dd class="cmt"><p>name of file</p></dd></dl></div>
+    </li><li name="ScMaBoSS.ResultProcessing#writeSizes" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeSizes(filename:String,hexString:Boolean):Unit"></a><a id="writeSizes(String,Boolean):Unit"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#writeSizes(filename:String,hexString:Boolean):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeSizes</span><span class="params">(<span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="hexString">hexString: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">write size to file
+</p><div class="fullcomment"><div class="comment cmt"><p>write size to file
+</p></div><dl class="paramcmts block"><dt class="param">filename</dt><dd class="cmt"><p>name of file</p></dd></dl></div>
+    </li><li name="ScMaBoSS.ResultProcessing#writeStateTraj" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeStateTraj(netStates:List[ScMaBoSS.NetState],firstLast:(Int,Int),normWithSize:Boolean,filename:String):Unit"></a><a id="writeStateTraj(List[NetState],(Int,Int),Boolean,String):Unit"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/ResultProcessing.html#writeStateTraj(netStates:List[ScMaBoSS.NetState],firstLast:(Int,Int),normWithSize:Boolean,filename:String):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeStateTraj</span><span class="params">(<span name="netStates">netStates: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>, <span name="firstLast">firstLast: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>) = <span class="symbol"><span class="name"><a href="#probDistTrajectory:List[(Double,scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double])]">(1, probDistTrajectory.length)</a></span></span></span>, <span name="normWithSize">normWithSize: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       <p class="shortcomment cmt">Write tab-separated file of state probability trajectory
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Write tab-separated file of state probability trajectory
+</p></div><dl class="paramcmts block"><dt class="param">netStates</dt><dd class="cmt"><p>network state</p></dd><dt class="param">filename</dt><dd class="cmt"><p>file name</p></dd></dl></div>
     </li>
               </ol>
             </div>

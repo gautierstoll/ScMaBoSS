@@ -23,7 +23,7 @@ case class ClientData(network: String = null, config: String = null, command: St
   * @param check    if true, just check coherence of network and config
   * @param hexfloat if true, double a represented in hexfloat format
   * @param augment  server parameter
-  * @param overRide server paramteer
+  * @param overRide server parameter
   * @param verbose  server parameter
   */
 case class Hints(check: Boolean = false, hexfloat: Boolean = false, augment: Boolean = true,
@@ -59,9 +59,9 @@ object Result {
   (Map[Set[String], Double], Double) =
     updateProb(lineToTimeProb(line)._2, divNode, deathNode, verbose)
 
-  /**
+  /** initial condition and normalization factor from a probability distribution
     *
-    * @param probDist  probability distrubtion over network states
+    * @param probDist  probability distribution over network states
     * @param divNode   division node
     * @param deathNode death node
     * @param verbose   true for printing updating process
@@ -69,20 +69,21 @@ object Result {
     */
   def updateProb(probDist: Map[Set[String], Double], divNode: String, deathNode: String,
                  verbose: Boolean = false): (Map[Set[String], Double], Double) = {
-
-    probDist.groupBy(x => (x._1 - divNode)).map(x=> (x._1 -> x._2.values.sum))
-    val nonNormDist : Map[Set[String], Double] = probDist.
-      filter(x => ! x._1.contains(deathNode)).
-      map(x => (if(x._1.contains(divNode)){x._1 -> x._2*2}else{x._1 -> x._2})).
-      groupBy(x => (x._1 - divNode)).map(x => (x._1 -> (x._2.values.sum)))
+    val nonNormDist: Map[Set[String], Double] = probDist.
+      filter(x => !x._1.contains(deathNode)).
+      map(x => (if (x._1.contains(divNode)) {
+        x._1 -> x._2 * 2
+      } else {
+        x._1 -> x._2
+      })).groupBy(x => (x._1 - divNode)).map(x => (x._1 -> (x._2.values.sum)))
     val normFactor = nonNormDist.values.sum
     if (verbose) println("Norm. factor: " + normFactor)
     (nonNormDist.map(x => (x._1 -> (x._2 / normFactor))), normFactor)
   }
 
-  /**
+  /** transform line of probtraj in time and probablity distribution
     *
-    * @param line      probtraj line
+    * @param line probtraj line
     * @return
     */
   def lineToTimeProb(line: String): (Double, Map[Set[String], Double]) = {
@@ -98,7 +99,7 @@ object Result {
     * @param mbcli      MaBoSS (queuing) client
     * @param simulation cfg with associated bnd
     * @param hints      hints for server
-    * @param jobName    used only if mbcli is an intermediate queuing soket server
+    * @param jobName    used only if mbcli is an intermediate queuing socket server
     * @return
     */
   def fromInputsMBSS(mbcli: MaBoSSClient, simulation: CfgMbss, hints: Hints, jobName: String = ""): Option[Result] = {
@@ -121,7 +122,7 @@ object Result {
   *
   * @param simulation configuration and network
   * @param verbose    flag for parser of data
-  * @param hexfloat   flag for writing data of file
+  * @param hexfloat   flag for writing data to file
   * @param outputData raw data from MaBoSS server
   */
 class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outputData: String) extends ResultProcessing {
@@ -134,6 +135,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
   def doubleToMbssString(double: Double): String = { // not yet used for writing files
     if (hexfloat) java.lang.Double.toHexString(double) else double.toString
   }
+
   var parsedResultData: ResultData =  DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime: List[String] = parsedResultData.prob_traj.split("\n").toList.tail
   lazy val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => Result.lineToTimeProb(line))
@@ -145,7 +147,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
     * @param deathNode death node
     * @return (new_statistical_distribution,normalization_factor)
     */
-  def updateLastLine(divNode: String, deathNode: String, verbose: Boolean = false): (Map[Set[String], Double], Double) = { // to be tested
+  def updateLastLine(divNode: String, deathNode: String, verbose: Boolean = false): (Map[Set[String], Double], Double) = {
     Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last, divNode, deathNode, verbose)
   }
 
@@ -284,7 +286,7 @@ trait ResultProcessing {
     *
     * @param filename name of file
     */
-  def writeLinesWithTime(filename: String, hexString: Boolean = false): Unit = {
+  def writeLinesWithTime(filename: String, hexString: Boolean = false): Unit = { //to be tested
     val pw = new PrintWriter(new File(filename))
     pw.write(
       probDistTrajectory.map(elm => elm._1 + "\t" +
@@ -306,15 +308,10 @@ trait ResultProcessing {
     *
     * @param filename name of file
     */
-  def writeSizes(filename: String, hexString: Boolean = false): Unit = {
+  def writeSizes(filename: String, hexString: Boolean = false): Unit = { //to be tested
     val pw = new PrintWriter(new File(filename))
     pw.write(sizes.map(s =>
-      (if (hexString) {
-        java.lang.Double.toHexString(s)
-      } else {
-        s.toString
-      }
-        )).mkString("\n"))
+      (if (hexString) {java.lang.Double.toHexString(s)} else {s.toString})).mkString("\n"))
     pw.close()
   }
 
@@ -326,11 +323,8 @@ trait ResultProcessing {
     */
   def stateTrajectory(netState: NetState, normWithSize: Boolean = false): List[(Double, Double)] = {
     val res : List[(Double,Double)]= probDistTrajectory.map(timeProbDist =>
-      (timeProbDist._1,
-        timeProbDist._2.
-          filter(prob =>
-            (netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty)).
-          map(_._2).sum))
+      (timeProbDist._1, timeProbDist._2.filter(prob =>
+            (netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty)).values.sum))
     if (normWithSize) res.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
     else res
   }
@@ -343,10 +337,7 @@ trait ResultProcessing {
     */
   def nodeTrajectory(node: String, normWithSize: Boolean = false): List[(Double, Double)] = { // to be tested, the .isDefined
     val res: List[(Double, Double)] = probDistTrajectory.map(timeProbDist =>
-      (timeProbDist._1,
-        timeProbDist._2.
-          filter(prob =>
-            prob._1.contains(node)).values.sum))
+      (timeProbDist._1, timeProbDist._2.filter(prob => prob._1.contains(node)).values.sum))
     if (normWithSize) res.zip(sizes).map(x => (x._1._1, x._1._2 * x._2))
     else res
   }
@@ -414,7 +405,7 @@ trait ResultProcessing {
   * @param filenameSize          in format writeSizes
   * @param listNodes             list of nodes for constructing NetState
   */
-class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String, val listNodes: List[String]) extends ResultProcessing {
+class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String, val listNodes: List[String]) extends ResultProcessing { //tobe tested
   val probDistTrajectory: List[(Double, Map[Set[String], Double])] = ManageInputFile.file_get_content(filenameLinesWithTime).
     split("\n").map(line => {
     val lineSplit = line.split("\t")

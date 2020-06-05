@@ -142,6 +142,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -183,8 +191,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="" title="MaBoSS client queue"></a>
-                        <a href="" title="MaBoSS client queue">
+                        <a class="class" href="" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -205,8 +213,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="ResultProcessing.html" title=""></a>
-                        <a href="ResultProcessing.html" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title="trait for handling results"></a>
+                        <a href="ResultProcessing.html" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -261,7 +275,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>MaBoSS client queue</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>MaBoSS client queue for MaBoSS server.</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -311,7 +325,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="ScMaBoSS.QueueMbssClient#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="ScMaBoSS.QueueMbssClient#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(hostName:String,port:Int):ScMaBoSS.QueueMbssClient"></a><a id="&lt;init&gt;:QueueMbssClient"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/QueueMbssClient.html#&lt;init&gt;(hostName:String,port:Int):ScMaBoSS.QueueMbssClient" title="Permalink">
@@ -326,7 +340,7 @@
         <span class="name">QueueMbssClient</span><span class="params">(<span name="hostName">hostName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;localhost&quot;</span></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>)</span>
       </span>
       
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">hostName</dt><dd class="cmt"><p>hostname or ip</p></dd><dt class="param">port</dt><dd class="cmt"><p>port number</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -493,10 +507,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="ScMaBoSS.QueueMbssClient#getQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getQueue():List[String]"></a>
+    </li><li name="ScMaBoSS.QueueMbssClient#getLog" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getLog:String"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/QueueMbssClient.html#getQueue():List[String]" title="Permalink">
+      <a href="../ScMaBoSS/QueueMbssClient.html#getLog:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -505,10 +519,27 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getQueue</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">getLog</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">get the list of current job, first one is on MaBoSS server
+      <p class="shortcomment cmt">get the log of the queue
+</p>
+    </li><li name="ScMaBoSS.QueueMbssClient#getQueue" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getQueue:List[String]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/QueueMbssClient.html#getQueue:List[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getQueue</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">get the list of current job, first one is on MaBoSS server (or finished)
 </p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -621,7 +652,9 @@
         <span class="name">sendSimulation</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfgMaBoSS">cfgMaBoSS: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hints">hints: <a href="Hints.html" class="extype" name="ScMaBoSS.Hints">Hints</a></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Option">Option</span>[<a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a>]]</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name of the job</p></dd></dl></div>
+      <p class="shortcomment cmt">send simulation, received Future
+</p><div class="fullcomment"><div class="comment cmt"><p>send simulation, received Future
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>name of the job</p></dd><dt class="param">cfgMaBoSS</dt><dd class="cmt"><p>configuration and network</p></dd><dt class="param">hints</dt><dd class="cmt"><p>hints for MaboSS server</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

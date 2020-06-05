@@ -142,6 +142,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -183,8 +191,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
-                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -205,8 +213,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="ResultProcessing.html" title=""></a>
-                        <a href="ResultProcessing.html" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title="trait for handling results"></a>
+                        <a href="ResultProcessing.html" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -314,10 +328,10 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
+              <ol><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,host:String,port:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int):ScMaBoSS.UPMaBoSS" title="Permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,host:String,port:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -326,49 +340,16 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">UPMaBoSS</span><span class="params">(<span name="upFile">upFile: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>)</span>
-      </span>
-      
-      <p class="shortcomment cmt">Constructor from files, hexUP and verbose are false
-</p>
-    </li><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int,hexUP:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
-      <span class="permalink">
-      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int,hexUP:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">UPMaBoSS</span><span class="params">(<span name="upFile">upFile: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
-      </span>
-      
-      <p class="shortcomment cmt">Constructor from files, verbose is false
-</p>
-    </li><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
-      <span class="permalink">
-      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(upFile:String,cfg:ScMaBoSS.CfgMbss,port:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">UPMaBoSS</span><span class="params">(<span name="upFile">upFile: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">UPMaBoSS</span><span class="params">(<span name="upFile">upFile: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="host">host: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;localhost&quot;</span></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
       </span>
       
       <p class="shortcomment cmt">Constructor from files
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Constructor from files
+</p></div><dl class="paramcmts block"><dt class="param">upFile</dt><dd class="cmt"><p>upp file</p></dd><dt class="param">cfg</dt><dd class="cmt"><p>cfg</p></dd><dt class="param">port</dt><dd class="cmt"><p>port of MaBoSS server</p></dd><dt class="param">hexUP</dt><dd class="cmt"><p>true for using HexString</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>true for showing normalization factor and update variables when running</p></dd></dl></div>
     </li><li name="ScMaBoSS.UPMaBoSS#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
+      <a id="&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,hostMbss:String,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS"></a><a id="&lt;init&gt;:UPMaBoSS"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#&lt;init&gt;(divNode:String,deathNode:String,updateVar:List[String],steps:Int,seed:Int,cfgMbss:ScMaBoSS.CfgMbss,hostMbss:String,portMbss:Int,hexUP:Boolean,verbose:Boolean):ScMaBoSS.UPMaBoSS" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -377,16 +358,16 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">UPMaBoSS</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="updateVar">updateVar: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="steps">steps: <span class="extype" name="scala.Int">Int</span></span>, <span name="seed">seed: <span class="extype" name="scala.Int">Int</span></span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="portMbss">portMbss: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
+        <span class="name">UPMaBoSS</span><span class="params">(<span name="divNode">divNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deathNode">deathNode: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="updateVar">updateVar: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="steps">steps: <span class="extype" name="scala.Int">Int</span></span>, <span name="seed">seed: <span class="extype" name="scala.Int">Int</span></span>, <span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="hostMbss">hostMbss: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="portMbss">portMbss: <span class="extype" name="scala.Int">Int</span></span>, <span name="hexUP">hexUP: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">seed</dt><dd class="cmt"><p>necessary because '#rand' can be in updateVar</p></dd><dt class="param">portMbss</dt><dd class="cmt"><p>port of MaBoSS server</p></dd><dt class="param">hexUP</dt><dd class="cmt"><p>using hexString in cfg?</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>show normalization factor and update variables when running?</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">divNode</dt><dd class="cmt"><p>division node</p></dd><dt class="param">deathNode</dt><dd class="cmt"><p>deathe node</p></dd><dt class="param">updateVar</dt><dd class="cmt"><p>list of update var lines</p></dd><dt class="param">steps</dt><dd class="cmt"><p>number of steps</p></dd><dt class="param">seed</dt><dd class="cmt"><p>necessary because '#rand' can be in updateVar</p></dd><dt class="param">cfgMbss</dt><dd class="cmt"><p>cfg</p></dd><dt class="param">portMbss</dt><dd class="cmt"><p>port of MaBoSS server</p></dd><dt class="param">hexUP</dt><dd class="cmt"><p>using hexString in cfg?</p></dd><dt class="param">verbose</dt><dd class="cmt"><p>show normalization factor and update variables when running?</p></dd></dl></div>
     </li></ol>
             </div>
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="ScMaBoSS.UPMaBoSS.UpStep" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="ScMaBoSS.UPMaBoSS.UpStep" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UpStepextendsProductwithSerializable"></a><a id="UpStep:UpStep"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/UPMaBoSS.html#UpStepextendsProductwithSerializable" title="Permalink">
@@ -398,15 +379,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="Steps of UPMaBoSS
+        <a title="Steps of UPMaBoSS, for constructing the stream strRun
 " href="UPMaBoSS$UpStep.html">
               <span class="name">UpStep</span>
             </a><span class="params">(<span name="cfgMbss">cfgMbss: <a href="CfgMbss.html" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>, <span name="result">result: <a href="Result.html" class="extype" name="ScMaBoSS.Result">Result</a> = <span class="symbol">null</span></span>, <span name="relSize">relSize: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1d</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
-      <p class="shortcomment cmt">Steps of UPMaBoSS
-</p>
-    </li><li name="ScMaBoSS.UPMaBoSS.UpStepLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Steps of UPMaBoSS, for constructing the stream strRun
+</p><div class="fullcomment"><div class="comment cmt"><p>Steps of UPMaBoSS, for constructing the stream strRun
+</p></div><dl class="paramcmts block"><dt class="param">cfgMbss</dt><dd class="cmt"><p>cfg</p></dd><dt class="param">result</dt><dd class="cmt"><p>result</p></dd><dt class="param">relSize</dt><dd class="cmt"><p>relative size</p></dd></dl></div>
+    </li><li name="ScMaBoSS.UPMaBoSS.UpStepLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="UpStepLightextendsProductwithSerializable"></a><a id="UpStepLight:UpStepLight"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/UPMaBoSS.html#UpStepLightextendsProductwithSerializable" title="Permalink">
@@ -425,7 +407,8 @@
       </span>
       
       <p class="shortcomment cmt">Light version of UpStep
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Light version of UpStep
+</p></div><dl class="paramcmts block"><dt class="param">lastLineProbTraj</dt><dd class="cmt"><p>last line with</p></dd><dt class="param">relSize</dt><dd class="cmt"><p>relative size</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -670,6 +653,22 @@
       </span>
       
       
+    </li><li name="ScMaBoSS.UPMaBoSS#hostMbss" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hostMbss:String"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#hostMbss:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hostMbss</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -751,7 +750,7 @@
       
       <p class="shortcomment cmt">Run UpMaBoSS, with full list of configurations.</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS, with full list of configurations. Useful for model debugging. Because it uses the stream strRun,
 it can be relaunched with a larger number of steps.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>relative sizes and configuration for each step</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nbSteps</dt><dd class="cmt"><p>number of steps</p></dd><dt>returns</dt><dd class="cmt"><p>relative sizes and configuration for each step</p></dd></dl></div>
     </li><li name="ScMaBoSS.UPMaBoSS#runLight" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="runLight(nbSteps:Int):ScMaBoSS.UPMbssOutLight"></a><a id="runLight(Int):UPMbssOutLight"></a>
       <span class="permalink">
@@ -769,7 +768,7 @@ it can be relaunched with a larger number of steps.
       
       <p class="shortcomment cmt">Run UpMaBoSS, with minimal output.</p><div class="fullcomment"><div class="comment cmt"><p>Run UpMaBoSS, with minimal output. Because it uses the stream strRunLight, it can be relaunched with a larger number of
 steps.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>minimal outputs of UPMaBoSS</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nbSteps</dt><dd class="cmt"><p>number of steps</p></dd><dt>returns</dt><dd class="cmt"><p>minimal outputs of UPMaBoSS</p></dd></dl></div>
     </li><li name="ScMaBoSS.UPMaBoSS#seed" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="seed:Int"></a>
       <span class="permalink">
@@ -850,6 +849,38 @@ steps.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ScMaBoSS.UPMaBoSS#timeMaBoSS" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="timeMaBoSS:Long"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#timeMaBoSS:Long" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">timeMaBoSS</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      
+      
+    </li><li name="ScMaBoSS.UPMaBoSS#timeMaBoSSServer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="timeMaBoSSServer:Long"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/UPMaBoSS.html#timeMaBoSSServer:Long" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">timeMaBoSSServer</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
@@ -996,7 +1027,7 @@ steps.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="ScMaBoSS.UPMaBoSS#writeToFile" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.UPMaBoSS#writeToFile" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="writeToFile(filename:String):Unit"></a><a id="writeToFile(String):Unit"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/UPMaBoSS.html#writeToFile(filename:String):Unit" title="Permalink">
@@ -1011,7 +1042,9 @@ steps.
         <span class="name">writeToFile</span><span class="params">(<span name="filename">filename: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">write upp file
+</p><div class="fullcomment"><div class="comment cmt"><p>write upp file
+</p></div><dl class="paramcmts block"><dt class="param">filename</dt><dd class="cmt"><p>upp file name</p></dd></dl></div>
     </li>
               </ol>
             </div>

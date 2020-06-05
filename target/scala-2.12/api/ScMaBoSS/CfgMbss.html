@@ -142,6 +142,14 @@
                           MaBoSSClient
                         </a>
                       </li><li class="current-entities indented1">
+                        <a class="object" href="MaBoSSQuClient$.html" title="Factory object"></a>
+                        <a class="class" href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+"></a>
+                        <a href="MaBoSSQuClient.html" title="socket communication with intermediate queuing socket server
+">
+                          MaBoSSQuClient
+                        </a>
+                      </li><li class="current-entities indented1">
                         <span class="separator"></span>
                         <a class="object" href="ManageInputFile$.html" title="Manage errors when reading file"></a>
                         <a href="ManageInputFile$.html" title="Manage errors when reading file">
@@ -183,8 +191,8 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue"></a>
-                        <a href="QueueMbssClient.html" title="MaBoSS client queue">
+                        <a class="class" href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server."></a>
+                        <a href="QueueMbssClient.html" title="MaBoSS client queue for MaBoSS server.">
                           QueueMbssClient
                         </a>
                       </li><li class="current-entities indented1">
@@ -205,8 +213,14 @@
                         </a>
                       </li><li class="current-entities indented1">
                         <span class="separator"></span>
-                        <a class="trait" href="ResultProcessing.html" title=""></a>
-                        <a href="ResultProcessing.html" title="">
+                        <a class="class" href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes)."></a>
+                        <a href="ResultFromFile.html" title="Concrete class of result from files (probDistTrajectory and sizes).">
+                          ResultFromFile
+                        </a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="ResultProcessing.html" title="trait for handling results"></a>
+                        <a href="ResultProcessing.html" title="trait for handling results">
                           ResultProcessing
                         </a>
                       </li><li class="current-entities indented1">
@@ -314,7 +328,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="ScMaBoSS.CfgMbss#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="ScMaBoSS.CfgMbss#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(bndMbss:ScMaBoSS.BndMbss,cfg:String):ScMaBoSS.CfgMbss"></a><a id="&lt;init&gt;:CfgMbss"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/CfgMbss.html#&lt;init&gt;(bndMbss:ScMaBoSS.BndMbss,cfg:String):ScMaBoSS.CfgMbss" title="Permalink">
@@ -329,7 +343,7 @@
         <span class="name">CfgMbss</span><span class="params">(<span name="bndMbss">bndMbss: <a href="BndMbss.html" class="extype" name="ScMaBoSS.BndMbss">BndMbss</a></span>, <span name="cfg">cfg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">bndMbss</dt><dd class="cmt"><p>bnd</p></dd><dt class="param">cfg</dt><dd class="cmt"><p>cfg</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -576,7 +590,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="ScMaBoSS.CfgMbss#mutatedCfg" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.CfgMbss#mutatedCfg" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mutatedCfg(mutNodes:List[String]):ScMaBoSS.CfgMbss"></a><a id="mutatedCfg(List[String]):CfgMbss"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/CfgMbss.html#mutatedCfg(mutNodes:List[String]):ScMaBoSS.CfgMbss" title="Permalink">
@@ -592,7 +606,8 @@
       </span>
       
       <p class="shortcomment cmt">Generate CfgMbss with mutations controlled by external variables
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Generate CfgMbss with mutations controlled by external variables
+</p></div><dl class="paramcmts block"><dt class="param">mutNodes</dt><dd class="cmt"><p>node that can be mutated</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -658,9 +673,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="ScMaBoSS.CfgMbss#setInitCond" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setInitCond(probDist:List[(ScMaBoSS.NetState,Double)],hex:Boolean):ScMaBoSS.CfgMbss"></a><a id="setInitCond(List[(NetState,Double)],Boolean):CfgMbss"></a>
+      <a id="setInitCond(probDist:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],hex:Boolean,nodeList:List[String]):ScMaBoSS.CfgMbss"></a><a id="setInitCond(Map[Set[String],Double],Boolean,List[String]):CfgMbss"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/CfgMbss.html#setInitCond(probDist:List[(ScMaBoSS.NetState,Double)],hex:Boolean):ScMaBoSS.CfgMbss" title="Permalink">
+      <a href="../ScMaBoSS/CfgMbss.html#setInitCond(probDist:scala.collection.immutable.Map[scala.collection.immutable.Set[String],Double],hex:Boolean,nodeList:List[String]):ScMaBoSS.CfgMbss" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -669,14 +684,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setInitCond</span><span class="params">(<span name="probDist">probDist: <span class="extype" name="scala.collection.immutable.List">List</span>[(<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Double">Double</span>)]</span>, <span name="hex">hex: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>
+        <span class="name">setInitCond</span><span class="params">(<span name="probDist">probDist: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Double">Double</span>]</span>, <span name="hex">hex: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="nodeList">nodeList: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol"><span class="name"><a href="#bndMbss:ScMaBoSS.BndMbss">this.bndMbss.nodeList</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="ScMaBoSS.CfgMbss">CfgMbss</a></span>
       </span>
       
       <p class="shortcomment cmt">Generate new CfgMbss with initial condition from probability distribution
-For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can be used via toList
+For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can use it
 </p><div class="fullcomment"><div class="comment cmt"><p>Generate new CfgMbss with initial condition from probability distribution
-For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can be used via toList
-</p></div><dl class="paramcmts block"><dt class="param">hex</dt><dd class="cmt"><p>write Double in hexString?</p></dd></dl></div>
+For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can use it
+</p></div><dl class="paramcmts block"><dt class="param">probDist</dt><dd class="cmt"><p>probability distribution</p></dd><dt class="param">hex</dt><dd class="cmt"><p>write Double in hexString?</p></dd><dt class="param">nodeList</dt><dd class="cmt"><p>List of node on which</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -709,7 +724,7 @@ For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can 
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="ScMaBoSS.CfgMbss#update" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.CfgMbss#update" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="update(newParam:scala.collection.immutable.Map[String,String]):ScMaBoSS.CfgMbss"></a><a id="update(Map[String,String]):CfgMbss"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/CfgMbss.html#update(newParam:scala.collection.immutable.Map[String,String]):ScMaBoSS.CfgMbss" title="Permalink">
@@ -725,7 +740,8 @@ For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can 
       </span>
       
       <p class="shortcomment cmt">Generate CfgMbss with updated external variables
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>Generate CfgMbss with updated external variables
+</p></div><dl class="paramcmts block"><dt class="param">newParam</dt><dd class="cmt"><p>map between parameter and its new value</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">

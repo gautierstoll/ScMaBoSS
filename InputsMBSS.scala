@@ -220,7 +220,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
 
   /**Generate CfgMbss with updated external variables
     *
-    * @param newParam
+    * @param newParam map between parameter and its new value
     * @return
     */
   def update(newParam : Map[String,String]) : CfgMbss = {
@@ -237,20 +237,14 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   }
 
   /** Generate new CfgMbss with initial condition from probability distribution
-    * For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can be used via toList
+    * For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can use it
     *
-    * @param probDist
+    * @param probDist probability distribution
     * @param hex write Double in hexString?
     * @param nodeList List of node on which
     * @return
     */
   def setInitCond(probDist : Map[Set[String],Double],hex : Boolean = false,nodeList : List[String] = this.bndMbss.nodeList) : CfgMbss = {
-    //val firstStateNodes : Set[String] = probDist.head._1.nodeSet
-    //if (probDist.tail.exists(x=> (x._1.nodeSet != firstStateNodes)))
-    //  throw new IllegalArgumentException("States of probdist are not compatible")
-    //if (firstStateNodes.union(bndMbss.nodeList.toSet).size > bndMbss.nodeList.length)
-    //  throw new IllegalArgumentException("States of probdist are not compatible with bnd")
-    //val firstStateNodeList = firstStateNodes.toList
     val newCfg : String = cfg.split("\n").filter(x => "istate".r.findFirstIn(x).isEmpty).mkString("\n") + "\n" +
     "["+nodeList.mkString(",")+"].istate = "+probDist.map(x=> (if (hex) java.lang.Double.toHexString(x._2) else x._2.toString) +
     " ["+

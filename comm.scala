@@ -162,7 +162,7 @@ object DataStreamer {
 
 /** Socket communication with MaBoSS server
   *
-  * @param socket
+  * @param socket java socket
   */
 class MaBoSSClient (val socket : java.net.Socket) {
   var timeNext : Long = 0
@@ -193,8 +193,8 @@ class MaBoSSClient (val socket : java.net.Socket) {
 
   /** Run a MaBoSS simulation and return a Result. Socket is closed after the run.
     *
-    * @param simulation
-    * @param hints
+    * @param simulation configuration with network
+    * @param hints hints for MaBoSS server
     * @return
     */
   def run(simulation: CfgMbss,hints: Hints ): Option[Result] =
@@ -208,15 +208,14 @@ class MaBoSSClient (val socket : java.net.Socket) {
 object MaBoSSClient {
   /** Construct socket from server host and port
     *
-    * @param host
-    * @param port
+    * @param host hostname or ip
+    * @param port port number
     * @return
     */
   def apply(host: String = "localhost", port: Int): Option[MaBoSSClient] = {
       try {
         Some(new MaBoSSClient(new java.net.Socket(host, port)))
       } catch {
-        //case e: Throwable => {println(e);System.err.print("error trying to connect to port " + port + " and host "+ host);sys.exit(1)}
         case e: Exception => {
           println(e)
           System.err.println("error trying to connect to port " + port + " and host "+ host)
@@ -226,16 +225,16 @@ object MaBoSSClient {
   }
 }
 
-/** socket communication with intermediate queuing sokcet server
+/** socket communication with intermediate queuing socket server
   *
-  * @param socket
+  * @param socket java socket
   */
 class MaBoSSQuClient(override val socket : java.net.Socket) extends MaBoSSClient(socket) {
   /** send simulation to queuing socket server with a jobName. Socket is closed after the run
     *
-    * @param simulation
-    * @param hints
-    * @param jobName
+    * @param simulation configureation with network
+    * @param hints hints for MaBoSS server
+    * @param jobName name of job
     * @return
     */
   def run(simulation: CfgMbss,hints: Hints,jobName : String ): Option[Result] =
@@ -251,8 +250,8 @@ class MaBoSSQuClient(override val socket : java.net.Socket) extends MaBoSSClient
 object MaBoSSQuClient {
   /**
     *
-    * @param host
-    * @param port
+    * @param host hostname or ip
+    * @param port port number
     * @return
     */
   def apply(host: String = "localhost", port: Int): Option[MaBoSSQuClient] = {
@@ -271,8 +270,8 @@ object MaBoSSQuClient {
 
 /**
   * MaBoSS client queue for MaBoSS server.
-  * @param hostName
-  * @param port
+  * @param hostName hostname or ip
+  * @param port port number
   */
 class QueueMbssClient(val hostName : String = "localhost", port : Int) {
   private val queueSim = scala.collection.mutable.ListBuffer[(String, Future[Option[Result]])]()
@@ -280,8 +279,8 @@ class QueueMbssClient(val hostName : String = "localhost", port : Int) {
   /** send simulation, received Future
     *
     * @param name name of the job
-    * @param cfgMaBoSS
-    * @param hints
+    * @param cfgMaBoSS configuration and network
+    * @param hints hints for MaboSS server
     * @return
     */
   def sendSimulation(name: String, cfgMaBoSS: CfgMbss, hints: Hints): Future[Option[Result]] = this.synchronized {

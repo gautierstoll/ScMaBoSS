@@ -63,13 +63,9 @@ object UPMaBoSS {
       map(x => "\\s*".r.replaceAllIn(x, "")).toList
     val boolStateList: List[Boolean] = "\\s*\\)\\s*\\]".r.replaceAllIn("\\s*\\(\\s*".r.replaceAllIn(boolState, ""), "").split(",").
       map(x => if ("\\s*".r.replaceAllIn(x, "") == "1") true else false).toList
-    //val upProbNetState = new NetState(nodeList.zip(boolStateList).toMap)
     val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1).toSet
     val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1).toSet
-    //println("Not filter "+ initCondProb)
-    //println("filter "+ initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)))
     val probOut: Double = initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)).values.sum
-   // println("probout" + probOut)
     if (hex) java.lang.Double.toHexString(probOut) else probOut.toString
   }
 }
@@ -267,7 +263,6 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
       }
       MaBoSSClient(hostMbss, portMbss) match {
         case Some(mcli) => {
-          //val mcli = new MaBoSSClient("localhost",portMbss)
           val sysTime = System.currentTimeMillis()
           mcli.run(newCfg, hints) match {
             case Some(result) => {timeMaBoSS += (System.currentTimeMillis()-sysTime)
