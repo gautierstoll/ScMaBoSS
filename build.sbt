@@ -6,7 +6,7 @@ import sun.security.tools.PathList._
 
 name := "ScMaBoSS"
 
-version := "0.7" // version with new results processing, for parralizing UPMaBoSS, should be fast
+version := "0.8" // parralel version of UPMaBoSS
 
 scalaVersion := "2.12.1"
 crossScalaVersions := Seq("2.12.1","2.13.0")

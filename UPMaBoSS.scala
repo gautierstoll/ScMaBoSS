@@ -83,8 +83,9 @@ object UPMaBoSS {
   * @param verbose   show normalization factor and update variables when running?
   */
 class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[String], val steps: Int,
-               val seed: Int, val cfgMbss: CfgMbss, val hostMbss: String, portMbss: Int,
-               hexUP: Boolean, verbose: Boolean) {
+               val seed: Int, val cfgMbss: CfgMbss, val hostMbss: String, val portMbss: Int,
+               val hexUP: Boolean,val verbose: Boolean) {
+
   private def this(t: (String, String, List[String], Int, Int, CfgMbss, String, Int, Boolean, Boolean)) =
     this(t._1, t._2, t._3, t._4, t._5, t._6: CfgMbss, t._7, t._8, t._9, t._10)
 
@@ -123,7 +124,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
   var timeMaBoSSServer : Long = 0
   /** return a list of string containing the updated variables with their values, in same order than updateVar, to be put in cfg
     *
-    * @param probDistRelSize probability distribtion and relative size
+    * @param probDistRelSize probability distribution and relative size
     * @return
     */
   private def setUpdateVar(probDistRelSize: (Map[Set[String], Double], Double)): List[String] = { // same order than updateVar and updateVarNames

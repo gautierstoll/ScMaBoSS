@@ -324,7 +324,7 @@ trait ResultProcessing {
   def stateTrajectory(netState: NetState, normWithSize: Boolean = false): List[(Double, Double)] = {
     val res : List[(Double,Double)]= probDistTrajectory.map(timeProbDist =>
       (timeProbDist._1, timeProbDist._2.filter(prob =>
-            (netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty)).values.sum))
+            netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty).values.sum))
     if (normWithSize) res.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
     else res
   }
@@ -405,7 +405,7 @@ trait ResultProcessing {
   * @param filenameSize          in format writeSizes
   * @param listNodes             list of nodes for constructing NetState
   */
-class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String, val listNodes: List[String]) extends ResultProcessing { //tobe tested
+class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String, val listNodes: List[String]) extends ResultProcessing {
   val probDistTrajectory: List[(Double, Map[Set[String], Double])] = ManageInputFile.file_get_content(filenameLinesWithTime).
     split("\n").map(line => {
     val lineSplit = line.split("\t")
