@@ -22,11 +22,12 @@ import scala.concurrent.duration._
 //scala.concurrent.Await.result(fRes1,10 seconds)
 
 
-//val oMcli = MaBoSSClient(port=43291)
+val oMcli = MaBoSSClient(port=43293)
 //println("Start Simulation")
-//val result_test = oMcli match {
-//  case Some(mcli) => mcli.run(simulation, hints)
-//  case None => null
+val result_test = oMcli match {
+  case Some(mcli) => mcli.run(simulationL, hints)
+  case None => null}
+
  // could also write val result_test = new Result(mcli,simulation,hints)
 
 //println("Finished simulation")

@@ -87,11 +87,17 @@ object Result {
     * @return
     */
   def lineToTimeProb(line: String): (Double, Map[Set[String], Double]) = {
-    val splitLine = line.split("\t")
-    (line.head.toDouble,
-      splitLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
-        map(x => (
-          (if(x(0) == "<nil>"){Set[String]()}else(x(0).split(" -- ").toSet)) -> x(1).toDouble)).toMap)
+    if (line == "") {
+      (0,Map())
+    } else {
+      val splitLine = line.split("\t")
+      (splitLine.head.toDouble,
+        splitLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
+          map(x => (
+            (if (x(0) == "<nil>") {
+              Set[String]()
+            } else (x(0).split(" -- ").toSet)) -> x(1).toDouble)).toMap)
+    }
   }
 
   /** for Constructor from MaBoSS server run with option
