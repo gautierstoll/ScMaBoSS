@@ -20,9 +20,23 @@ Documentation
 Usage
 =====
 
-MaBoSS server should have been launched on a given port_number:
+A MaBoSS server should have been compiled from the last version of MaBoSS
+[MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0). For that, in the `engine/src/` folder of the source,
+```bash
+make server
+```
+MaBoSS server should be running on a given port_number:
 ```bash
 ./MaBoSS-server --port port_number --host localhost --verbose
+```
+
+For model larger than 64, the maximum number of nodes should be specified, eg
+```bash
+make server MAXNODES=100
+```
+and
+```bash
+./MaBoSS_100n-server --port port_number --host localhost --verbose
 ```
 
 ## Installation
@@ -36,26 +50,36 @@ MaBoSS server should have been launched on a given port_number:
 sbt compile
 sbt package
 ```
-4. In your working directory, create a `lib/` sub-directory and copy the library from `ScMaBoSS/target/scala-2.12/`
+4. In your working directory, create a `lib/` sub-directory and copy the library from `ScMaBoSS/target/scala-2.12/`.
+This `.jar` file can be used in any computer that has java 8 installed.
 
 5. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
-([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl))
+([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl)); you can use the file `build.sbt`
+of ScMaBoSS, changing only `name` and `version`
 
-6. ScMaBoSS can be used in a scala REPL. For instance, in a sbt console: (like an sbt console) with
+6. ScMaBoSS can be used in a scala REPL. For instance, in a sbt console (after running `sbt`), open an REPL console
 ```sbt
 console
 ```
+
+ScMaBoSS can be used after
 ```scala
 import ScMaBoSS._
 ```
 for MacOSX, sbt console may return an error. In that case, one should launch `TERM=xterm-color` on the terminal before launching `sbt`.
 In an sbt console, the memory can be set like in java when launching sbt, eg `sbt -J-Xmx4G -J-Xms4G`.
 
+For complicated project, it may bu usefull to develop scripts in an IDE (like [IntelliJ](https://www.jetbrains.com/idea/)).
+For instance, an scala project can be created in the working directory; classes are defined in `.scala` files and scripts in
+`.sc` files. When running `sbt`, classes will be compiled and scritps can be run by the command `:load` in an `sbt` console.
+
 ## Example for using MaBoSS server:
 1. Parameters for the server:
 ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
 ```
+If `hexfloat = true`, real numbers will be transmitted from MaBoSS server to scala with no loss.
+
 2. Constructing inputs from files:
 ```scala
     val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
@@ -72,10 +96,29 @@ If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise
 ```
 Note that because `optMcli` is an option, there is a need for `match -- case`. The socket is now closed. For a new simulation, a
 new one needs to be created, otherwise an error occurs and the sbt console crashes. Again, `oResult` is an option, because modeling
-may have crashed; the result has aslo to be extraced with a `match -- case`. 
+may have crashed; the result has aslo to be extraced with a `match -- case`:
+```scala
+val simResult = oResult match {case Some(sResult) => sResult; case _ => null}
+```
+Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
+used for extracting output data, eg
 
-Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be 
-used for extracting ouput data.
+* **Plotting Boolean state trajectories**:
+Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, 
+b. 'Nodes1' active and `Nodes2` inactive.
+```scala
+simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
+``` 
+* **Plotting node state trajectories**
+Suppose you need the plot of two trajectories: `Node1` and `Nodes2` inactive.
+```scala
+simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
+``` 
+* **Exporting MaBoSS output files**
+* **Exporting fixed points**
+* **Saving data**
+
+
 
 ## Example of parallel run of MaBoSS servers, aggregating last line of prob_traj:
 1. Parameters for the server:
