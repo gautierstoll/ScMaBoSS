@@ -70,7 +70,7 @@ object UPMaBoSS {
   }
 }
 
-/** UPMaBoSS in scala, using MaBoSS server, mainly used for full model debugging
+/** UPMaBoSS in scala, using MaBoSS server
   *
   * @param divNode   division node
   * @param deathNode deathe node
@@ -298,14 +298,14 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
   }
 }
 
-/** Output of UPMaBoSS, including population size and CfgMbss for each time steps
+/** Output of UPMaBoSS, including population size and CfgMbss for each time steps, mainly used for full model debugging
   *
   * @param sizes          list of relative sizes
   * @param configurations list of cfg
   */
 case class UPMbssOut(sizes: List[Double], configurations: List[CfgMbss]) {}
 
-/** Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
+/** Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run, for processing results
   *
   * @param sizes     list of relaitve sizes
   * @param lastLines list of probtraj last lines
