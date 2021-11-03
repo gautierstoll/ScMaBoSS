@@ -70,7 +70,7 @@ object UPMaBoSS {
   }
 }
 
-/** UPMaBoSS in scala, using MaBoSS server
+/** UPMaBoSS in scala, using MaBoSS server, mainly used for full model debugging
   *
   * @param divNode   division node
   * @param deathNode deathe node
