@@ -37,7 +37,7 @@ object NetState {
   }
 }
 
-/** Network state, with associated node list and error handling
+/** Network state, with associated node list and error handling. The statString used is some constructors a set of node names separates by " -- "
   *
   * @param state
   */
@@ -236,7 +236,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss,newCfg(cfg,newParam.toList))
   }
 
-  /** Generate new CfgMbss with initial condition from probability distribution
+  /** Generate new CfgMbss with initial condition from probability distribution.
     * For instance, probTrajLine4Dist result of classes Result and UPMbssOutLight can use it
     *
     * @param probDist probability distribution
