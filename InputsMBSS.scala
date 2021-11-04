@@ -37,7 +37,7 @@ object NetState {
   }
 }
 
-/** Network state, with associated node list and error handling. The stateString used in some constructors is a set of node names separates by " -- "
+/** Network state, with associated node list and error handling. The stateString used in some constructors is a set of node names separated by " -- "
   *
   * @param state
   */
