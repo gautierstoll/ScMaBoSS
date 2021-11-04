@@ -25,6 +25,8 @@ A MaBoSS server should have been compiled from the last version of MaBoSS
 ```bash
 make server
 ```
+For compilation, `flex`, `bison`, `gcc` or `g++` are necessary.
+
 MaBoSS server should be running on a given port_number:
 ```bash
 ./MaBoSS-server --port port_number --host localhost --verbose
@@ -43,7 +45,7 @@ and
 
 1. Install scala (>2.12) and sbt. Java version should be at least 8.
 
-2. Download the repository `ScMaBoSS/` (eg 'git clone https://github.com/gautierstoll/ScMaBoSS`)
+2. Download the repository `ScMaBoSS/` (eg `git clone https://github.com/gautierstoll/ScMaBoSS`)
 
 3. Compile the library in `ScMaBoSS/`:
     ```bash
@@ -125,7 +127,7 @@ of ScMaBoSS, changing only `name` and `version`.
     simResult.writeFP2File("fileFP.csv")
     simResult.writeStatDist2File("fileST.csv")
     ```
-    Note that if `hexfloat = true` in `Hints`, the double are repsented in hexfloat in these `.csv` files.
+    Note that if `hexfloat = true` in `Hints`, the double are represented in hexfloat in these `.csv` files.
 
     * **Exporting data for further processing/plotting**
     The result can be exported as a trajectory table, given a set of Boolean state:
