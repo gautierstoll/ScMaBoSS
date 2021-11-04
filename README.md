@@ -170,7 +170,7 @@ with verbose for UPMaBoSS steps:
     ```scala
     val upTest : UPMaBoSS = new UPMaBoSS("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),"localhost",port_number,hexUP = false,verbose = true)
     ```
-    if `hexUP = true`, real number a passe between scala an MaBoSS server (and vice versa) with no loss.
+    if `hexUP = true`, real numbers are passed between scala an MaBoSS server (and vice versa) with no loss.
 2. Run UPMaBoSS:
     ```scala
     val upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
