@@ -74,7 +74,8 @@ of ScMaBoSS, changing only `name` and `version`.
 
     For complicated project, it may be useful to develop scripts in an IDE (like [IntelliJ](https://www.jetbrains.com/idea/)).
     For instance, a scala project can be created in the working directory; classes are defined in `.scala` files and scripts in
-    `.sc` files. When running `sbt`, classes will be compiled and scripts can be run by the command `:load` in an `sbt` console.
+    `.sc` files. When running `sbt`, classes will be compiled and scripts can be run by the command `:load` in a scala 
+    REPL console.
 
 ## Example for using MaBoSS server:
 1. Parameters for the server:
@@ -109,15 +110,17 @@ of ScMaBoSS, changing only `name` and `version`.
 
     * **Plotting Boolean state trajectories**:
     Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, 
-    b. `Nodes1` active and `Nodes2` inactive.
+    b. `Node1` active and `Node2` inactive.
     ```scala
     simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
     ``` 
-    Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) is defined
-    by the activity over a list of nodes. Therefore, this list of nodes should be a subset of the external nodes of the model.
+    Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
+    is defined
+    by the activity over a list of nodes. Therefore, this list of nodes should be a subset of the external nodes of the
+     model.
 
     * **Plotting node state trajectories**
-    Suppose you need the plot of two trajectories: one for `Node1` and another for `Nodes2`.
+    Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
     ```scala
     simResult.plotStateTraj(netStates = List(new NetState(Map("DyingTumor" ->true)),new NetState(Map("ATP" -> true))),filename = "Test.pdf")
     ``` 
