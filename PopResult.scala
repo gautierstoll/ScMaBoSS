@@ -19,21 +19,31 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
       (splittedLine(indexOfPop).toDouble,splittedLine(indexOfPop+1).toDouble,splittedLine(indexOfPop+2).toDouble),
     (splittedLine(0).toDouble,splittedLine.drop(indexOfPop+3).sliding(2,2).map(x=> (x(0) -> x(1).toDouble)).toMap))}).unzip3
 
-  private val ListTuple :
+  private val listTuple :
   ((List[Double],List[Double]),(List[Double],List[Double],List[Double]),(List[Double],List[Map[String,Double]])) =
     (zippedLists._1.unzip,zippedLists._2.unzip3,zippedLists._3.unzip)
 
-  val TH: List[Double] = ListTuple._1._1
-  val H: List[Double] = ListTuple._1._2
-  val Pop: List[Double] = ListTuple._2._1
-  val VarPop: List[Double] = ListTuple._2._2
-  val HPop: List[Double] = ListTuple._2._3
-  val Time: List[Double] = ListTuple._3._1
-  val StateProb: List[Map[String, Double]] = ListTuple._3._2
+  val th: List[Double] = listTuple._1._1
+  val h: List[Double] = listTuple._1._2
+  val pop: List[Double] = listTuple._2._1
+  val varPop: List[Double] = listTuple._2._2
+  val hPop: List[Double] = listTuple._2._3
+  val time: List[Double] = listTuple._3._1
+  val stateProb: List[Map[String, Double]] = listTuple._3._2
 
-  lazy val PopStateProb : List[Map[String, Double]] = ManageInputFile.file_get_content(filenamePop).split("\n").toList.tail.
+  lazy val popStateProb : List[Map[String, Double]] = ManageInputFile.file_get_content(filenamePop).split("\n").toList.tail.
     map(line => line.split("\t").drop(indexOfPop).sliding(2,3).map(x => (x(0) -> x(1).toDouble)).toMap)
-  }
+
+  /** Compute the probability to detect a node, above a minium number of cells
+    *
+    * @param node node name
+    * @param minCellNb threshold of cell number detection
+    * @return List of node detection probability
+    */
+  def probDetectNode(node : String,minCellNb : Long) : List[Double] = popStateProb.map(
+    pStateDist => pStateDist.filter(pStateProb => pStateProb._1.contains(node)).
+      filter(pStateProb => new PopNetState(pStateProb._1,listNodes).state.filter(nStateNb => nStateNb._1.toString.contains(node)).values.sum >= minCellNb)
+      .values.sum)}
 
 
 
