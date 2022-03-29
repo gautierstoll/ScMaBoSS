@@ -11,6 +11,10 @@ class PopNetState(val stateString: String,nodeList : List[String]){
  val state : Map[NetState,Long] = stateString.replaceAll("\\s*\\[|\\]\\s*","").
    split(",").map( s => {val keyVal = s.replaceAll("\\{|\\}","").split(":")
    (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).toMap
+
+  override def toString: String = {
+    "["+state.toList.map(x=> "{"+x._1.toString+":"+x._2.toString+"}").mkString(",")+"]"
+  }
 }
 
 /** Sub class of BndMbss, for PopMaBoSS

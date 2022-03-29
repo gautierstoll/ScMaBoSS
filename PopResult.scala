@@ -15,7 +15,7 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
   private val indexOfPop: Int = splittedSimpleFile.head.split("\t").indexOf("Pop")
   private val zippedLists: (List[(Double, Double)], List[(Double, Double, Double)], List[(Double, Map[String, Double])])  = splittedSimpleFile.tail.map(line => {
     val splittedLine : Array[String] = line.split("\t")
-    ((splittedLine(1).toDouble,splittedLine(2).toDouble),
+    ((splittedLine(1).toDouble,splittedLine(3).toDouble),
       (splittedLine(indexOfPop).toDouble,splittedLine(indexOfPop+1).toDouble,splittedLine(indexOfPop+2).toDouble),
     (splittedLine(0).toDouble,splittedLine.drop(indexOfPop+3).sliding(2,2).map(x=> (x(0) -> x(1).toDouble)).toMap))}).unzip3
 
