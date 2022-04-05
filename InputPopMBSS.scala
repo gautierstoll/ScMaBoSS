@@ -14,7 +14,18 @@ class PopNetState(val stateString: String,nodeList : List[String]){
 
   override def toString: String = stateString
 
+  /** number of cells with active node
+    *
+    * @param node
+    * @return
+    */
   def activeNodePop(node : String) : Long = state.filterKeys(ns => ns.activeNodes.contains(node)).values.sum
+
+  /** ratio of cells with active node
+    *
+    * @param node
+    * @return
+    */
   def activeNodeRatio(node : String) : Double = this.activeNodePop(node)/state.values.sum
 }
 
