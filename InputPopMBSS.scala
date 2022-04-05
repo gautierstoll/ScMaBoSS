@@ -13,6 +13,9 @@ class PopNetState(val stateString: String,nodeList : List[String]){
    (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).toMap
 
   override def toString: String = stateString
+
+  def activeNodePop(node : String) : Long = state.filterKeys(ns => ns.activeNodes.contains(node)).values.sum
+  def activeNodeRatio(node : String) : Double = this.activeNodePop(node)/state.values.sum
 }
 
 /** Sub class of BndMbss, for PopMaBoSS

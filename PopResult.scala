@@ -13,11 +13,13 @@ import scala.collection.immutable.List
 class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes: List[String]){
   private val splittedSimpleFile: List[String] = ManageInputFile.file_get_content(filenameSimplPop).split("\n").toList
   private val indexOfPop: Int = splittedSimpleFile.head.split("\t").indexOf("Pop")
-  private val zippedLists: (List[(Double, Double)], List[(Double, Double, Double)], List[(Double, Map[String, Double])])  = splittedSimpleFile.tail.map(line => {
+  private val zippedLists: (List[(Double, Double)], List[(Double, Double, Double)], List[(Double, Map[String, Double])])  =
+    splittedSimpleFile.tail.map(line => {
     val splittedLine : Array[String] = line.split("\t")
     ((splittedLine(1).toDouble,splittedLine(3).toDouble),
       (splittedLine(indexOfPop).toDouble,splittedLine(indexOfPop+1).toDouble,splittedLine(indexOfPop+2).toDouble),
-    (splittedLine(0).toDouble,splittedLine.drop(indexOfPop+3).sliding(2,2).map(x=> (x(0) -> x(1).toDouble)).toMap))}).unzip3
+    (splittedLine(0).toDouble,splittedLine.drop(indexOfPop+3).sliding(2,2).map(x=> (x(0) -> x(1).toDouble)).toMap))}
+    ).unzip3
 
   private val listTuple :
   ((List[Double],List[Double]),(List[Double],List[Double],List[Double]),(List[Double],List[Map[String,Double]])) =
@@ -34,7 +36,7 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
   lazy val popStateProb : List[Map[String, Double]] = ManageInputFile.file_get_content(filenamePop).split("\n").toList.tail.
     map(line => line.split("\t").drop(indexOfPop).sliding(2,3).map(x => (x(0) -> x(1).toDouble)).toMap)
 
-  /** Compute the probability to detect a node, above a minium number of cells
+  /** Compute the probability to detect a node, above a minimum number of cells
     *
     * @param node node name
     * @param minCellNb threshold of cell number detection
@@ -44,8 +46,3 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
     pStateDist => pStateDist.filter(pStateProb => pStateProb._1.contains(node)).
       filter(pStateProb => new PopNetState(pStateProb._1,listNodes).state.filter(nStateNb => nStateNb._1.toString.contains(node)).values.sum >= minCellNb)
       .values.sum)}
-
-
-
-
-
