@@ -26,7 +26,7 @@ class PopNetState(val stateString: String,nodeList : List[String]){
     * @param node
     * @return
     */
-  def activeNodeRatio(node : String) : Double = this.activeNodePop(node)/state.values.sum
+  def activeNodeRatio(node : String) : Double = this.activeNodePop(node).toDouble/state.values.sum
 }
 
 /** Sub class of BndMbss, for PopMaBoSS
