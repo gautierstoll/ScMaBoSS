@@ -6,11 +6,12 @@ import scala.collection.immutable.List
   *
   * @param stateString string representation of population state
   * @param nodeList list of model nodes, necessary for constructing the set of NetStates
+  *                 if nodeList is smaller than the one used for generating stateString, cell numbers are summed up
   */
 class PopNetState(val stateString: String,nodeList : List[String]){
  val state : Map[NetState,Long] = stateString.replaceAll("\\s*\\[|\\]\\s*","").
    split(",").map( s => {val keyVal = s.replaceAll("\\{|\\}","").split(":")
-   (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).toMap
+   (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).groupBy(_._1).map(x => (x._1 -> x._2.map(_._2).sum))
 
   override def toString: String = stateString
 
