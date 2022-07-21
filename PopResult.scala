@@ -44,5 +44,21 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
     */
   def probDetectNode(node : String,minCellNb : Long) : List[Double] = popStateProb.map(
     pStateDist => pStateDist.filter(pStateProb => pStateProb._1.contains(node)).
-      filter(pStateProb => new PopNetState(pStateProb._1,listNodes).state.filter(nStateNb => nStateNb._1.toString.contains(node)).values.sum >= minCellNb)
-      .values.sum)}
+      filter(pStateProb => new PopNetState(pStateProb._1,listNodes).state.
+        filter(nStateNb => nStateNb._1.toString.contains(node)).values.sum >= minCellNb)
+      .values.sum)
+
+  /** Compute the probability to detect a node, above a minimum number of cells
+    *
+    * @param node node name
+    * @param minCellProp threshold of cell proportion detection
+    * @return
+    */
+  def probDetectNode(node : String,minCellProp : Double) : List[Double] = popStateProb.map(
+  pStateDist => pStateDist.filter(pStateProb => pStateProb._1.contains(node)).
+  filter({pStateProb =>
+    val pState = new PopNetState(pStateProb._1,listNodes)
+    pState.state.filter(nStateNb => nStateNb._1.toString.contains(node)).values.sum.toDouble/pState.nbCell >= minCellProp})
+  .values.sum)
+}
+

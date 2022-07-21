@@ -13,6 +13,11 @@ class PopNetState(val stateString: String,nodeList : List[String]){
    split(",").map( s => {val keyVal = s.replaceAll("\\{|\\}","").split(":")
    (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).groupBy(_._1).map(x => (x._1 -> x._2.map(_._2).sum))
 
+ /** number of cells
+   *
+   */
+ val nbCell: Long = state.values.sum
+
   override def toString: String = stateString
 
   /** number of cells with active node
