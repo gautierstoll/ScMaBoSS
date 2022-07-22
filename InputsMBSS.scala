@@ -5,9 +5,9 @@ import java.nio.file.{Files, Paths}
 import scala.util.matching.Regex
 import java.io._
 import scala.collection.immutable._
-
 import jdk.nashorn.internal.runtime.regexp.RegExp
 
+import scala.annotation.tailrec
 import scala.io.Source
 
 /** Manage errors when reading file
@@ -34,6 +34,22 @@ object NetState {
 //    if (!activeNodeList.toSet.subsetOf(nodeList.toSet))
 //      println("No node found, take <nil>")
     nodeList.map(node => (node,activeNodeList.contains(node))).toMap
+  }
+  def allPossibleStates(nodeList : List[String]) : List[NetState] = {
+    @tailrec
+    def recursiveGen(subList : List[Map[String,Boolean]], remainNodes : List[String]) : List[Map[String,Boolean]] = {
+      if (remainNodes.isEmpty) {
+        subList
+      } else {
+        val newNode = remainNodes.head
+        val newRemainNodes = remainNodes.tail
+        val newSubList = for (nodeMap <- subList; boolVal <- List(true, false)) yield {
+          ((newNode, boolVal) :: nodeMap.toList).toMap
+        }
+        recursiveGen(newSubList, newRemainNodes)
+      }
+    }
+      recursiveGen(List[Map[String, Boolean]](),nodeList).map(mp => new NetState(mp))
   }
 }
 
