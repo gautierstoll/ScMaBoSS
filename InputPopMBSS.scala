@@ -173,7 +173,7 @@ class popStateDist(val inputMap : Map[String,Double],val listNodes: List[String]
   val expRatioNode2 = expectActiveNodeRatio(node2)
   pStMap.map(pStatProb =>
    (pStatProb._1.activeNodeNb(node1).toDouble/pStatProb._1.state.values.sum - expRatioNode1)*
-     (pStatProb._1.activeNodeNb(node1).toDouble/pStatProb._1.state.values.sum - expRatioNode2)*
+     (pStatProb._1.activeNodeNb(node2).toDouble/pStatProb._1.state.values.sum - expRatioNode2)*
      pStatProb._2).sum
  }
 }
