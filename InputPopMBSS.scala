@@ -110,7 +110,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   this.expectNb(new NetState(Map(node -> true)))
  }
 
- /** expectation log number of a network state
+ /** expectation log number of a network state (0 numbers are replaced by 1)
    *
    * @param nState network state (can "enclose" network states of the model)
    * @return expectation value
@@ -139,10 +139,11 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
  def expectActiveNodeRatio (node : String) : Double =
   this.expectRatio(new NetState(Map(node -> true)))
 
- /** expectation of logit ratio, can provide a min value (use for logit(0) and logit(1))
+ /** expectation of logit ratio can provide a min value (logit(0) -> logit(min)logit(1))
+   * a min value is used (logit(0) -> logit(sensit), logit(1) -> logit(1-sensit)
    *
    * @param nState network state (can "enclose" network states of the model)
-   * @param sensit minimum ratio to avoid log(ratio=0)
+   * @param sensit if set to zero, sensit is computed from 1/max number of cells in pStateMap
    * @return expectation value
    */
  def expectLogitRatio(nState : NetState, sensit : Double = 0): Double = {
@@ -180,7 +181,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   covNb(new NetState(Map(node1 -> true)),new NetState(Map(node2 -> true)))
  }
 
- /** covariance log number of network state pairs
+ /** covariance log number of network state pairs (0 numbers are replaced by 1)
    *
     * @param nState1 network state (can "enclose" network states of the model)
    * @param nState2 network state (can "enclose" network states of the model)
@@ -228,11 +229,12 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   covRatio(new NetState(Map(node1 -> true)),new NetState(Map(node1 -> true)))
  }
 
- /**
+ /** covariance logit ratio of active node pairs
+   * a min value is used (logit(0) -> logit(sensit), logit(1) -> logit(1-sensit)
    *
    * @param nState1
    * @param nState2
-   * @param sensit
+   * @param sensit if set to zero, sensit is computed from 1/max number of cells in pStateMap
    * @return
    */
  def covLogitRatio (nState1 : NetState, nState2 : NetState,sensit : Double = 0) : Double = {

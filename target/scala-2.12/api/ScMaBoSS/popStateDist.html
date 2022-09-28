@@ -529,10 +529,10 @@
         <span class="name">covLogNb</span><span class="params">(<span name="nState1">nState1: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="nState2">nState2: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       
-      <p class="shortcomment cmt">covariance log number of network state pairs
-</p><div class="fullcomment"><div class="comment cmt"><p>covariance log number of network state pairs
+      <p class="shortcomment cmt">covariance log number of network state pairs (0 numbers are replaced by 1)
+</p><div class="fullcomment"><div class="comment cmt"><p>covariance log number of network state pairs (0 numbers are replaced by 1)
 </p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
-    </li><li name="ScMaBoSS.popStateDist#covLogitRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="ScMaBoSS.popStateDist#covLogitRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="covLogitRatio(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState,sensit:Double):Double"></a><a id="covLogitRatio(NetState,NetState,Double):Double"></a>
       <span class="permalink">
       <a href="../ScMaBoSS/popStateDist.html#covLogitRatio(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState,sensit:Double):Double" title="Permalink">
@@ -547,7 +547,11 @@
         <span class="name">covLogitRatio</span><span class="params">(<span name="nState1">nState1: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="nState2">nState2: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="sensit">sensit: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       
-      <p class="shortcomment cmt"></p>
+      <p class="shortcomment cmt">covariance logit ratio of active node pairs
+a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
+</p><div class="fullcomment"><div class="comment cmt"><p>covariance logit ratio of active node pairs
+a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
+</p></div><dl class="paramcmts block"><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#covNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="covNb(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState):Double"></a><a id="covNb(NetState,NetState):Double"></a>
       <span class="permalink">
@@ -667,8 +671,8 @@
         <span class="name">expectLogNb</span><span class="params">(<span name="nState">nState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       
-      <p class="shortcomment cmt">expectation log number of a network state
-</p><div class="fullcomment"><div class="comment cmt"><p>expectation log number of a network state
+      <p class="shortcomment cmt">expectation log number of a network state (0 numbers are replaced by 1)
+</p><div class="fullcomment"><div class="comment cmt"><p>expectation log number of a network state (0 numbers are replaced by 1)
 </p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#expectLogitRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="expectLogitRatio(nState:ScMaBoSS.NetState,sensit:Double):Double"></a><a id="expectLogitRatio(NetState,Double):Double"></a>
@@ -685,9 +689,11 @@
         <span class="name">expectLogitRatio</span><span class="params">(<span name="nState">nState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>, <span name="sensit">sensit: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       
-      <p class="shortcomment cmt">expectation of logit ratio, can provide a min value (use for logit(0) and logit(1))
-</p><div class="fullcomment"><div class="comment cmt"><p>expectation of logit ratio, can provide a min value (use for logit(0) and logit(1))
-</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">sensit</dt><dd class="cmt"><p>minimum ratio to avoid log(ratio=0)</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
+      <p class="shortcomment cmt">expectation of logit ratio can provide a min value (logit(0) -&gt; logit(min)logit(1))
+a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
+</p><div class="fullcomment"><div class="comment cmt"><p>expectation of logit ratio can provide a min value (logit(0) -&gt; logit(min)logit(1))
+a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
+</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#expectNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="expectNb(nState:ScMaBoSS.NetState):Double"></a><a id="expectNb(NetState):Double"></a>
       <span class="permalink">
