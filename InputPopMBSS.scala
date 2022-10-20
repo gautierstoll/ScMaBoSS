@@ -35,6 +35,22 @@ class PopNetState(val stateString: String,nodeList : List[String]){
     * @return
     */
   def activeNodeRatio(node : String) : Double = this.activeNodeNb(node).toDouble/state.values.sum
+
+ /** number of cells in a given state
+   *
+   * @param netState network state (can "enclose" network states of the model)
+   * @return number of cells
+   */
+ def stateNb(netState: NetState) : Long = state.filter(netStateNb =>
+  (netState.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & netState.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
+   values.sum
+
+ /** ratio in a given state
+   *
+   * @param netState network state (can "enclose" network states of the model)
+   * @return ratio
+   */
+ def stateRatio(netState: NetState) : Double = stateNb(netState).toDouble/nbCell
 }
 
 /** Sub class of BndMbss, for PopMaBoSS
@@ -97,9 +113,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
    * @return expectation value
    */
  def expectNb (nState :NetState) : Double =
-  pStMap.map(pStateProb => pStateProb._1.state.filter(netStateNb =>
-   (nState.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-    values.sum.toDouble*pStateProb._2).sum
+  pStMap.map(pStateProb => pStateProb._1.stateNb(nState).toDouble*pStateProb._2).sum
 
  /** expectation number of an active node
    *
@@ -116,9 +130,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
    * @return expectation value
    */
  def expectLogNb (nState :NetState) : Double =
-  pStMap.map(pStateProb => logNoZero(pStateProb._1.state.filter(netStateNb =>
-   (nState.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-    values.sum)*pStateProb._2).sum
+  pStMap.map(pStateProb => logNoZero(pStateProb._1.stateNb(nState))*pStateProb._2).sum
 
 
  /** expectation ratio of a network state
@@ -127,9 +139,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
    * @return expectation value
    */
  def expectRatio (nState : NetState) : Double =
-  pStMap.map(pStateProb => (pStateProb._1.state.filter(netStateProb =>
-   (nState.activeNodes.diff(netStateProb._1.activeNodes).isEmpty & nState.inactiveNodes.diff(netStateProb._1.inactiveNodes).isEmpty)).
-    values.sum.toDouble/pStateProb._1.nbCell)*pStateProb._2).sum
+  pStMap.map(pStateProb => (pStateProb._1.stateRatio(nState))*pStateProb._2).sum
 
  /** expectation ratio of an active node
    *
@@ -148,9 +158,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
    */
  def expectLogitRatio(nState : NetState, sensit : Double = 0): Double = {
   val sensit4Logit : Double = if (sensit == 0.0) { minSensit } else sensit
-  pStMap.map(pStateProb => logitSens(pStateProb._1.state.filter(netStateNb =>
-   (nState.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-    values.sum.toDouble/pStateProb._1.nbCell,sensit4Logit)*pStateProb._2).sum
+  pStMap.map(pStateProb => logitSens(pStateProb._1.stateRatio(nState),sensit4Logit)*pStateProb._2).sum
  }
 
  /** covariance number of network state pairs
@@ -163,12 +171,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   val expNbState1 = expectNb(nState1)
   val expNbState2 = expectNb(nState2)
   pStMap.map(pStatProb =>
-   (pStatProb._1.state.filter(netStateNb =>
-    (nState1.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState1.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-     values.sum.toDouble - expNbState1)*
-     (pStatProb._1.state.filter(netStateNb =>
-     (nState2.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState2.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-       values.sum.toDouble - expNbState2)*
+   (pStatProb._1.stateNb(nState1).toDouble - expNbState1)*
+     (pStatProb._1.stateNb(nState2).toDouble - expNbState2)*
      pStatProb._2).sum
  }
  /** covariance number of active node pairs
@@ -191,12 +195,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   val expLogNbState1 = expectLogNb(nState1)
   val expLogNbState2 = expectLogNb(nState2)
   pStMap.map(pStatProb =>
-   (logNoZero(pStatProb._1.state.filter(netStateNb =>
-    (nState1.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState1.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-     values.sum) - expLogNbState1)*
-     (logNoZero(pStatProb._1.state.filter(netStateNb =>
-      (nState2.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState2.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-       values.sum) - expLogNbState2)*
+   (logNoZero(pStatProb._1.stateNb(nState1)) - expLogNbState1)*
+     (logNoZero(pStatProb._1.stateNb(nState2)) - expLogNbState2)*
      pStatProb._2).sum
  }
 
@@ -210,12 +210,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   val expRatioState1 = expectRatio(nState1)
   val expRatioState2 = expectRatio(nState2)
   pStMap.map(pStatProb =>
-   (pStatProb._1.state.filter(netStateNb =>
-    (nState1.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState1.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-     values.sum.toDouble/pStatProb._1.nbCell - expRatioState1)*
-     (pStatProb._1.state.filter(netStateNb =>
-      (nState2.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & nState2.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-       values.sum.toDouble/pStatProb._1.nbCell - expRatioState2)*
+   (pStatProb._1.stateRatio(nState1) - expRatioState1)*
+     (pStatProb._1.stateRatio(nState2) - expRatioState2)*
      pStatProb._2).sum
  }
 
@@ -242,12 +238,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   val expLogitRatioState1 = expectLogitRatio(nState1,sensit)
   val expLogitRatioState2 = expectLogitRatio(nState2,sensit)
   pStMap.map(pStatProb =>
-   (logitSens(pStatProb._1.state.filter(netStateProb =>
-    (nState1.activeNodes.diff(netStateProb._1.activeNodes).isEmpty & nState1.inactiveNodes.diff(netStateProb._1.inactiveNodes).isEmpty)).
-     values.sum.toDouble/pStatProb._1.nbCell,sensit4Logit) - expLogitRatioState1)*
-     (logitSens(pStatProb._1.state.filter(netStateProb =>
-      (nState2.activeNodes.diff(netStateProb._1.activeNodes).isEmpty & nState2.inactiveNodes.diff(netStateProb._1.inactiveNodes).isEmpty)).
-       values.sum.toDouble/pStatProb._1.nbCell,sensit4Logit) - expLogitRatioState2)*
+   (logitSens(pStatProb._1.stateRatio(nState1),sensit4Logit) - expLogitRatioState1)*
+     (logitSens(pStatProb._1.stateRatio(nState2),sensit4Logit) - expLogitRatioState2)*
      pStatProb._2).sum
 
 
