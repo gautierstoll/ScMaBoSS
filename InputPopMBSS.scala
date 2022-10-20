@@ -63,7 +63,7 @@ class popStateDist(val inputMap : Map[String,Double],val listNodes: List[String]
 private def logNoZero(x:Double) : Double = if (x <= 0.0) {0} else log(x)
  lazy private val minSensit:Double = 1/pStMap.keys.map(_.nbCell).max.toDouble // minimum sensibility for ratio
 private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with minimum sensitivity parameter
- case x if (x <= 0.0)|(x >= 1.0) => log(sensit)*log(1-sensit)
+ case x if (x <= 0.0)|(x >= 1.0) => log(sensit/(1-sensit))
  case _ => log(p/(1-p))
  }
  /** Compute the probability to detect a node, above a minimum number of cells
