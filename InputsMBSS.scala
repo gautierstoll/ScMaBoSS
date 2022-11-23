@@ -14,14 +14,34 @@ import scala.io.Source
   *
   */
 object ManageInputFile {
-  def file_get_content(filename: String): String = {
+  /**
+    *
+    * @param filename
+    * @param lineList list of line to take, start with 0. If list is empty, everything is taken.
+    * @return
+    */
+  def file_get_content(filename: String, lineList: List[Int] = List()): String = {
     if (!Files.exists(Paths.get(filename))) throw new FileNotFoundException(filename + "is not valid")
     val bufferedSource = try {
       Source.fromFile(filename)
     } catch {case _: Throwable => throw new FileNotFoundException(filename + "is not readable")}
-    val content = bufferedSource.getLines.mkString("\n")
-    bufferedSource.close()
-    content
+    if (lineList.size == 0) {
+      val content = bufferedSource.getLines.mkString("\n")
+      bufferedSource.close()
+      content
+    } else {
+      val buffString = bufferedSource.getLines()
+      var takenInput : List[String] = List()
+      var lineListOrd = lineList.sortWith(_<_)
+      while(buffString.hasNext & (lineListOrd.size > 0))
+        {
+          buffString.drop(lineListOrd.head)
+          if(buffString.hasNext) {takenInput = takenInput :+ buffString.next()}
+          lineListOrd = lineListOrd.map(x=> x-lineListOrd.head-1)
+          lineListOrd = lineListOrd.tail
+        }
+        takenInput.mkString("\n")
+    }
   }
 }
 
