@@ -10,15 +10,19 @@ import scala.math._
   * @param nodeList list of model nodes, necessary for constructing the set of NetStates
   *                 if nodeList is smaller than the one used for generating stateString, cell numbers are summed up
   */
-class PopNetState(val stateString: String,nodeList : List[String]){
- val state : Map[NetState,Long] = stateString.replaceAll("\\s*\\[|\\]\\s*","").
+class PopNetState(val stateString: String,val nodeList : List[String]){
+ val stringSetArray :  Array[(Set[String],Long)] = stateString.replaceAll("\\s*\\[|\\]\\s*","").
    split(",").map( s => {val keyVal = s.replaceAll("\\{|\\}","").split(":")
-   (new NetState(keyVal(0),nodeList),keyVal(1).toLong)}).groupBy(_._1).map(x => (x._1 -> x._2.map(_._2).sum))
+  if (keyVal.size < 2) (Set(""),0.toLong) else
+  (keyVal(0).split(" -- ").toSet,keyVal(1).toLong)})
+ lazy val stateList : List[(NetState,Long)] = stringSetArray.
+   map(s => (new NetState(s._1,nodeList),s._2)).toList
+ lazy val state : Map[NetState,Long] = stateList.groupBy(_._1).map(x => (x._1 -> x._2.map(_._2).sum))
 
  /** number of cells
    *
    */
- val nbCell: Long = state.values.sum
+ lazy val nbCell: Long = stringSetArray.map(_._2).sum
 
   override def toString: String = stateString
 
@@ -27,30 +31,43 @@ class PopNetState(val stateString: String,nodeList : List[String]){
     * @param node
     * @return
     */
-  def activeNodeNb(node : String) : Long = state.filterKeys(ns => ns.activeNodes.contains(node)).values.sum
+  def activeNodeNb(node : String) : Long = stringSetArray.filter(x => x._1.contains(node)).map(_._2).sum
+
+   // state.filterKeys(ns => ns.activeNodes.contains(node)).values.sum
+
+
 
   /** ratio of cells with active node
     *
     * @param node
     * @return
     */
-  def activeNodeRatio(node : String) : Double = this.activeNodeNb(node).toDouble/state.values.sum
+  def activeNodeRatio(node : String) : Double = this.activeNodeNb(node).toDouble/nbCell
+
+
+   // this.activeNodeNb(node).toDouble/state.values.sum
 
  /** number of cells in a given state
    *
    * @param netState network state (can "enclose" network states of the model)
    * @return number of cells
    */
- def stateNb(netState: NetState) : Long = state.filter(netStateNb =>
+ def stateNb(netState: NetState) : Long = stringSetArray.filter(strSNb =>
+  (netState.activeNodes.diff(strSNb._1).isEmpty & netState.inactiveNodes.intersect(strSNb._1).isEmpty)).
+   map(_._2).sum
+
+
+
+  /* state.filter(netStateNb =>
   (netState.activeNodes.diff(netStateNb._1.activeNodes).isEmpty & netState.inactiveNodes.diff(netStateNb._1.inactiveNodes).isEmpty)).
-   values.sum
+   values.sum */
 
  /** ratio in a given state
    *
    * @param netState network state (can "enclose" network states of the model)
    * @return ratio
    */
- def stateRatio(netState: NetState) : Double = stateNb(netState).toDouble/nbCell
+ def stateRatio(netState: NetState) : Double = this.stateNb(netState).toDouble/nbCell
 }
 
 /** Sub class of BndMbss, for PopMaBoSS
@@ -244,5 +261,13 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
 
  }
+ def probDist[OutType](fPopNetState : (PopNetState => OutType)) : List[(OutType,Double)] =
+  pStMap.toList.map(pStProb => (fPopNetState(pStProb._1),pStProb._2)).
+    groupBy(_._1).map(x=> (x._1,x._2.map(_._2).sum)).toList
 
+ def probDistNb: List[(Long, Double)] = probDist(pNSt => pNSt.nbCell)
+ def probDistNodeNb(node: String): List[(Long, Double)] = probDist(pNSt => pNSt.activeNodeNb(node))
+ def probDistNodeRatio(node: String): List[(Double, Double)] = probDist(pNSt => pNSt.activeNodeRatio(node))
+ def probDistStateNb(state: NetState): List[(Long, Double)] = probDist(pNSt => pNSt.stateNb(state))
+ def probDistStateRatio(state: NetState): List[(Double, Double)] = probDist(pNSt => pNSt.stateRatio(state))
 }

@@ -51,10 +51,15 @@ object ManageInputFile {
 object NetState {
   private def stringToBoolMap(stateString : String,nodeList : List[String]) : Map[String,Boolean] = {
     val activeNodeList = stateString.split(" -- ")
+    stringSetToBoolMap(activeNodeList.toSet,nodeList)
 //    if (!activeNodeList.toSet.subsetOf(nodeList.toSet))
 //      println("No node found, take <nil>")
-    nodeList.map(node => (node,activeNodeList.contains(node))).toMap
+    // nodeList.map(node => (node,activeNodeList.contains(node))).toMap
   }
+  private def stringSetToBoolMap(setString : Set[String],nodeList : List[String]) : Map[String,Boolean] = {
+    nodeList.map(node => (node,setString.contains(node))).toMap
+  }
+
   def allPossibleStates(nodeList : List[String]) : List[NetState] = {
     @tailrec
     def recursiveGen(subList : List[Map[String,Boolean]], remainNodes : List[String]) : List[Map[String,Boolean]] = {
@@ -90,6 +95,10 @@ class NetState (val state: Map[String,Boolean]) {
   def this(stateString : String,nodeList : List[String]) =
   this(NetState.stringToBoolMap(stateString,nodeList))
 
+  def this(stringSet : Set[String],nodeList : List[String]) =
+    this(NetState.stringSetToBoolMap(stringSet,nodeList))
+
+
   /**
     *
     * @param stateString active nodes separates by " -- "
@@ -99,6 +108,8 @@ class NetState (val state: Map[String,Boolean]) {
   def this(stateString : String,bndMbSS : BndMbss) =
     this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList))
 
+  def this(stringSet : Set[String],bndMbSS : BndMbss) =
+    this(NetState.stringSetToBoolMap(stringSet,bndMbSS.nodeList))
 
   /** Careful! It uses Cfg external nodes.
     *
@@ -108,6 +119,10 @@ class NetState (val state: Map[String,Boolean]) {
     */
   def this(stateString : String,cfgMbSS : CfgMbss) =
     this(NetState.stringToBoolMap(stateString, cfgMbSS.extNodeList))
+
+  def this(stringSet : Set[String],cfgMbSS : CfgMbss) =
+    this(NetState.stringSetToBoolMap(stringSet, cfgMbSS.extNodeList))
+
 
   /**
     *
