@@ -12,7 +12,7 @@ import scala.collection.immutable.List
   * @param listLines Lines to use, header will be automatically included
   */
 class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes: List[String],listLines : List[Int] = List()) {
-  val listLinesHead = if (listLines.isEmpty | listLines.contains(0)) {listLines} else {0 :: listLines}
+  private val listLinesHead: List[Int] = if (listLines.isEmpty | listLines.contains(0)) {listLines} else {0 :: listLines}
   private val splittedSimpleFile: List[String] = ManageInputFile.file_get_content(filenameSimplPop,listLinesHead).split("\n").toList
   private val indexOfPop: Int = splittedSimpleFile.head.split("\t").indexOf("Pop")
   private val zippedLists: (List[(Double, Double)], List[(Double, Double, Double)], List[(Double, Map[String, Double])]) =
