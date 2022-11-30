@@ -457,9 +457,9 @@
       <p class="shortcomment cmt">number of cells with active node
 </p>
     </li><li name="ScMaBoSS.PopNetState#activeNodeRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="activeNodeRatio(node:String):Double"></a><a id="activeNodeRatio(String):Double"></a>
+      <a id="activeNodeRatio(node:String):Option[Double]"></a><a id="activeNodeRatio(String):Option[Double]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/PopNetState.html#activeNodeRatio(node:String):Double" title="Permalink">
+      <a href="../ScMaBoSS/PopNetState.html#activeNodeRatio(node:String):Option[Double]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -468,7 +468,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">activeNodeRatio</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">activeNodeRatio</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
       <p class="shortcomment cmt">ratio of cells with active node
@@ -608,7 +608,7 @@
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
         <span class="name">nbCell</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
@@ -631,6 +631,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="ScMaBoSS.PopNetState#nodeList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nodeList:List[String]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/PopNetState.html#nodeList:List[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nodeList</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -678,10 +694,26 @@
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
         <span class="name">state</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Long">Long</span>]</span>
+      </span>
+      
+      
+    </li><li name="ScMaBoSS.PopNetState#stateList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stateList:List[(ScMaBoSS.NetState,Long)]"></a><a id="stateList:List[(NetState,Long)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/PopNetState.html#stateList:List[(ScMaBoSS.NetState,Long)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stateList</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>, <span class="extype" name="scala.Long">Long</span>)]</span>
       </span>
       
       
@@ -704,9 +736,9 @@
 </p><div class="fullcomment"><div class="comment cmt"><p>number of cells in a given state
 </p></div><dl class="paramcmts block"><dt class="param">netState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>number of cells</p></dd></dl></div>
     </li><li name="ScMaBoSS.PopNetState#stateRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="stateRatio(netState:ScMaBoSS.NetState):Double"></a><a id="stateRatio(NetState):Double"></a>
+      <a id="stateRatio(netState:ScMaBoSS.NetState):Option[Double]"></a><a id="stateRatio(NetState):Option[Double]"></a>
       <span class="permalink">
-      <a href="../ScMaBoSS/PopNetState.html#stateRatio(netState:ScMaBoSS.NetState):Double" title="Permalink">
+      <a href="../ScMaBoSS/PopNetState.html#stateRatio(netState:ScMaBoSS.NetState):Option[Double]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -715,12 +747,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">stateRatio</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">stateRatio</span><span class="params">(<span name="netState">netState: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Double">Double</span>]</span>
       </span>
       
       <p class="shortcomment cmt">ratio in a given state
 </p><div class="fullcomment"><div class="comment cmt"><p>ratio in a given state
-</p></div><dl class="paramcmts block"><dt class="param">netState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>ratio</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">netState</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>ratio</p></dd></dl></div>
     </li><li name="ScMaBoSS.PopNetState#stateString" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="stateString:String"></a>
       <span class="permalink">
@@ -734,6 +766,22 @@
       </span>
       <span class="symbol">
         <span class="name">stateString</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
+    </li><li name="ScMaBoSS.PopNetState#stringSetArray" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stringSetArray:Array[(Set[String],Long)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/PopNetState.html#stringSetArray:Array[(Set[String],Long)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stringSetArray</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[(<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Long">Long</span>)]</span>
       </span>
       
       

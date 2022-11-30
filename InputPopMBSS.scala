@@ -57,7 +57,7 @@ class PopNetState(val stateString: String,val nodeList : List[String]) {
 
  /** ratio in a given state
    *
-   * @param netState network state (can "enclose" network states of the model)
+   * @param netState network state, can be defined on a node subset
    * @return ratio
    */
  def stateRatio(netState: NetState): Option[Double] = nbCell match {
@@ -120,6 +120,12 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
     })
     .values.sum
 
+ /** Generic processed probability distribution (second order function)
+   *
+   * @param fPopNetState function of data processing (careful, it returns an Option)
+   * @tparam OutType type of output
+   * @return a probability distribution
+   */
  def probDist[OutType](fPopNetState : (PopNetState => Option[OutType])) : List[(OutType,Double)] = {
   val nonNormalizedDist = pStMap.toList.map(pStProb => (fPopNetState(pStProb._1), pStProb._2)).
     flatMap(optOutProb => optOutProb._1 match {
@@ -130,22 +136,71 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
   nonNormalizedDist.map(x => (x._1,x._2/normFactor))
  }
 
+ /** Probability distribution over number of cells
+   *
+   * @return
+   */
  def probDistNb: List[(Long, Double)] = probDist(pNSt => Some(pNSt.nbCell))
 
+ /** Probability distribution over number of cells having a given active node
+   *
+   * @param node
+   * @return
+   */
  def probDistNodeNb(node: String): List[(Long , Double)] = probDist(pNSt => Some(pNSt.activeNodeNb(node)))
+
+ /** Probability distribution over number of cells having a given set of active nodes
+   *
+   * @param nodes
+   * @return
+   */
  def probDistNodeNb(nodes: List[String]): List[(List[Long] , Double)] =
   probDist(pNSt => Some(nodes.map(x => pNSt.activeNodeNb(x))))
+
+ /** Probability distribution over ratio of cells having a given active node
+   *
+   * @param node
+   * @return
+   */
  def probDistNodeRatio(node: String): List[(Double, Double)] = probDist(pNSt => pNSt.activeNodeRatio(node))
+
+ /** Probability distribution over ratio of cells having a given set of active nodes
+   *
+   * @param nodes
+   * @return
+   */
  def probDistNodeRatio(nodes: List[String]): List[(List[Double], Double)] =
   probDist(pNSt => {
    val listOpt = nodes.map(x => pNSt.activeNodeRatio(x))
    if (listOpt.contains(None)) {None} else Some(listOpt.flatten)})
 
+ /** Probability distribution over number of cells having a given state
+   *
+   * @param state network state, can be defined on a node subset
+   * @return
+   */
  def probDistStateNb(state: NetState): List[(Long, Double)] = probDist(pNSt => Some(pNSt.stateNb(state)))
+
+ /** Probability distribution over number of cells having a given set of state
+   *
+   * @param states network states, can be defined on a node subset
+   * @return
+   */
  def probDistStateNb(states: List[NetState]): List[(List[Long], Double)] =
   probDist(pNSt => Some(states.map(x => pNSt.stateNb(x))))
 
+ /** Probability distribution over ratio of cells having a given state
+   *
+   * @param state network state, can be defined on a node subset
+   * @return
+   */
  def probDistStateRatio(state: NetState): List[(Double, Double)] = probDist(pNSt => pNSt.stateRatio(state))
+
+ /** Probability distribution over ratio of cells having a given set of states
+   *
+   * @param states network state, can be defined on a node subset
+   * @return
+   */
  def probDistStateRatio(states: List[NetState]): List[(List[Double], Double)] =
   probDist(pNSt => {
    val listOpt = states.map(x => pNSt.stateRatio(x))
@@ -154,7 +209,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** expectation number of a network state
    *
-   * @param nState network state (can "enclose" network states of the model)
+   * @param nState network state, can be defined on a node subset
    * @return expectation value
    */
  def expectNb (nState :NetState) : Double =
@@ -170,7 +225,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** expectation log number of a network state (0 numbers are replaced by 1)
    *
-   * @param nState network state (can "enclose" network states of the model)
+   * @param nState network state, can be defined on a node subset
    * @return expectation value
    */
  def expectLogNb (nState :NetState) : Double =
@@ -178,7 +233,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** expectation ratio of a network state
    *
-   * @param nState network state (can "enclose" network states of the model)
+   * @param nState network state, can be defined on a node subset
    * @return expectation value
    */
  def expectRatio (nState : NetState) : Double =
@@ -195,7 +250,7 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
  /** expectation of logit ratio can provide a min value (logit(0) -> logit(min)logit(1))
    * a min value is used (logit(0) -> logit(sensit), logit(1) -> logit(1-sensit)
    *
-   * @param nState network state (can "enclose" network states of the model)
+   * @param nState network state, can be defined on a node subset
    * @param sensit if set to zero, sensit is computed from 1/max number of cells in pStateMap
    * @return expectation value
    */
@@ -206,8 +261,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** covariance number of network state pairs
    *
-   * @param nState1 network state (can "enclose" network states of the model)
-   * @param nState2 network state (can "enclose" network states of the model)
+   * @param nState1 network state, can be defined on a node subset
+   * @param nState2 network state, can be defined on a node subset
    * @return covariance
    */
  def covNb(nState1: NetState, nState2: NetState): Double = {
@@ -229,8 +284,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** covariance log number of network state pairs (0 numbers are replaced by 1)
    *
-    * @param nState1 network state (can "enclose" network states of the model)
-   * @param nState2 network state (can "enclose" network states of the model)
+    * @param nState1 network state, can be defined on a node subset
+   * @param nState2 network state, can be defined on a node subset
    * @return covariance
    */
  def covLogNb (nState1 : NetState, nState2 : NetState) : Double = {
@@ -242,8 +297,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
 
  /** covariance ratio of network state pairs
    *
-   * @param nState1 network state (can "enclose" network states of the model)
-   * @param nState2 network state (can "enclose" network states of the model)
+   * @param nState1 network state, can be defined on a node subset
+   * @param nState2 network state, can be defined on a node subset
    * @return covariance
    */
  def covRatio (nState1 : NetState, nState2 : NetState) : Double = {
@@ -265,8 +320,8 @@ private def logitSens(p:Double,sensit:Double) : Double = p match { // logit with
  /** covariance logit ratio of active node pairs
    * a min value is used (logit(0) -> logit(sensit), logit(1) -> logit(1-sensit)
    *
-   * @param nState1
-   * @param nState2
+   * @param nState1 network state, can be defined on a node subset
+   * @param nState2 network state, can be defined on a node subset
    * @param sensit if set to zero, sensit is computed from 1/max number of cells in pStateMap
    * @return
    */

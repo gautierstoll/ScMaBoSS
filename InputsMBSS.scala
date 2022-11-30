@@ -25,7 +25,7 @@ object ManageInputFile {
     val bufferedSource = try {
       Source.fromFile(filename)
     } catch {case _: Throwable => throw new FileNotFoundException(filename + "is not readable")}
-    if (lineList.size == 0) {
+    if (lineList.isEmpty) {
       val content = bufferedSource.getLines.mkString("\n")
       bufferedSource.close()
       content
@@ -33,7 +33,7 @@ object ManageInputFile {
       val buffString = bufferedSource.getLines()
       var takenInput : List[String] = List()
       var lineListOrd = lineList.sortWith(_<_)
-      while(buffString.hasNext & (lineListOrd.size > 0))
+      while(buffString.hasNext & lineListOrd.nonEmpty)
         {
           buffString.drop(lineListOrd.head)
           if(buffString.hasNext) {takenInput = takenInput :+ buffString.next()}

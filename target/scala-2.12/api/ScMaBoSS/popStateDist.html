@@ -531,7 +531,7 @@
       
       <p class="shortcomment cmt">covariance log number of network state pairs (0 numbers are replaced by 1)
 </p><div class="fullcomment"><div class="comment cmt"><p>covariance log number of network state pairs (0 numbers are replaced by 1)
-</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#covLogitRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="covLogitRatio(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState,sensit:Double):Double"></a><a id="covLogitRatio(NetState,NetState,Double):Double"></a>
       <span class="permalink">
@@ -551,7 +551,7 @@
 a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
 </p><div class="fullcomment"><div class="comment cmt"><p>covariance logit ratio of active node pairs
 a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
-</p></div><dl class="paramcmts block"><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#covNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="covNb(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState):Double"></a><a id="covNb(NetState,NetState):Double"></a>
       <span class="permalink">
@@ -569,7 +569,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">covariance number of network state pairs
 </p><div class="fullcomment"><div class="comment cmt"><p>covariance number of network state pairs
-</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#covRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="covRatio(nState1:ScMaBoSS.NetState,nState2:ScMaBoSS.NetState):Double"></a><a id="covRatio(NetState,NetState):Double"></a>
       <span class="permalink">
@@ -587,7 +587,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">covariance ratio of network state pairs
 </p><div class="fullcomment"><div class="comment cmt"><p>covariance ratio of network state pairs
-</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState1</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">nState2</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>covariance</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -673,7 +673,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">expectation log number of a network state (0 numbers are replaced by 1)
 </p><div class="fullcomment"><div class="comment cmt"><p>expectation log number of a network state (0 numbers are replaced by 1)
-</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#expectLogitRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="expectLogitRatio(nState:ScMaBoSS.NetState,sensit:Double):Double"></a><a id="expectLogitRatio(NetState,Double):Double"></a>
       <span class="permalink">
@@ -693,7 +693,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
 a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
 </p><div class="fullcomment"><div class="comment cmt"><p>expectation of logit ratio can provide a min value (logit(0) -&gt; logit(min)logit(1))
 a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit)
-</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt class="param">sensit</dt><dd class="cmt"><p>if set to zero, sensit is computed from 1/max number of cells in pStateMap</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#expectNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="expectNb(nState:ScMaBoSS.NetState):Double"></a><a id="expectNb(NetState):Double"></a>
       <span class="permalink">
@@ -711,7 +711,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">expectation number of a network state
 </p><div class="fullcomment"><div class="comment cmt"><p>expectation number of a network state
-</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="ScMaBoSS.popStateDist#expectRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="expectRatio(nState:ScMaBoSS.NetState):Double"></a><a id="expectRatio(NetState):Double"></a>
       <span class="permalink">
@@ -729,7 +729,7 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">expectation ratio of a network state
 </p><div class="fullcomment"><div class="comment cmt"><p>expectation ratio of a network state
-</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state (can &quot;enclose&quot; network states of the model)</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">nState</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd><dt>returns</dt><dd class="cmt"><p>expectation value</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -920,6 +920,181 @@ a min value is used (logit(0) -&gt; logit(sensit), logit(1) -&gt; logit(1-sensit
       
       <p class="shortcomment cmt">Compute the probability to detect a node, above a minimum number of cells
 </p>
+    </li><li name="ScMaBoSS.popStateDist#probDist" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probDist[OutType](fPopNetState:ScMaBoSS.PopNetState=&gt;Option[OutType]):List[(OutType,Double)]"></a><a id="probDist[OutType]((PopNetState)⇒Option[OutType]):List[(OutType,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDist[OutType](fPopNetState:ScMaBoSS.PopNetState=&gt;Option[OutType]):List[(OutType,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDist</span><span class="tparams">[<span name="OutType">OutType</span>]</span><span class="params">(<span name="fPopNetState">fPopNetState: (<a href="PopNetState.html" class="extype" name="ScMaBoSS.PopNetState">PopNetState</a>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="ScMaBoSS.popStateDist.probDist.OutType">OutType</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="ScMaBoSS.popStateDist.probDist.OutType">OutType</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Generic processed probability distribution (second order function)
+</p><div class="fullcomment"><div class="comment cmt"><p>Generic processed probability distribution (second order function)
+</p></div><dl class="paramcmts block"><dt class="tparam">OutType</dt><dd class="cmt"><p>type of output</p></dd><dt class="param">fPopNetState</dt><dd class="cmt"><p>function of data processing (careful, it returns an Option)</p></dd><dt>returns</dt><dd class="cmt"><p>a probability distribution</p></dd></dl></div>
+    </li><li name="ScMaBoSS.popStateDist#probDistNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probDistNb:List[(Long,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistNb:List[(Long,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistNb</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over number of cells
+</p>
+    </li><li name="ScMaBoSS.popStateDist#probDistNodeNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probDistNodeNb(nodes:List[String]):List[(List[Long],Double)]"></a><a id="probDistNodeNb(List[String]):List[(List[Long],Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistNodeNb(nodes:List[String]):List[(List[Long],Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistNodeNb</span><span class="params">(<span name="nodes">nodes: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Long">Long</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over number of cells having a given set of active nodes
+</p>
+    </li><li name="ScMaBoSS.popStateDist#probDistNodeNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probDistNodeNb(node:String):List[(Long,Double)]"></a><a id="probDistNodeNb(String):List[(Long,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistNodeNb(node:String):List[(Long,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistNodeNb</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over number of cells having a given active node
+</p>
+    </li><li name="ScMaBoSS.popStateDist#probDistNodeRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probDistNodeRatio(nodes:List[String]):List[(List[Double],Double)]"></a><a id="probDistNodeRatio(List[String]):List[(List[Double],Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistNodeRatio(nodes:List[String]):List[(List[Double],Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistNodeRatio</span><span class="params">(<span name="nodes">nodes: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over ratio of cells having a given set of active nodes
+</p>
+    </li><li name="ScMaBoSS.popStateDist#probDistNodeRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="probDistNodeRatio(node:String):List[(Double,Double)]"></a><a id="probDistNodeRatio(String):List[(Double,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistNodeRatio(node:String):List[(Double,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistNodeRatio</span><span class="params">(<span name="node">node: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over ratio of cells having a given active node
+</p>
+    </li><li name="ScMaBoSS.popStateDist#probDistStateNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probDistStateNb(states:List[ScMaBoSS.NetState]):List[(List[Long],Double)]"></a><a id="probDistStateNb(List[NetState]):List[(List[Long],Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistStateNb(states:List[ScMaBoSS.NetState]):List[(List[Long],Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistStateNb</span><span class="params">(<span name="states">states: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Long">Long</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over number of cells having a given set of state
+</p><div class="fullcomment"><div class="comment cmt"><p>Probability distribution over number of cells having a given set of state
+</p></div><dl class="paramcmts block"><dt class="param">states</dt><dd class="cmt"><p>network states, can be defined on a node subset</p></dd></dl></div>
+    </li><li name="ScMaBoSS.popStateDist#probDistStateNb" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probDistStateNb(state:ScMaBoSS.NetState):List[(Long,Double)]"></a><a id="probDistStateNb(NetState):List[(Long,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistStateNb(state:ScMaBoSS.NetState):List[(Long,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistStateNb</span><span class="params">(<span name="state">state: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over number of cells having a given state
+</p><div class="fullcomment"><div class="comment cmt"><p>Probability distribution over number of cells having a given state
+</p></div><dl class="paramcmts block"><dt class="param">state</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd></dl></div>
+    </li><li name="ScMaBoSS.popStateDist#probDistStateRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probDistStateRatio(states:List[ScMaBoSS.NetState]):List[(List[Double],Double)]"></a><a id="probDistStateRatio(List[NetState]):List[(List[Double],Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistStateRatio(states:List[ScMaBoSS.NetState]):List[(List[Double],Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistStateRatio</span><span class="params">(<span name="states">states: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="scala.Double">Double</span>], <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over ratio of cells having a given set of states
+</p><div class="fullcomment"><div class="comment cmt"><p>Probability distribution over ratio of cells having a given set of states
+</p></div><dl class="paramcmts block"><dt class="param">states</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd></dl></div>
+    </li><li name="ScMaBoSS.popStateDist#probDistStateRatio" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="probDistStateRatio(state:ScMaBoSS.NetState):List[(Double,Double)]"></a><a id="probDistStateRatio(NetState):List[(Double,Double)]"></a>
+      <span class="permalink">
+      <a href="../ScMaBoSS/popStateDist.html#probDistStateRatio(state:ScMaBoSS.NetState):List[(Double,Double)]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">probDistStateRatio</span><span class="params">(<span name="state">state: <a href="NetState.html" class="extype" name="ScMaBoSS.NetState">NetState</a></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[(<span class="extype" name="scala.Double">Double</span>, <span class="extype" name="scala.Double">Double</span>)]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Probability distribution over ratio of cells having a given state
+</p><div class="fullcomment"><div class="comment cmt"><p>Probability distribution over ratio of cells having a given state
+</p></div><dl class="paramcmts block"><dt class="param">state</dt><dd class="cmt"><p>network state, can be defined on a node subset</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

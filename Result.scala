@@ -323,7 +323,7 @@ trait ResultProcessing {
 
   /** Boolean state probability trajectory, given a network state
     *
-    * @param netState     network state
+    * @param netState     network state, can be defined on a node subset
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
     */
@@ -350,7 +350,7 @@ trait ResultProcessing {
 
   /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
     *
-    * @param netStates    network state
+    * @param netStates    network state, can be defined on a node subset
     * @param firstLast    first (start at 1) and last elements to take in the trajectory
     * @param normWithSize if true probabilities are multiplied by sizes
     * @param filename     file name
@@ -382,7 +382,7 @@ trait ResultProcessing {
 
   /** Write tab-separated file of state probability trajectory
     *
-    * @param netStates network state
+    * @param netStates network state, can be defined on a node subset
     * @param filename  file name
     */
   def writeStateTraj(netStates: List[NetState],
