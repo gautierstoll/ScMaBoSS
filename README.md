@@ -106,7 +106,9 @@ of ScMaBoSS, changing only `name` and `version`.
     val simResult = oResult match {case Some(sResult) => sResult; case _ => null}
     ```
     Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
-    used for extracting output data, eg
+    used for extracting output data. In all methods of this class, if an input is an object
+    [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
+    can be defined on a subset of the external nodes.
 
     * **Plotting Boolean state trajectories**:
     Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, 
@@ -116,7 +118,7 @@ of ScMaBoSS, changing only `name` and `version`.
     ``` 
     Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
     is defined
-    by the activity over a list of nodes. Therefore, this list of nodes should be a subset of the external nodes of the
+    by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
      model.
 
     * **Plotting node state trajectories**
@@ -185,8 +187,27 @@ with verbose for UPMaBoSS steps:
     that constructs a stream `strRunLight`. Therefore, the simulation can be relaunched with a larger number of steps, with no
     new calculation for the first steps.
 
-License
-=======
+## Example for data  processing of PopMaBoSS:
+1. Create an PopMaBoSS results from file:
+    ```scala
+    val PRes = new PResultFromFile("File_pop_probtraj.csv","File_simple_pop_probtraj.csv",
+        listNodes,listLines)
+    ```
+    The `listNodes` is necessary, because the output files may not display all nodes. The optional listLines restrict 
+   the result to a set of lines (start at 1, without the header)
+
+2. Create a probability disctribution over population state at a given step:
+    ```scala
+    val pState30 = new popStateDist(PRes.popStateProb.take(30).head,PRes.listNodes)
+    ```
+3. Use the different methods of the class
+   [`popStateDist`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/popStateDist.html)
+    for data processing. The most genereal method is `probDist`, that needs as argument a function for `PopNetState` to an
+    option onto any type.
+
+   
+      License
+      =======
 
 ScMaBoSS is distributed under the Apache License Version 2.0 (see LICENSE file).
 
