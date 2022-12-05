@@ -202,7 +202,7 @@ with verbose for UPMaBoSS steps:
     ```
 3. Use the different methods of the class
    [`popStateDist`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/popStateDist.html)
-    for data processing. The most genereal method is `probDist`, that needs as argument a function for `PopNetState` to an
+    for data processing. The most general method is `probDist` that needs as argument a function from `PopNetState` to an
     option onto any type.
 
    
