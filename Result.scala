@@ -18,7 +18,7 @@ import org.nspl.awtrenderer._
   */
 case class ClientData(network: String = null, config: String = null, command: String = "Run") {}
 
-/** Parameters for MaBoSS server
+/** Parameters for MaBoSS server, <i>necessary for running MaBoSS.</i>
   *
   * @param check    if true, just check coherence of network and config
   * @param hexfloat if true, double a represented in hexfloat format
@@ -124,7 +124,7 @@ object Result {
   }
 }
 
-/** Results of MaBoSS server
+/** Results of MaBoSS server, <i>necessary for handling output of MaBoSS server.</i>
   *
   * @param simulation configuration and network
   * @param verbose    flag for parser of data
@@ -405,7 +405,9 @@ trait ResultProcessing {
 
 }
 
-/** Concrete class of result from files (probDistTrajectory and sizes). Careful, probDistTrajectory file does not contains probability variance.
+/** Concrete class of result from files (probDistTrajectory and sizes), produced by the methods
+  *  writeLinesWithTime and writeSizes of the trait ResultProcessing.
+  *
   *
   * @param filenameLinesWithTime not in MaBoSS probtraj format, in format of writeLinesWithTime
   * @param filenameSize          in format writeSizes

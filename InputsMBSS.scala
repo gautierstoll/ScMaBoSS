@@ -80,26 +80,32 @@ object NetState {
 
 /** Network state, with associated node list and error handling. The stateString used in some constructors is a set of node names separated by " -- "
   *
-  * @param state
+  * @param state map between node and Boolean state
   */
 class NetState (val state: Map[String,Boolean]) {
   val nodeSet : Set[String] = state.keySet
   val activeNodes : Set[String] = state.filter(_._2).keySet
   val inactiveNodes : Set[String] = state.filter(!_._2).keySet
-  /**
+  /** Constructor for String representation (node list is needed)
     *
     * @param stateString active nodes separates by " -- "
     * @param nodeList
     * @return
     */
-  def this(stateString : String,nodeList : List[String]) =
+  def this(stateString : String,nodeList : List[String]) = {
   this(NetState.stringToBoolMap(stateString,nodeList))
+  }
 
+  /** Constructor for set of active nodes (node list is needed)
+    *
+    * @param stringSet active nodes
+    * @param nodeList
+    */
   def this(stringSet : Set[String],nodeList : List[String]) =
     this(NetState.stringSetToBoolMap(stringSet,nodeList))
 
 
-  /**
+  /** Constructor for String representation (bnd is needed fo node list)
     *
     * @param stateString active nodes separates by " -- "
     * @param bndMbSS list of nodes from BndMbss
@@ -108,10 +114,15 @@ class NetState (val state: Map[String,Boolean]) {
   def this(stateString : String,bndMbSS : BndMbss) =
     this(NetState.stringToBoolMap(stateString,bndMbSS.nodeList))
 
+  /** Constructor for set of active nodes (bnd is needed fo node list)
+    *
+    * @param stringSet
+    * @param bndMbSS
+    */
   def this(stringSet : Set[String],bndMbSS : BndMbss) =
     this(NetState.stringSetToBoolMap(stringSet,bndMbSS.nodeList))
 
-  /** Careful! It uses Cfg external nodes.
+  /** Constructor for String representation (cfg external nodes is needed for node list)
     *
     * @param stateString active nodes separates by " -- "
     * @param cfgMbSS list of nodes from external nodes in CfgMbss
@@ -120,11 +131,16 @@ class NetState (val state: Map[String,Boolean]) {
   def this(stateString : String,cfgMbSS : CfgMbss) =
     this(NetState.stringToBoolMap(stateString, cfgMbSS.extNodeList))
 
+  /** Constructor for set of active nodes (cfg external nodes is needed for node list)
+    *
+    * @param stringSet
+    * @param cfgMbSS
+    */
   def this(stringSet : Set[String],cfgMbSS : CfgMbss) =
     this(NetState.stringSetToBoolMap(stringSet, cfgMbSS.extNodeList))
 
 
-  /**
+  /** String representation
     *
     * @return active nodes separates by " -- "
     */
@@ -146,11 +162,16 @@ class NetState (val state: Map[String,Boolean]) {
     state.hashCode()
   }
 
+  /** Test if "this" is the restricted state of a given NetState defined on a larger set of nodes
+    *
+    * @param netState
+    * @return
+    */
   def isSubStateOf(netState : NetState) : Boolean =
     this.activeNodes.subsetOf(netState.activeNodes) & this.inactiveNodes.subsetOf(netState.inactiveNodes)
 }
 
-/**Companion object, for using input file and generating default configuration
+/** Companion object, for using input file and generating default configuration
   *
   */
 object BndMbss {
@@ -173,7 +194,8 @@ object BndMbss {
     "\n// - weighted random: [NODE].istate = P0 [0], P1 [1]; where P0 and P1 are arithmetic expressions\n"
 }
 
-/**Boolean Network Descriptor for MaBoSS
+/** Boolean Network Descriptor for MaBoSS,
+  * <i>necessary for running MaBoSS/UPMaBoSS.</i>
   *
   * @param bnd bnd
   */
@@ -184,7 +206,7 @@ class BndMbss(val bnd : String) {
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
     case Some(node) => node ; case None => null}}).toList
 
-  /**Generate BndMbss with mutations controlled by external variables
+  /** Generate BndMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
     * @return
@@ -217,7 +239,7 @@ class BndMbss(val bnd : String) {
     new BndMbss(mutNodeFields)
   }
 
-  /**Default configuration
+  /** Default configuration
     *
     * @return
     */
@@ -235,7 +257,7 @@ class BndMbss(val bnd : String) {
   }
 }
 
-/**Companion object for constructor from file
+/** Companion object for constructor from file
   *
   */
 object CfgMbss {
@@ -246,7 +268,7 @@ object CfgMbss {
     new CfgMbss(bndMbss,filenames.map(x => ManageInputFile.file_get_content(x)).mkString("\n"))}
 }
 
-/**Configuration for MaBoSS (including bnd)
+/**Configuration for MaBoSS (including bnd), <i>necessary for running MaBoSS/UPMaBoSS.</i>
   *
   * @param bndMbss bnd
   * @param cfg cfg
@@ -260,7 +282,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     filter(node => (node+"\\.is_internal\\s*=\\s*TRUE").r.findFirstIn(noCommentCfg).isEmpty).
     filter(node => (node+"\\.is_internal\\s*=\\s*1").r.findFirstIn(noCommentCfg).isEmpty)
 
-  /**Generate CfgMbss with mutations controlled by external variables
+  /** Generate CfgMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
     * @return
@@ -269,7 +291,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
-  /**Generate CfgMbss with updated external variables
+  /** Generate CfgMbss with updated external variables
     *
     * @param newParam map between parameter and its new value
     * @return

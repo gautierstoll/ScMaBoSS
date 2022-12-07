@@ -160,7 +160,7 @@ object DataStreamer {
   }
 }
 
-/** Socket communication with MaBoSS server
+/** Socket communication with MaBoSS server, <i>necessary for running MaBoSS.</i>
   *
   * @param socket java socket
   */
@@ -192,6 +192,7 @@ class MaBoSSClient (val socket : java.net.Socket) {
   def close(): Unit = {socket.close()}
 
   /** Run a MaBoSS simulation and return a Result. Socket is closed after the run.
+    * <i>Necessary for running MaBoSS.</i>
     *
     * @param simulation configuration with network
     * @param hints hints for MaBoSS server
@@ -202,7 +203,7 @@ class MaBoSSClient (val socket : java.net.Socket) {
 }
 
 
-/** Factory object
+/** Factory object, <i>necessary for running MaBoSS.</i>
   *
   */
 object MaBoSSClient {
@@ -226,6 +227,7 @@ object MaBoSSClient {
 }
 
 /** socket communication with intermediate queuing socket server
+  * (launched with the application ServSkApp of ScServSocket project)
   *
   * @param socket java socket
   */
@@ -269,7 +271,7 @@ object MaBoSSQuClient {
 }
 
 /**
-  * MaBoSS client queue for MaBoSS server.
+  * MaBoSS client queue for MaBoSS server, internal Scala queuing system.
   * @param hostName hostname or ip
   * @param port port number
   */
