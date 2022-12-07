@@ -46,59 +46,6 @@ case class ResultData(status: Int = 0, errmsg: String = "", stat_dist: String = 
   *
   */
 object Result {
-  /** initial condition and normalization factor from a line of probtraj, useful for UPMaBoSS
-    * Not private because UPStepLight of UPMaBoSS uses it
-    *
-    * @param line      line of probtraj
-    * @param divNode   division node
-    * @param deathNode death node
-    * @param verbose   true for printing updating process
-    * @return
-    */
-  def updateLine(line: String, divNode: String, deathNode: String, verbose: Boolean = false):
-  (Map[Set[String], Double], Double) =
-    updateProb(lineToTimeProb(line)._2, divNode, deathNode, verbose)
-
-  /** initial condition and normalization factor from a probability distribution
-    *
-    * @param probDist  probability distribution over network states
-    * @param divNode   division node
-    * @param deathNode death node
-    * @param verbose   true for printing updating process
-    * @return
-    */
-  def updateProb(probDist: Map[Set[String], Double], divNode: String, deathNode: String,
-                 verbose: Boolean = false): (Map[Set[String], Double], Double) = {
-    val nonNormDist: Map[Set[String], Double] = probDist.
-      filter(x => !x._1.contains(deathNode)).
-      map(x => (if (x._1.contains(divNode)) {
-        x._1 -> x._2 * 2
-      } else {
-        x._1 -> x._2
-      })).groupBy(x => (x._1 - divNode)).map(x => (x._1 -> (x._2.values.sum)))
-    val normFactor = nonNormDist.values.sum
-    if (verbose) println("Norm. factor: " + normFactor)
-    (nonNormDist.map(x => (x._1 -> (x._2 / normFactor))), normFactor)
-  }
-
-  /** transform line of probtraj in time and probablity distribution
-    *
-    * @param line probtraj line
-    * @return
-    */
-  def lineToTimeProb(line: String): (Double, Map[Set[String], Double]) = {
-    if (line == "") {
-      (0,Map())
-    } else {
-      val splitLine = line.split("\t")
-      (splitLine.head.toDouble,
-        splitLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
-          map(x => (
-            (if (x(0) == "<nil>") {
-              Set[String]()
-            } else (x(0).split(" -- ").toSet)) -> x(1).toDouble)).toMap)
-    }
-  }
 
   /** for Constructor from MaBoSS server run with option
     *
@@ -144,7 +91,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
 
   var parsedResultData: ResultData =  DataStreamer.parseStreamData(outputData, verbose)
   val linesWithTime: List[String] = parsedResultData.prob_traj.split("\n").toList.tail
-  lazy val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => Result.lineToTimeProb(line))
+  lazy val probDistTrajectory: List[(Double,Map[Set[String], Double])] = linesWithTime.map(line => ResultMethods.lineToTimeProb(line))
   val sizes: List[Double] = List.fill(linesWithTime.length)(1.0)
 
   /** updates last probability distribution for UPMaBoSS
@@ -154,7 +101,7 @@ class Result(val simulation: CfgMbss, verbose: Boolean, hexfloat: Boolean, outpu
     * @return (new_statistical_distribution,normalization_factor)
     */
   def updateLastLine(divNode: String, deathNode: String, verbose: Boolean = false): (Map[Set[String], Double], Double) = {
-    Result.updateLine(parsedResultData.prob_traj.split("\n").toList.last, divNode, deathNode, verbose)
+    ResultMethods.updateLine(parsedResultData.prob_traj.split("\n").toList.last, divNode, deathNode, verbose)
   }
 
   def writeProbTraj2File(filename: String): Unit = {
@@ -272,8 +219,65 @@ object ParReducibleLastLine extends ParReducibleProbDist {
     * @return
     */
   protected def generate(r: Result): Map[Set[String], Double] = {
-    Result.lineToTimeProb(r.parsedResultData.prob_traj.split("\n").last)._2
+    ResultMethods.lineToTimeProb(r.parsedResultData.prob_traj.split("\n").last)._2
   }
+}
+
+object ResultMethods {
+  /** initial condition and normalization factor from a line of probtraj, useful for UPMaBoSS
+    * Not private because UPStepLight of UPMaBoSS uses it
+    *
+    * @param line      line of probtraj
+    * @param divNode   division node
+    * @param deathNode death node
+    * @param verbose   true for printing updating process
+    * @return
+    */
+  def updateLine(line: String, divNode: String, deathNode: String, verbose: Boolean = false):
+  (Map[Set[String], Double], Double) =
+    updateProb(lineToTimeProb(line)._2, divNode, deathNode, verbose)
+
+  /** initial condition and normalization factor from a probability distribution
+    *
+    * @param probDist  probability distribution over network states
+    * @param divNode   division node
+    * @param deathNode death node
+    * @param verbose   true for printing updating process
+    * @return
+    */
+  def updateProb(probDist: Map[Set[String], Double], divNode: String, deathNode: String,
+                 verbose: Boolean = false): (Map[Set[String], Double], Double) = {
+    val nonNormDist: Map[Set[String], Double] = probDist.
+      filter(x => !x._1.contains(deathNode)).
+      map(x => (if (x._1.contains(divNode)) {
+        x._1 -> x._2 * 2
+      } else {
+        x._1 -> x._2
+      })).groupBy(x => (x._1 - divNode)).map(x => (x._1 -> (x._2.values.sum)))
+    val normFactor = nonNormDist.values.sum
+    if (verbose) println("Norm. factor: " + normFactor)
+    (nonNormDist.map(x => (x._1 -> (x._2 / normFactor))), normFactor)
+  }
+
+  /** transform line of probtraj in time and probablity distribution
+    *
+    * @param line probtraj line
+    * @return
+    */
+  def lineToTimeProb(line: String): (Double, Map[Set[String], Double]) = {
+    if (line == "") {
+      (0,Map())
+    } else {
+      val splitLine = line.split("\t")
+      (splitLine.head.toDouble,
+        splitLine.dropWhile("^[0-9].*".r.findFirstIn(_).isDefined).sliding(3, 3).
+          map(x => (
+            (if (x(0) == "<nil>") {
+              Set[String]()
+            } else (x(0).split(" -- ").toSet)) -> x(1).toDouble)).toMap)
+    }
+  }
+
 }
 
 /** trait for handling results

@@ -245,7 +245,7 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
     if (upStep.relSize == 0) UpStepLight(None, 0) else {
       val newInitCond = upStep.lastLineProbTraj match {
         case None => None
-        case Some(line) => Some(Result.updateLine(line, divNode, deathNode, verbose))
+        case Some(line) => Some(ResultMethods.updateLine(line, divNode, deathNode, verbose))
       }
       val newRelSize = newInitCond match {
         case None => upStep.relSize
@@ -322,5 +322,5 @@ case class UPMbssOutLight(sizes: List[Double], lastLines: List[String], cfgMbss:
     })
 
   val probDistTrajectory: List[(Double, Map[Set[String], Double])] = lastLines.zipWithIndex.map(lineIndex =>
-    (lineIndex._2 * stepTime, Result.lineToTimeProb(lineIndex._1)._2))
+    (lineIndex._2 * stepTime, ResultMethods.lineToTimeProb(lineIndex._1)._2))
 }
