@@ -223,9 +223,11 @@ object ParReducibleLastLine extends ParReducibleProbDist {
   }
 }
 
+/** Methods for handling results, mainly used by UPMaBoSS
+  *
+  */
 object ResultMethods {
   /** initial condition and normalization factor from a line of probtraj, useful for UPMaBoSS
-    * Not private because UPStepLight of UPMaBoSS uses it
     *
     * @param line      line of probtraj
     * @param divNode   division node
