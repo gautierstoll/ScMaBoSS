@@ -429,3 +429,14 @@ class ResultFromFile(val filenameLinesWithTime: String, val filenameSize: String
   }).toList
   val sizes: List[Double] = ManageInputFile.file_get_content(filenameSize).split("\n").toList.map(_.toDouble)
 }
+
+/** Result from MaBoSS output probtraj file.
+  *
+  * @param probtrajFileName
+  * @param listNodes
+  */
+class ResultFromMSSOutFile(val probtrajFileName: String,val listNodes: List[String]) extends ResultProcessing {
+  val probDistTrajectory : List[(Double, Map[Set[String], Double])] = ManageInputFile.file_get_content(probtrajFileName).
+    split("\n").toList.tail.map(l => ResultMethods.lineToTimeProb(l))
+  val sizes :List[Double] = List.fill(probDistTrajectory.length)(1)
+}
