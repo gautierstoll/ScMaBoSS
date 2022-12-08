@@ -42,7 +42,7 @@ case class Hints(check: Boolean = false, hexfloat: Boolean = false, augment: Boo
 case class ResultData(status: Int = 0, errmsg: String = "", stat_dist: String = null,
                       prob_traj: String = null, traj: String = null, FP: String = null, runlog: String = null) {}
 
-/** Companion object for updating probtraj line for UPMaBoSS and constructor from MaBoSS run
+/** Companion object for constructor from MaBoSS run
   *
   */
 object Result {
@@ -295,7 +295,7 @@ trait ResultProcessing {
 
 
   /** write probability trajectory to file. Careful, probability variance is not written
-    *
+    * <i>Necessary for downloading results with class ResultFromFile</i>
     * @param filename name of file
     */
   def writeLinesWithTime(filename: String, hexString: Boolean = false): Unit = { //to be tested
@@ -317,7 +317,7 @@ trait ResultProcessing {
   def sizes: List[Double] // careful: concrete class need to have same length with linesWithTime
 
   /** write size to file
-    *
+    *<i>Necessary for downloading results with class ResultFromFile</i>
     * @param filename name of file
     */
   def writeSizes(filename: String, hexString: Boolean = false): Unit = { //to be tested
@@ -328,7 +328,7 @@ trait ResultProcessing {
   }
 
   /** Boolean state probability trajectory, given a network state
-    *
+    *<i>Useful data processing method</i>
     * @param netState     network state, can be defined on a node subset
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
@@ -342,7 +342,7 @@ trait ResultProcessing {
   }
 
   /** Node state probability trajectory, given a node
-    *
+    *<i>Useful data processing method</i>
     * @param node         network node
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
@@ -355,7 +355,7 @@ trait ResultProcessing {
   }
 
   /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
-    *
+    *<i>Useful visualization method</i>
     * @param netStates    network state, can be defined on a node subset
     * @param firstLast    first (start at 1) and last elements to take in the trajectory
     * @param normWithSize if true probabilities are multiplied by sizes
@@ -387,7 +387,7 @@ trait ResultProcessing {
   }
 
   /** Write tab-separated file of state probability trajectory
-    *
+    *<i>Useful data exporting method</i>
     * @param netStates network state, can be defined on a node subset
     * @param filename  file name
     */
