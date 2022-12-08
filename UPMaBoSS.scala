@@ -311,6 +311,7 @@ case class UPMbssOut(sizes: List[Double], configurations: List[CfgMbss]) {}
   * @param lastLines list of probtraj last lines
   */
 case class UPMbssOutLight(sizes: List[Double], lastLines: List[String], cfgMbss: CfgMbss) extends ResultProcessing {
+  val listNodes = cfgMbss.extNodeList
   val stepTime: Double = "=(.*);".r.findAllIn(cfgMbss.noCommentCfg.split("\n").filter("max_time".r.findFirstMatchIn(_).isDefined).head).
     matchData.map(_.group(1).toDouble).next()
   /** Last probtraj line with UPMaBoSS time
