@@ -70,8 +70,8 @@ object UPMaBoSS {
   }
 }
 
-/** UPMaBoSS in scala, using MaBoSS server
-  *<i>Necessary for running UPMaBoSS</i>
+/** UPMaBoSS in scala, using MaBoSS server,
+  *<i>necessary for running UPMaBoSS</i>
   * @param divNode   division node
   * @param deathNode death node
   * @param updateVar list of update var lines
@@ -305,8 +305,8 @@ class UPMaBoSS(val divNode: String, val deathNode: String, val updateVar: List[S
   */
 case class UPMbssOut(sizes: List[Double], configurations: List[CfgMbss]) {}
 
-/** Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run
-  * <i>Useful data processing methods</i>
+/** Minimal output of UPMaBoSS, including population size and protraj last line of each MaBoSS run,
+  * <br><i>useful data processing methods</i>
   * @param sizes     list of relaitve sizes
   * @param lastLines list of probtraj last lines
   */

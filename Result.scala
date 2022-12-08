@@ -294,8 +294,9 @@ trait ResultProcessing {
   def probDistTrajectory: List[(Double, Map[Set[String], Double])]
 
 
-  /** write probability trajectory to file. Careful, probability variance is not written
-    * <i>Necessary for downloading results with class ResultFromFile</i>
+  /** write probability trajectory to file, <i>necessary for downloading results with class ResultFromFile</i>.
+    * <br>Probability variance is not written
+    *
     * @param filename name of file
     */
   def writeLinesWithTime(filename: String, hexString: Boolean = false): Unit = { //to be tested
@@ -316,8 +317,8 @@ trait ResultProcessing {
     */
   def sizes: List[Double] // careful: concrete class need to have same length with linesWithTime
 
-  /** write size to file
-    *<i>Necessary for downloading results with class ResultFromFile</i>
+  /** write size to file,
+    *<i>necessary for downloading results with class ResultFromFile</i>
     * @param filename name of file
     */
   def writeSizes(filename: String, hexString: Boolean = false): Unit = { //to be tested
@@ -327,8 +328,8 @@ trait ResultProcessing {
     pw.close()
   }
 
-  /** Boolean state probability trajectory, given a network state
-    *<i>Useful data processing method</i>
+  /** Boolean state probability trajectory, given a network state,
+    *<i>useful data processing method</i>
     * @param netState     network state, can be defined on a node subset
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
@@ -341,8 +342,8 @@ trait ResultProcessing {
     else res
   }
 
-  /** Node state probability trajectory, given a node
-    *<i>Useful data processing method</i>
+  /** Node state probability trajectory, given a node,
+    *<i>useful data processing method</i>
     * @param node         network node
     * @param normWithSize if true probabilities are multiplied by sizes
     * @return probability over time
@@ -354,8 +355,8 @@ trait ResultProcessing {
     else res
   }
 
-  /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states
-    *<i>Useful visualization method</i>
+  /** Plot Boolean state probability trajectories, given a list of probtraj and a list of network states,
+    *<i>useful visualization method</i>
     * @param netStates    network state, can be defined on a node subset
     * @param firstLast    first (start at 1) and last elements to take in the trajectory
     * @param normWithSize if true probabilities are multiplied by sizes
@@ -386,8 +387,8 @@ trait ResultProcessing {
     pdfToFile(pdfFile, sequence(builtElement :: Nil, FreeLayout).build)
   }
 
-  /** Write tab-separated file of state probability trajectory
-    *<i>Useful data exporting method</i>
+  /** Write tab-separated file of state probability trajectory,
+    *<i>useful data exporting method</i>
     * @param netStates network state, can be defined on a node subset
     * @param filename  file name
     */
