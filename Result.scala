@@ -156,7 +156,9 @@ trait ResultProcessing {
   def stateTrajectory(netState: NetState, normWithSize: Boolean = false): List[(Double, Double)] = {
     val res : List[(Double,Double)]= probDistTrajectory.map(timeProbDist =>
       (timeProbDist._1, timeProbDist._2.filter(prob =>
-            netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.intersect(prob._1).isEmpty).values.sum))
+            netState.activeNodes.diff(prob._1).isEmpty & netState.inactiveNodes.diff(listNodes.toSet.diff(prob._1)).isEmpty)
+              //netState.inactiveNodes.intersect(prob._1).isEmpty)
+    .values.sum))
     if (normWithSize) res.zip(sizes).map(x=>(x._1._1,x._1._2*x._2))
     else res
   }

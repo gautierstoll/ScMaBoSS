@@ -16,6 +16,8 @@ Documentation
 - `comm.scala`: communication with MaBoSS server
 - `Results.scala`: outputs of MaBoSS, including trajectories extraction and simple plotting
 - `UPMaBoSS.scala`: UPMaBoSS implementation
+- `InputPopMBSS.scala`: inputs for PopMaBoSS, including PopNetState and popStateDist
+- `PopResults.scala`: processing PopMaBoSS output files
 
 Usage
 =====
@@ -106,7 +108,7 @@ of ScMaBoSS, changing only `name` and `version`.
     val simResult = oResult match {case Some(sResult) => sResult; case _ => null}
     ```
     Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
-    used for extracting output data. In all methods of this class, if an input is an object
+    used for extracting output data. In all methods of this class, if an argument is an object
     [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
     can be defined on a subset of the external nodes.
 
@@ -206,8 +208,8 @@ with verbose for UPMaBoSS steps:
     option onto any type.
 
    
-      License
-      =======
+License
+=======
 
 ScMaBoSS is distributed under the Apache License Version 2.0 (see LICENSE file).
 

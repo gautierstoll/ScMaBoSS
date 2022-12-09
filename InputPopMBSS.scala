@@ -52,7 +52,8 @@ class PopNetState(val stateString: String,val nodeList : List[String]) {
    * @return number of cells
    */
  def stateNb(netState: NetState): Long = stringSetArray.filter(strSNb =>
-  (netState.activeNodes.diff(strSNb._1).isEmpty & netState.inactiveNodes.intersect(strSNb._1).isEmpty)).
+  (netState.activeNodes.diff(strSNb._1).isEmpty & netState.inactiveNodes.diff(nodeList.toSet.diff(strSNb._1)).isEmpty)).
+    // netState.inactiveNodes.intersect(strSNb._1).isEmpty)).
    map(_._2).sum
 
  /** ratio in a given state
