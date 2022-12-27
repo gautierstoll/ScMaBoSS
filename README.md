@@ -189,8 +189,8 @@ with verbose for UPMaBoSS steps:
     that constructs a stream `strRunLight`. Therefore, the simulation can be relaunched with a larger number of steps, with no
     new calculation for the first steps.
 
-## Example for data  processing of PopMaBoSS:
-1. Create an PopMaBoSS results from file:
+## Example for data processing of PopMaBoSS:
+1. Create a PopMaBoSS results from file:
     ```scala
     val PRes = new PResultFromFile("File_pop_probtraj.csv","File_simple_pop_probtraj.csv",
         listNodes,listLines)
@@ -198,7 +198,7 @@ with verbose for UPMaBoSS steps:
     The `listNodes` is necessary, because the output files may not display all nodes. The optional listLines restrict 
    the result to a set of lines (start at 1, without the header)
 
-2. Create a probability disctribution over population state at a given step:
+2. Create a probability distribution over population state at a given step:
     ```scala
     val pState30 = new popStateDist(PRes.popStateProb.take(30).head,PRes.listNodes)
     ```
