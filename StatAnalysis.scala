@@ -27,7 +27,10 @@ class DataFrame(val doubleNames:List[String],
   val qualData : List[List[(String,Option[String])]] =
     qualDataNoEmptyLines ::: List.fill(maxSize - qualDataNoEmptyLines.size)(qualNamesKeys.map(x=> (x._1,None:Option[String])))
 
-  override def toString: String = doubleNames.mkString("\t") + "\t" + longNames.mkString("\t") + "\t" + qualNamesKeys.map(_._1).mkString("\t") + "\n" +
+  override def toString: String =
+    (if(doubleNames.nonEmpty) {doubleNames.mkString("\t") + "\t"} else {""}) +
+      (if(longNames.nonEmpty) {longNames.mkString("\t") + "\t"} else {""}) +
+      qualNamesKeys.map(_._1).mkString("\t") + "\n" +
     doubleData.map(dblVals => dblVals.map(dblOVal => dblOVal._2 match {
       case Some(vl) => vl.toString
       case _ => "NA"
@@ -38,6 +41,7 @@ class DataFrame(val doubleNames:List[String],
       }).mkString("\t"))
     ).zip(
       qualData.map(qVals => qVals.map(qOVal => qOVal._2.getOrElse("NA")).mkString("\t"))).
-      map(x => (x._1._1 + "\t" + x._1._2 + "\t" + x._2)).mkString("\n")
+      map(x => ((if(x._1._1.nonEmpty){x._1._1 + "\t"} else{""}) +
+        (if(x._1._2.nonEmpty){x._1._2 + "\t"}else{""}) + x._2)).mkString("\n")
 }
 
