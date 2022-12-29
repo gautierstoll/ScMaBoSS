@@ -1,10 +1,20 @@
 package ScMaBoSS
 
 object DataFrame {
+  /** Non robust Data Frame constructor
+    *
+    * @param doubleNames double column names
+    * @param longNames long column names
+    * @param qualNames qualitive column names
+    * @param doubleColList list of columns, names attributed automatically
+    * @param longColList list of columns, names attributed automatically
+    * @param qualColList list of columns, names attributed automatically, possible value are computed (qualNamesKeys)
+    * @return
+    */
   def FromColList(doubleNames: List[String] = List(), longNames: List[String] = List(),
                   qualNames: List[String] = List(),
-                  doubleColList: List[List[Double]], longColList: List[List[Long]],
-                  qualColList: List[List[String]]): DataFrame = {
+                  doubleColList: List[List[Double]]=List(), longColList: List[List[Long]]=List(),
+                  qualColList: List[List[String]]=List()): DataFrame = {
     def constructListMap[A](colNames: List[String], lList: List[List[A]]): (List[String], List[Map[String, A]]) = {
       def transposeLL[B](llistVal: List[List[B]]): List[List[Option[B]]] = {
         if (llistVal.map(_.isEmpty).reduce(_ & _)) {List[List[Option[B]]]()} else {
@@ -31,13 +41,13 @@ object DataFrame {
 }
 
 
-/** Statically typed dataFrame
+/** Statically typed dataFrame, robust constructor
   *
-  * @param doubleNames
-  * @param longNames
-  * @param qualNamesKeys
+  * @param doubleNames only these names are used for data in doubleVal maps
+  * @param longNames only these names are used for data in longVal maps
+  * @param qualNamesKeys only these names are used for data in qualVal maps
   * @param doubleVal Must have the keys of doubleNames
-  * @param longVal Must have the keys of lonNames
+  * @param longVal Must have the keys of longNames
   * @param qualVal Must have the keys of qualNamesKeys ._1 and the values of qualNamesKeys._2
   */
 class DataFrame(val doubleNames:List[String] = List(),
@@ -61,20 +71,31 @@ class DataFrame(val doubleNames:List[String] = List(),
   })
 
   private val maxSize = List(doubleDataNoEmptyLines.size,longDataNoEmptyLines.size,qualDataNoEmptyLines.size).max
-  /** Option for empty values, same length as the longest one (except if fully empty)
+  /** Double data, Option for empty values, same length as the longest one
     *
     */
-  val doubleData : List[List[(String,Option[Double])]] =
-    if(doubleDataNoEmptyLines.isEmpty) {List()}
+  val doubleData : List[List[(String,Option[Double])]] = {
+    if(doubleDataNoEmptyLines.isEmpty) {List.fill(maxSize)(List[(String,Option[Double])]())}
     else {doubleDataNoEmptyLines ::: List.fill(maxSize - doubleDataNoEmptyLines.size)(doubleNames.map(x=> (x,None)))}
+  }
+  /** Long data, Option for empty values, same length as the longest one
+    *
+    */
   val longData : List[List[(String,Option[Long])]] =
-    if (longDataNoEmptyLines.isEmpty) {List()}
+    if (longDataNoEmptyLines.isEmpty) {List.fill(maxSize)(List[(String,Option[Long])]())}
     else {longDataNoEmptyLines ::: List.fill(maxSize - longDataNoEmptyLines.size)(longNames.map(x=> (x,None)))}
 
+  /** Qualitative data, Option for empty values, same length as the longest one
+    *
+    */
   val qualData : List[List[(String,Option[String])]] =
-    if (qualDataNoEmptyLines.isEmpty){List()}
+    if (qualDataNoEmptyLines.isEmpty){List.fill(maxSize)(List[(String,Option[String])]())}
     else {qualDataNoEmptyLines ::: List.fill(maxSize - qualDataNoEmptyLines.size)(qualNamesKeys.map(x=> (x._1,None:Option[String])))}
 
+  /** Useful for exporting the table to a file
+    *
+    * @return
+    */
   override def toString: String =
     (if(doubleNames.nonEmpty) {doubleNames.mkString("\t") + "\t"} else {""}) +
       (if(longNames.nonEmpty) {longNames.mkString("\t") + "\t"} else {""}) +
