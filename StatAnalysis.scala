@@ -1,10 +1,52 @@
 package ScMaBoSS
 
-class DataFrame(val doubleNames:List[String],
-                val longNames:List[String],val qualNamesKeys:List[(String,Set[String])],
-                doubleVal : List[Map[String,Double]],
-                longVal : List[Map[String,Long]],
-                qualVal : List[Map[String,String]]) {
+object DataFrame {
+  def FromColList(doubleNames: List[String] = List(), longNames: List[String] = List(),
+                  qualNames: List[String] = List(),
+                  doubleColList: List[List[Double]], longColList: List[List[Long]],
+                  qualColList: List[List[String]]): DataFrame = {
+    def constructListMap[A](colNames: List[String], lList: List[List[A]]): (List[String], List[Map[String, A]]) = {
+      def transposeLL[B](llistVal: List[List[B]]): List[List[Option[B]]] = {
+        if (llistVal.map(_.isEmpty).reduce(_ & _)) {List[List[Option[B]]]()} else {
+          llistVal.map(list => if (list.isEmpty) {None: Option[B]} else {Some(list.head)}) ::
+            transposeLL(llistVal.map(list => if (list.isEmpty) {List[B]()} else list.tail))}
+      }
+      val finalColNames = colNames.take(lList.size)
+      val listMap = if (finalColNames.isEmpty) {List[Map[String, A]]()} else {
+        transposeLL(lList.take(finalColNames.size)).map(line => line.zip(finalColNames).flatMap(pair => {
+          pair match {
+            case (Some(d), n) => Some(n, d): Option[(String, A)]
+            case _ => None: Option[(String, A)]
+          }}).toMap)}
+      (finalColNames, listMap)
+    }
+    val doubleListMap = constructListMap(doubleNames, doubleColList)
+    val longListMap = constructListMap(longNames, longColList)
+    val qualListMap = constructListMap(qualNames, qualColList)
+    val qualNamesKeys: List[(String, Set[String])] =
+      if (qualListMap._1.isEmpty) {List()} else {
+      qualListMap._1.zip(qualColList.map(_.toSet))}
+    new DataFrame(doubleListMap._1, longListMap._1, qualNamesKeys, doubleListMap._2, longListMap._2, qualListMap._2)
+  }
+}
+
+
+/** Statically typed dataFrame
+  *
+  * @param doubleNames
+  * @param longNames
+  * @param qualNamesKeys
+  * @param doubleVal Must have the keys of doubleNames
+  * @param longVal Must have the keys of lonNames
+  * @param qualVal Must have the keys of qualNamesKeys ._1 and the values of qualNamesKeys._2
+  */
+class DataFrame(val doubleNames:List[String] = List(),
+                val longNames:List[String] = List() ,val qualNamesKeys:List[(String,Set[String])] = List(),
+                doubleVal : List[Map[String,Double]] = List(),
+                longVal : List[Map[String,Long]] = List(),
+                qualVal : List[Map[String,String]] = List() ) {
+
+
   private val doubleDataNoEmptyLines : List[List[(String,Option[Double])]] = doubleVal.map(mapDbl =>
     doubleNames.map(dName => (dName , mapDbl.get(dName))))
   private val longDataNoEmptyLines : List[List[(String,Option[Long])]] = longVal.map(mapLong =>
@@ -19,13 +61,19 @@ class DataFrame(val doubleNames:List[String],
   })
 
   private val maxSize = List(doubleDataNoEmptyLines.size,longDataNoEmptyLines.size,qualDataNoEmptyLines.size).max
+  /** Option for empty values, same length as the longest one (except if fully empty)
+    *
+    */
   val doubleData : List[List[(String,Option[Double])]] =
-    doubleDataNoEmptyLines ::: List.fill(maxSize - doubleDataNoEmptyLines.size)(doubleNames.map(x=> (x,None)))
+    if(doubleDataNoEmptyLines.isEmpty) {List()}
+    else {doubleDataNoEmptyLines ::: List.fill(maxSize - doubleDataNoEmptyLines.size)(doubleNames.map(x=> (x,None)))}
   val longData : List[List[(String,Option[Long])]] =
-    longDataNoEmptyLines ::: List.fill(maxSize - longDataNoEmptyLines.size)(longNames.map(x=> (x,None)))
+    if (longDataNoEmptyLines.isEmpty) {List()}
+    else {longDataNoEmptyLines ::: List.fill(maxSize - longDataNoEmptyLines.size)(longNames.map(x=> (x,None)))}
 
   val qualData : List[List[(String,Option[String])]] =
-    qualDataNoEmptyLines ::: List.fill(maxSize - qualDataNoEmptyLines.size)(qualNamesKeys.map(x=> (x._1,None:Option[String])))
+    if (qualDataNoEmptyLines.isEmpty){List()}
+    else {qualDataNoEmptyLines ::: List.fill(maxSize - qualDataNoEmptyLines.size)(qualNamesKeys.map(x=> (x._1,None:Option[String])))}
 
   override def toString: String =
     (if(doubleNames.nonEmpty) {doubleNames.mkString("\t") + "\t"} else {""}) +
