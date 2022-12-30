@@ -1,7 +1,7 @@
 package ScMaBoSS
 
 object DataFrame {
-  /** Non robust Data Frame constructor
+  /** Non robust Data Frame constructor. Careful, row order is inverted in order to have tail recursion
     *
     * @param doubleNames double column names
     * @param longNames long column names
@@ -16,10 +16,10 @@ object DataFrame {
                   doubleColList: List[List[Double]]=List(), longColList: List[List[Long]]=List(),
                   qualColList: List[List[String]]=List()): DataFrame = {
     def constructListMap[A](colNames: List[String], lList: List[List[A]]): (List[String], List[Map[String, A]]) = {
-      def transposeLL[B](llistVal: List[List[B]]): List[List[Option[B]]] = {
-        if (llistVal.map(_.isEmpty).reduce(_ & _)) {List[List[Option[B]]]()} else {
-          llistVal.map(list => if (list.isEmpty) {None: Option[B]} else {Some(list.head)}) ::
-            transposeLL(llistVal.map(list => if (list.isEmpty) {List[B]()} else list.tail))}
+      def transposeLL[B](llistVal: List[List[B]],cumulList : List[List[Option[B]]] = List() ): List[List[Option[B]]] = {
+        if (llistVal.map(_.isEmpty).reduce(_ & _)) {cumulList} else {
+            transposeLL(llistVal.map(list => if (list.isEmpty) {List[B]()} else list.tail),
+              llistVal.map(list => if (list.isEmpty) {None: Option[B]} else {Some(list.head)}) :: cumulList)}
       }
       val finalColNames = colNames.take(lList.size)
       val listMap = if (finalColNames.isEmpty) {List[Map[String, A]]()} else {
@@ -30,7 +30,7 @@ object DataFrame {
           }}).toMap)}
       (finalColNames, listMap)
     }
-    val doubleListMap = constructListMap(doubleNames, doubleColList)
+    val doubleListMap = constructListMap[Double](doubleNames, doubleColList)
     val longListMap = constructListMap(longNames, longColList)
     val qualListMap = constructListMap(qualNames, qualColList)
     val qualNamesKeys: List[(String, Set[String])] =
@@ -60,7 +60,7 @@ class DataFrame(val doubleNames:List[String] = List(),
   private val doubleDataNoEmptyLines : List[List[(String,Option[Double])]] = doubleVal.map(mapDbl =>
     doubleNames.map(dName => (dName , mapDbl.get(dName))))
   private val longDataNoEmptyLines : List[List[(String,Option[Long])]] = longVal.map(mapLong =>
-    doubleNames.map(dName => (dName , mapLong.get(dName))))
+    longNames.map(dName => (dName , mapLong.get(dName))))
   private val qualDataNoEmptyLines : List[List[(String,Option[String])]] = qualVal.map(mapQual => {
     qualNamesKeys.map(qualNameKeys =>  {
       mapQual.get(qualNameKeys._1) match {
