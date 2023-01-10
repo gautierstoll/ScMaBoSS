@@ -20,7 +20,7 @@ class PResultFromFile(filenamePop: String,filenameSimplPop:String,val listNodes:
       val splittedLine: Array[String] = line.split("\t")
       ((splittedLine(1).toDouble, splittedLine(3).toDouble),
         (splittedLine(indexOfPop).toDouble, splittedLine(indexOfPop + 1).toDouble, splittedLine(indexOfPop + 2).toDouble),
-        (splittedLine(0).toDouble, splittedLine.drop(indexOfPop + 3).sliding(2, 2).map(x => (x(0) -> x(1).toDouble)).toMap))
+        (splittedLine(0).toDouble, splittedLine.drop(indexOfPop + 3).sliding(2, 3).map(x => (x(0) -> x(1).toDouble)).toMap))
     }
     ).unzip3
 
