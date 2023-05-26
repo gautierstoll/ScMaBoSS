@@ -111,15 +111,15 @@ of ScMaBoSS, changing only `name` and `version`.
    used for extracting output data. In all methods of this class, if an argument is an object
     [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
    can be defined on a subset of the external nodes.
-   **Plotting Boolean state trajectories**:
-     Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, b. `Node1` active and `Node2`inactive.
-     ```scala
-     simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
-     ``` 
-     Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
-     is defined
-     by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
-     model.
+ * **Plotting Boolean state trajectories**:
+   Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, b. `Node1` active and `Node2`inactive.
+  ```scala
+  simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
+  ```
+  Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
+  is defined
+  by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
+  model.
   * **Plotting node state trajectories**
      Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
      ```scala
@@ -133,21 +133,21 @@ of ScMaBoSS, changing only `name` and `version`.
     ```
     Note that if `hexfloat = true` in `Hints`, the double are represented in hexfloat in these `.csv` files.
 
- * **Exporting data for further processing/plotting**
-    The result can be exported as a trajectory table, given a set of Boolean state:
-    ```scala
-    simResult.writeStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.csv")
-    ``` 
- * **Saving data**
-    Data can be saved in order to be handle by the class 
-    [`ResultFromFile`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/ResultFromFile.html). Two files are necessary:
-    ```scala
-    simResult.writeLinesWithTime("fileLineTime.csv")
-    simResult.writeSizes("fileSize.csv")
-    ```
-    If argument `hexfloat = true` is added, the data is saved with no loss. The file describing the sizes is trivial for a MaBoSS run. 
-    Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
-    time.
+* **Exporting data for further processing/plotting**
+   The result can be exported as a trajectory table, given a set of Boolean state:
+   ```scala
+   simResult.writeStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.csv")
+   ``` 
+* **Saving data**
+   Data can be saved in order to be handle by the class 
+   [`ResultFromFile`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/ResultFromFile.html). Two files are necessary:
+   ```scala
+   simResult.writeLinesWithTime("fileLineTime.csv")
+   simResult.writeSizes("fileSize.csv")
+   ```
+   If argument `hexfloat = true` is added, the data is saved with no loss. The file describing the sizes is trivial for a MaBoSS run. 
+   Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
+   time.
 
 ## Example of parallel run of MaBoSS servers, aggregating last line of prob_traj:
 1. Parameters for the server:
