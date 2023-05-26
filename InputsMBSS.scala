@@ -200,7 +200,7 @@ object BndMbss {
   * @param bnd bnd
   */
 class BndMbss(val bnd : String) {
-  private val noCommentBnd = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
+  private val noCommentBnd = "/\\*[^\\*/]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(bnd,""),"")
   private val extVarList : List[String] = "\\$[a-zA-Z_0-9]+".r.findAllIn(noCommentBnd).toList.distinct
   private val nodeFields : List[String] = noCommentBnd.split("[n|N][o|O][d|D][e|E]\\s+").toList.tail.distinct
   val nodeList : List[String] = nodeFields.iterator.map(x => {"[^\\s]+".r.findFirstIn(x) match {
@@ -274,7 +274,7 @@ object CfgMbss {
   * @param cfg cfg
   */
 class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
-  val noCommentCfg : String = "/\\*[\\s\\S]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
+  val noCommentCfg : String = "/\\*[^\\*/]*\\*/".r.replaceAllIn("//.*".r.replaceAllIn(cfg,""),"")
   /** List of external nodes
     *
     */
