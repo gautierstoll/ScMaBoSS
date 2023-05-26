@@ -95,40 +95,37 @@ of ScMaBoSS, changing only `name` and `version`.
     val optMcli = MaBoSSClient("localhost",port=port_number)
     ```
     Note that for a distant MaBoSS server, ip adress can be used instead of "localhost". 
-    If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise
-    
+    If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise 
 4. Run MaBoSS:
     ```scala
-    val oResult : Option[Result] = optMcli match {case Some(mcli) => mcli.run(simulation,hints);case _ => null}
+   val oResult : Option[Result] = optMcli.head.run(simulation,hints)
     ```
-    Note that because `optMcli` is an option, there is a need for `match -- case`. The socket is now closed. For a new simulation, a
-    new one needs to be created, otherwise an error occurs and the sbt console crashes. Again, `oResult` is an option, because modeling
-    may have crashed; the result has aslo to be extraced with a `match -- case`:
-    ```scala
-    val simResult = oResult match {case Some(sResult) => sResult; case _ => null}
-    ```
+   Note that `optMcli` is an option; in fact, an option is either a list with a single element or an empty 
+   list. The socket is now closed. For a new simulation, a new one needs to be created, otherwise an error occurs 
+   and the sbt console crashes. Again, `oResult` is an option, because modeling may have crashed; the result needs 
+    also to be extracted:
+   ```scala
+    val simResult = oResult.head
+   ```
     Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
-    used for extracting output data. In all methods of this class, if an argument is an object
+   used for extracting output data. In all methods of this class, if an argument is an object
     [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
-    can be defined on a subset of the external nodes.
-
-    * **Plotting Boolean state trajectories**:
-    Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, 
-    b. `Node1` active and `Node2` inactive.
-    ```scala
-    simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
-    ``` 
-    Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
-    is defined
-    by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
+   can be defined on a subset of the external nodes.
+   **Plotting Boolean state trajectories**:
+     Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, b. `Node1` active and `Node2`inactive.
+     ```scala
+     simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
+     ``` 
+     Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
+     is defined
+     by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
      model.
-
-    * **Plotting node state trajectories**
-    Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
-    ```scala
-    simResult.plotStateTraj(netStates = List(new NetState(Map("DyingTumor" ->true)),new NetState(Map("ATP" -> true))),filename = "Test.pdf")
-    ``` 
-    * **Exporting MaBoSS output files**
+  * **Plotting node state trajectories**
+     Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
+     ```scala
+     simResult.plotStateTraj(netStates = List(new NetState(Map("DyingTumor" ->true)),new NetState(Map("ATP" -> true))),filename = "Test.pdf")
+     ``` 
+  * **Exporting MaBoSS output files**
     ```scala
     simResult.writeProbTraj2File("fileTraj.csv")
     simResult.writeFP2File("fileFP.csv")
@@ -136,12 +133,12 @@ of ScMaBoSS, changing only `name` and `version`.
     ```
     Note that if `hexfloat = true` in `Hints`, the double are represented in hexfloat in these `.csv` files.
 
-    * **Exporting data for further processing/plotting**
+ * **Exporting data for further processing/plotting**
     The result can be exported as a trajectory table, given a set of Boolean state:
     ```scala
     simResult.writeStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.csv")
     ``` 
-    * **Saving data**
+ * **Saving data**
     Data can be saved in order to be handle by the class 
     [`ResultFromFile`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/ResultFromFile.html). Two files are necessary:
     ```scala
