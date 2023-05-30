@@ -123,7 +123,7 @@ of ScMaBoSS, changing only `name` and `version`.
   * **Plotting node state trajectories**
      Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
      ```scala
-     simResult.plotStateTraj(netStates = List(new NetState(Map("DyingTumor" ->true)),new NetState(Map("ATP" -> true))),filename = "Test.pdf")
+     simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true)),new NetState(Map("Node2" -> true))),filename = "Test.pdf")
      ``` 
   * **Exporting MaBoSS output files**
     ```scala
