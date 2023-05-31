@@ -10,6 +10,7 @@ Documentation
 =============
 
 [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/)
+, important information, useful for non-scala specialist, is given in italic.
 
  Source files:
 - `InputMBSS.scala`: inputs for MaBoSS, including bnd and cfg
@@ -96,14 +97,14 @@ of ScMaBoSS, changing only `name` and `version`.
     ```
     Note that for a distant MaBoSS server, ip adress can be used instead of "localhost". 
     If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise 
-4. Run MaBoSS:
+4. Run MaBoSS (note that handling option with `.head` should not appear in a script, because it may render an error):
     ```scala
    val oResult : Option[Result] = optMcli.head.run(simulation,hints)
     ```
    Note that `optMcli` is an option; in fact, an option is either a list with a single element or an empty 
    list. The socket is now closed. For a new simulation, a new one needs to be created, otherwise an error occurs 
    and the sbt console crashes. Again, `oResult` is an option, because modeling may have crashed; the result needs 
-    also to be extracted:
+    also to be extracted (note that handling option with `.head` should not appear in a script, because it may render an error):
    ```scala
     val simResult = oResult.head
    ```
