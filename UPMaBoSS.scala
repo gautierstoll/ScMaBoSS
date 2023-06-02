@@ -55,16 +55,22 @@ object UPMaBoSS {
   private def upProbFromInitCond(initCondProb: Map[Set[String], Double], upProb: String, hex: Boolean = false,
                                  listNodes : List[String]): String = {
     val nodes = try upProb.split("=").head catch {
-      case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb)
+      case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb + " in upp")
     }
     val boolState = try upProb.split("=").tail.head catch {
-      case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb)
+      case _: Throwable => throw new IllegalArgumentException("cannot parse " + upProb + " in upp")
     }
     val nodeList = "\\s*\\)\\s*".r.replaceAllIn("p\\[\\s*\\(\\s*".r.replaceAllIn(nodes, ""), "").split(",").
       map(x => "\\s*".r.replaceAllIn(x, "")).toList
     val boolStateList: List[Boolean] = "\\s*\\]".r.replaceAllIn( // parenthesis is not necessary
       "\\s*\\)\\s*\\]".r.replaceAllIn("\\s*\\(\\s*".r.replaceAllIn(boolState, ""), ""),"").split(",").
-      map(x => if ("\\s*".r.replaceAllIn(x, "") == "1") true else false).toList
+      map( x =>  "\\s*".r.replaceAllIn(x, "") match {
+        // x => if ("\\s*".r.replaceAllIn(x, "") == "1") true else false
+        case "1" => true
+        case "0" => false
+        case _:String => throw new IllegalArgumentException("cannot parse " + x + " in upp")
+      }
+      ).toList
     val activeNodes = nodeList.zip(boolStateList).filter(_._2).map(_._1).toSet
     val inactiveNodes = nodeList.zip(boolStateList).filter(!_._2).map(_._1).toSet
     // val probOut: Double = initCondProb.filter(x => (activeNodes.diff(x._1).isEmpty & x._1.intersect(inactiveNodes).isEmpty)).values.sum

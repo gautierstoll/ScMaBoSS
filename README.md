@@ -23,14 +23,19 @@ Documentation
 Usage
 =====
 
-A MaBoSS server should have been compiled from the last version of MaBoSS
-[MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0). For that, in the `engine/src/` folder of the source,
+## Running a MaBoSS server
+
+For using `ScMaBoSS`, a MaBoSS server should be running somewhere in your computer (or on a distant machine
+accessible by a fixed ip address). For that, a MaBoSS server should have been compiled from the last version of MaBoSS
+[MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0): 
+
+In the `engine/src/` folder of the source,
 ```bash
 make server
 ```
 For compilation, `flex`, `bison`, `gcc` or `g++` are necessary.
 
-MaBoSS server should be running on a given port_number:
+MaBoSS server should be running on a given `port_number`:
 ```bash
 ./MaBoSS-server --port port_number --host localhost --verbose
 ```
@@ -54,15 +59,19 @@ and
     ```bash
     sbt compile
     sbt package
-    ```
-4. In your working directory, create a `lib/` sub-directory and copy the `.jar` library from `ScMaBoSS/target/scala-2.12/`.
-This `.jar` file can be used in any computer that has java 8 installed.
+   ```
+The compiled library (`.jar` file) is in `ScMaBoSS/target/scala-2.12/`   
 
-5. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
+## Using ScMaBoSS in a terminal
+
+1. In your working directory, create a `lib/` sub-directory and copy the `.jar` library from `ScMaBoSS/target/scala-2.12/`.
+This `.jar` file can be used in any computer that has java >8 installed.
+
+2. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
 ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl)); you can use the file `build.sbt`
 of ScMaBoSS, changing only `name` and `version`.
 
-6. ScMaBoSS can be used in a scala REPL. For instance, in a sbt console (after running `sbt`), open an REPL console
+3. ScMaBoSS can be used in a scala REPL ("Read-Evaluate-Print-Loop"). For instance, in a sbt console (after running `sbt`), open an REPL console
     ```sbt
     console
     ```
@@ -75,12 +84,63 @@ of ScMaBoSS, changing only `name` and `version`.
     on the terminal before launching `sbt`.
     In an sbt console, the memory can be set like in java when launching sbt, eg `sbt -J-Xmx4G -J-Xms4G`.
 
-    For complicated project, it may be useful to develop scripts in an IDE (like [IntelliJ](https://www.jetbrains.com/idea/)).
-    For instance, a scala project can be created in the working directory; classes are defined in `.scala` files and scripts in
-    `.sc` files. When running `sbt`, classes will be compiled and scripts can be run by the command `:load` in a scala 
-    REPL console.
+## Using ScMaBoSS with jupyter notebook through almond
+    Install almond with Scala 2.12. Run in a terminal:
+```bash
+$ curl -Lo coursier https://git.io/coursier-cli
+$ chmod +x coursier
+$ ./coursier launch --fork almond --scala 2.12.11 -- --install
+$ rm -f coursier
+```
+The scala kernel should appear in a jupyter notebook. Scala code can be executed.
 
-## Example for using MaBoSS server:
+In the notebook, install the libraries (the ScMaBoss compiled library `scmaboss_2.12.jar` is located in the `lib` folder):
+```scala
+import $ivy.`io.github.pityka::nspl-awt:0.0.21`
+import $ivy.`io.github.pityka::nspl-saddle:0.0.21`
+import $ivy.`org.scala-saddle:saddle-core_2.11:1.3.4`
+import $cp.lib.`scmaboss_2.12.jar`
+```
+Load ScMaBoSS:
+```scala
+import ScMaBoSS._
+```
+## Using ScMaBoSS within an IDE
+
+For complicated project, it may be useful to use an IDE, where scala scripts, model files 
+and the REPL ("Read-Evaluate-Print-Loop") console are all accessible together. 
+
+For that, install, [IntelliJ](https://www.jetbrains.com/idea/)). 
+
+The scala plugin 
+should be added to IntelliJ (explained 
+[here](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html)). 
+
+Like above, a MaBoSS 
+server should be running somewhere on your computer.
+
+For creating a project,
+1. Like above, in your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
+   ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl)); you can use the file `build.sbt`
+   of ScMaBoSS, changing only `name` and `version`.
+2. Like above, in your working directory, create a `lib/` sub-directory and 
+copy the `.jar` file of ScMaBoSS
+3. Put in your working directory your model files (`.bnd`, `.cfg`, `.upp`)
+4. In IntelliJ, create a new project: `New... -> Project from Existing Sources... `, select your working 
+directory and follow the step of installation 
+(in particular, select `sbt` for `Import project from external model`)
+
+You can create scala script (`.sc` files): `New... -> Scala WorkSheet`. 
+   
+You can open your model files (visible in the left panel).
+
+You can open a REPL console: 
+   right click -> `Scala REPL...`. 
+
+You can run selected code is the REPL console is open: right click -> 
+   `Send Selection to Scala REPL`.
+
+## Running MaBoSS through its server:
 1. Parameters for the server:
     ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -150,7 +210,7 @@ of ScMaBoSS, changing only `name` and `version`.
    Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
    time.
 
-## Example of parallel run of MaBoSS servers, aggregating last line of prob_traj:
+## Parallel run of MaBoSS servers, aggregating last line of prob_traj:
 1. Parameters for the server:
     ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -169,7 +229,7 @@ of ScMaBoSS, changing only `name` and `version`.
     ```
     An option is returned.
 
-## Example for using UPMaBoSS:
+## Using UPMaBoSS through MaBoSS server:
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
     ```scala
@@ -187,7 +247,7 @@ with verbose for UPMaBoSS steps:
     that constructs a stream `strRunLight`. Therefore, the simulation can be relaunched with a larger number of steps, with no
     new calculation for the first steps.
 
-## Example for data processing of PopMaBoSS:
+## Data processing of PopMaBoSS:
 1. Create a PopMaBoSS results from file:
     ```scala
     val PRes = new PResultFromFile("File_pop_probtraj.csv","File_simple_pop_probtraj.csv",
