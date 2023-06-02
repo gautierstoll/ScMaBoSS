@@ -10,7 +10,7 @@ Documentation
 =============
 
 [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/)
-, important information, useful for non-scala specialist, is given in italic.
+. Important information, useful for non-scala specialist, is given in italic.
 
  Source files:
 - `InputMBSS.scala`: inputs for MaBoSS, including bnd and cfg
@@ -26,7 +26,7 @@ Usage
 ## Running a MaBoSS server
 
 For using `ScMaBoSS`, a MaBoSS server should be running somewhere in your computer (or on a distant machine
-accessible by a fixed ip address). For that, a MaBoSS server should have been compiled from the last version of MaBoSS
+accessible by a fixed ip address). For that, a MaBoSS server should have been compiled from the last version of
 [MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0): 
 
 In the `engine/src/` folder of the source,
@@ -56,10 +56,10 @@ and
 2. Download the repository `ScMaBoSS/` (eg `git clone https://github.com/gautierstoll/ScMaBoSS`)
 
 3. Compile the library in `ScMaBoSS/`:
-    ```bash
-    sbt compile
-    sbt package
-   ```
+```bash
+sbt compile
+sbt package
+```
 The compiled library (`.jar` file) is in `ScMaBoSS/target/scala-2.12/`   
 
 ## Using ScMaBoSS in a terminal
@@ -72,20 +72,20 @@ This `.jar` file can be used in any computer that has java >8 installed.
 of ScMaBoSS, changing only `name` and `version`.
 
 3. ScMaBoSS can be used in a scala REPL ("Read-Evaluate-Print-Loop"). For instance, in a sbt console (after running `sbt`), open an REPL console
-    ```sbt
-    console
-    ```
+```sbt
+console
+```
 
-    ScMaBoSS can be used after
-    ```scala
-    import ScMaBoSS._
-    ```
-    For some version of MacOSX and Linux, sbt console may return an error. In that case, one should launch `TERM=xterm-color` 
-    on the terminal before launching `sbt`.
-    In an sbt console, the memory can be set like in java when launching sbt, eg `sbt -J-Xmx4G -J-Xms4G`.
+ScMaBoSS can be used after
+```scala
+import ScMaBoSS._
+```
+For some version of MacOSX and Linux, sbt console may return an error. In that case, one should launch `TERM=xterm-color` 
+on the terminal before launching `sbt`.
+In an sbt console, the memory can be set like in java when launching sbt, eg `sbt -J-Xmx4G -J-Xms4G`.
 
 ## Using ScMaBoSS with jupyter notebook through almond
-    Install almond with Scala 2.12. Run in a terminal:
+Install almond with Scala 2.12. Run in a terminal:
 ```bash
 $ curl -Lo coursier https://git.io/coursier-cli
 $ chmod +x coursier
@@ -107,13 +107,15 @@ import ScMaBoSS._
 ```
 ## Using ScMaBoSS within an IDE
 
-For complicated project, it may be useful to use an IDE, where scala scripts, model files 
-and the REPL ("Read-Evaluate-Print-Loop") console are all accessible together. 
+For complicated project, it may be useful to use an IDE (Integrated Developement Environement), 
+where scala scripts, model files 
+and the REPL ("Read-Evaluate-Print-Loop") console are all integrated in the same application. 
 
-For that, install, [IntelliJ](https://www.jetbrains.com/idea/)). 
+For that
+1. Install [IntelliJ](https://www.jetbrains.com/idea/). 
 
-The scala plugin 
-should be added to IntelliJ (explained 
+2. Add the scala plugin 
+to IntelliJ (explained 
 [here](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html)). 
 
 Like above, a MaBoSS 
@@ -140,23 +142,26 @@ You can open a REPL console:
 You can run selected code is the REPL console is open: right click -> 
    `Send Selection to Scala REPL`.
 
-## Running MaBoSS through its server:
+## Running MaBoSS server through ScMaBoSS:
 1. Parameters for the server:
-    ```scala
-    val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
+   ```scala
+   val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
     ```
-    If `hexfloat = true`, real numbers will be transmitted from MaBoSS server to scala with no loss.
+   If `hexfloat = true`, real numbers will be transmitted from MaBoSS server to scala with no loss.
 
 2. Constructing inputs from files:
-    ```scala
-    val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
-    ```
+
+   ```scala
+   val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
+   ```
+   
 3. Open server socket on port port_number:
-    ```scala
-    val optMcli = MaBoSSClient("localhost",port=port_number)
-    ```
-    Note that for a distant MaBoSS server, ip adress can be used instead of "localhost". 
-    If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise 
+   ```scala
+   val optMcli = MaBoSSClient("localhost",port=port_number)
+   ```
+   Note that for a distant MaBoSS server, ip adress can be used instead of "localhost". 
+   If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise 
+   
 4. Run MaBoSS (note that handling option with `.head` should not appear in a script, because it may render an error):
     ```scala
    val oResult : Option[Result] = optMcli.head.run(simulation,hints)
@@ -168,49 +173,53 @@ You can run selected code is the REPL console is open: right click ->
    ```scala
     val simResult = oResult.head
    ```
-    Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
-   used for extracting output data. In all methods of this class, if an argument is an object
-    [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
+   Methods of class [`Result`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/Result.html) can be
+   used for extracting output data. In all methods of this class, if an argument is an object 
+[`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html), this latter
    can be defined on a subset of the external nodes.
- * **Plotting Boolean state trajectories**:
-   Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, b. `Node1` active and `Node2`inactive.
-  ```scala
-  simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
-  ```
-  Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
-  is defined
-  by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
-  model.
-  * **Plotting node state trajectories**
-     Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
-     ```scala
-     simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true)),new NetState(Map("Node2" -> true))),filename = "Test.pdf")
-     ``` 
-  * **Exporting MaBoSS output files**
-    ```scala
-    simResult.writeProbTraj2File("fileTraj.csv")
-    simResult.writeFP2File("fileFP.csv")
-    simResult.writeStatDist2File("fileST.csv")
-    ```
-    Note that if `hexfloat = true` in `Hints`, the double are represented in hexfloat in these `.csv` files.
 
-* **Exporting data for further processing/plotting**
-   The result can be exported as a trajectory table, given a set of Boolean state:
-   ```scala
-   simResult.writeStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.csv")
-   ``` 
-* **Saving data**
-   Data can be saved in order to be handle by the class 
-   [`ResultFromFile`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/ResultFromFile.html). Two files are necessary:
-   ```scala
-   simResult.writeLinesWithTime("fileLineTime.csv")
-   simResult.writeSizes("fileSize.csv")
-   ```
-   If argument `hexfloat = true` is added, the data is saved with no loss. The file describing the sizes is trivial for a MaBoSS run. 
-   Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
-   time.
+### Plotting Boolean state trajectories:
+Suppose you need the plot of two trajectories: a. `Node1` and `Node2` active, b. `Node1` active and `Node2`inactive.
+```scala
+simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.pdf")
+ ```
+Note that the class [`NetState`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/NetState.html) 
+is defined
+by the activity over a list of nodes. Therefore, this list of nodes can be a subset of the external nodes of the
+model.
 
-## Parallel run of MaBoSS servers, aggregating last line of prob_traj:
+### Plotting node state trajectories
+Suppose you need the plot of two trajectories: one for `Node1` and another for `Node2`.
+```scala
+simResult.plotStateTraj(netStates = List(new NetState(Map("Node1" ->true)),new NetState(Map("Node2" -> true))),filename = "Test.pdf")
+```
+
+### Exporting MaBoSS output files
+```scala
+simResult.writeProbTraj2File("fileTraj.csv")
+simResult.writeFP2File("fileFP.csv")
+simResult.writeStatDist2File("fileST.csv")
+```
+Note that if `hexfloat = true` in `Hints`, the double are represented in hexfloat in these `.csv` files.
+
+### Exporting data for further processing/plotting
+The result can be exported as a trajectory table, given a set of Boolean state:
+```scala
+simResult.writeStateTraj(netStates = List(new NetState(Map("Node1" ->true,"Node2" -> true)),new NetState(Map("Node1" ->true,"Node2" -> false))),filename = "Test.csv")
+``` 
+
+### Saving data
+Data can be saved in order to be handle by the class 
+[`ResultFromFile`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/ResultFromFile.html). Two files are necessary:
+```scala
+simResult.writeLinesWithTime("fileLineTime.csv")
+simResult.writeSizes("fileSize.csv")
+```
+If argument `hexfloat = true` is added, the data is saved with no loss. The file describing the sizes is trivial for a MaBoSS run. 
+     Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
+     time.
+
+## Parallel run of MaBoSS servers through ScMaBoSS, aggregating last line of prob_traj:
 1. Parameters for the server:
     ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -229,7 +238,7 @@ You can run selected code is the REPL console is open: right click ->
     ```
     An option is returned.
 
-## Using UPMaBoSS through MaBoSS server:
+## Running UPMaBoSS through ScMaBoSS within MaBoSS server:
 1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
 with verbose for UPMaBoSS steps:
     ```scala
