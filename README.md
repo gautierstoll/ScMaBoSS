@@ -9,8 +9,8 @@ ScMaBoSS is a library for running MaBoSS through Scala within [MaBoSS server](ht
 Documentation
 =============
 
-[scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/)
-. Important information, useful for non-scala specialist, is given in italic.
+In [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/) format. Important 
+information particularly useful for scala non-specialist, is given in italic.
 
  Source files:
 - `InputMBSS.scala`: inputs for MaBoSS, including bnd and cfg
@@ -25,42 +25,47 @@ Usage
 
 ## Running a MaBoSS server
 
-For using `ScMaBoSS`, a MaBoSS server should be running somewhere in your computer (or on a distant machine
-accessible by a fixed ip address). For that, a MaBoSS server should have been compiled from the last version of
-[MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0): 
+For using `ScMaBoSS`, a MaBoSS server should be running somewhere in the computer (or on a distant machine
+accessible by a fixed ip address). 
 
-In the `engine/src/` folder of the source,
+For that, a MaBoSS server should have been compiled from the last version of
+[MaBoSS Git](https://github.com/maboss-bkmc/MaBoSS-env-2.0): 
+in the `engine/src/` folder of MaBoSS sources 
+(eg download them with `git clone https://github.com/maboss-bkmc/MaBoSS-env-2.0`), run
 ```bash
 make server
 ```
-For compilation, `flex`, `bison`, `gcc` or `g++` are necessary.
+For this compilation, `flex`, `bison`, (`gcc` or `g++`) are necessary.
 
-MaBoSS server should be running on a given `port_number`:
+MaBoSS server should be running on a free `port_number` (eg `20000`). For that, run
 ```bash
 ./MaBoSS-server --port port_number --host localhost --verbose
 ```
+(on linux, `sudo lsof -i -P -n | grep LISTEN` shows used ports)
 
-For model larger than 64, the maximum number of nodes should be specified, eg
+For model larger than 64, the maximum number of nodes should be specified at compilation, eg
 ```bash
 make server MAXNODES=100
 ```
-and
+The name of MaBoSS executable is different. In that case, run
 ```bash
 ./MaBoSS_100n-server --port port_number --host localhost --verbose
 ```
 
-## Installation
+## Compilation of ScMaBoSS
 
 1. Install scala (>2.12) and sbt. Java version should be at least 8.
 
-2. Download the repository `ScMaBoSS/` (eg `git clone https://github.com/gautierstoll/ScMaBoSS`)
+2. Download the sources of `ScMaBoSS` 
+(eg download them with `git clone https://github.com/gautierstoll/ScMaBoSS`)
 
 3. Compile the library in `ScMaBoSS/`:
 ```bash
 sbt compile
 sbt package
 ```
-The compiled library (`.jar` file) is in `ScMaBoSS/target/scala-2.12/`   
+The compiled library (`.jar` file) is in `ScMaBoSS/target/scala-2.12/`. It should work in any computer having 
+java >8 installed.
 
 ## Using ScMaBoSS in a terminal
 
@@ -69,9 +74,10 @@ This `.jar` file can be used in any computer that has java >8 installed.
 
 2. In your working directory, create a `build.sbt`, containing the library dependencies of ScMaBoSS
 ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl)); you can use the file `build.sbt`
-of ScMaBoSS, changing only `name` and `version`.
+of ScMaBoSS sources, changing only `name` and `version`.
 
-3. ScMaBoSS can be used in a scala REPL ("Read-Evaluate-Print-Loop"). For instance, in a sbt console (after running `sbt`), open an REPL console
+3. ScMaBoSS can be used in a scala REPL ("Read-Evaluate-Print-Loop"). For instance, in an sbt console
+(after running `sbt`), open an REPL console
 ```sbt
 console
 ```
@@ -126,8 +132,8 @@ For creating a project,
    ([saddle](https://github.com/saddle/saddle) and [nspl](https://github.com/pityka/nspl)); you can use the file `build.sbt`
    of ScMaBoSS, changing only `name` and `version`.
 2. Like above, in your working directory, create a `lib/` sub-directory and 
-copy the `.jar` file of ScMaBoSS
-3. Put in your working directory your model files (`.bnd`, `.cfg`, `.upp`)
+copy the `.jar` file of ScMaBoSS.
+3. Put in your working directory your model files (`.bnd`, `.cfg`, `.upp`).
 4. In IntelliJ, create a new project: `New... -> Project from Existing Sources... `, select your working 
 directory and follow the step of installation 
 (in particular, select `sbt` for `Import project from external model`)
@@ -142,7 +148,7 @@ You can open a REPL console:
 You can run selected code is the REPL console is open: right click -> 
    `Send Selection to Scala REPL`.
 
-## Running MaBoSS server through ScMaBoSS:
+## Running MaBoSS through ScMaBoSS:
 1. Parameters for the server:
    ```scala
    val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -155,11 +161,11 @@ You can run selected code is the REPL console is open: right click ->
    val simulation: CfgMbss = CfgMbss.fromFile("file.cfg", BndMbss.fromFile("file.bnd"))
    ```
    
-3. Open server socket on port port_number:
+3. Open server socket on port `port_number` used by the running MaBoSS server:
    ```scala
    val optMcli = MaBoSSClient("localhost",port=port_number)
    ```
-   Note that for a distant MaBoSS server, ip adress can be used instead of "localhost". 
+   Note that for a distant MaBoSS server, an ip address can be used instead of "localhost". 
    If the socket cannot be open, `MaBoSSClient` return a `None`. Otherwise 
    
 4. Run MaBoSS (note that handling option with `.head` should not appear in a script, because it may render an error):
@@ -167,7 +173,7 @@ You can run selected code is the REPL console is open: right click ->
    val oResult : Option[Result] = optMcli.head.run(simulation,hints)
     ```
    Note that `optMcli` is an option; in fact, an option is either a list with a single element or an empty 
-   list. The socket is now closed. For a new simulation, a new one needs to be created, otherwise an error occurs 
+   list. The socket is now closed. For a new simulation, a new socket needs to be created, otherwise an error occurs 
    and the sbt console crashes. Again, `oResult` is an option, because modeling may have crashed; the result needs 
     also to be extracted (note that handling option with `.head` should not appear in a script, because it may render an error):
    ```scala
@@ -219,7 +225,7 @@ If argument `hexfloat = true` is added, the data is saved with no loss. The file
      Nevertheless, it is necessary because the class `ResultFromFile` can also be created from data of UPMaBoSS, where the size changes over 
      time.
 
-## Parallel run of MaBoSS servers through ScMaBoSS, aggregating last line of prob_traj:
+## Parallel run of MaBoSS through ScMaBoSS, with multiple MaBoSS servers, aggregating last line of prob_traj:
 1. Parameters for the server:
     ```scala
     val hints: Hints = Hints(check = false,hexfloat = false,augment = true,overRide = false,verbose = false)
@@ -239,20 +245,23 @@ If argument `hexfloat = true` is added, the data is saved with no loss. The file
     An option is returned.
 
 ## Running UPMaBoSS through ScMaBoSS within MaBoSS server:
-1. Create UPMaBoSS object from files, using MaBoSS server on port port_number, not using hexFloat,
+1. Create UPMaBoSS object from files, using MaBoSS server on port port_number (here hexFloat is not used),
 with verbose for UPMaBoSS steps:
     ```scala
     val upTest : UPMaBoSS = new UPMaBoSS("file.upp",CfgMbss.fromFile("file.cfg",BndMbss.fromFile("file.bnd")),"localhost",port_number,hexUP = false,verbose = true)
     ```
-    if `hexUP = true`, real numbers are passed between scala an MaBoSS server (and vice versa) with no loss.
+    if `hexUP = true`, real numbers are passed between scala an MaBoSS server (and vice versa) with no loss, but the verbose 
+information are difficult to read.
 2. Run UPMaBoSS:
     ```scala
     val upRes : UPMbssOutLight = upTest.runLight(numberOfSteps)
     ```
     Methods of class [`UPMbssOutLight`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMbssOutLight.html)
-    can be used for extracting output data. As `UPMbssOutLight` is a sub-class of `Result`, it can be used as described above, for result
+    can be used for extracting output data. As `UPMbssOutLight` is a sub-class of `Result`, it can be used as described above
+    for result
     of MaBoSS server.
-    Note that [`UPMaBoSS`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMaBoSS.html) is a class
+    Note that [`UPMaBoSS`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/UPMaBoSS.html) is a 
+    class
     that constructs a stream `strRunLight`. Therefore, the simulation can be relaunched with a larger number of steps, with no
     new calculation for the first steps.
 
@@ -262,8 +271,8 @@ with verbose for UPMaBoSS steps:
     val PRes = new PResultFromFile("File_pop_probtraj.csv","File_simple_pop_probtraj.csv",
         listNodes,listLines)
     ```
-    The `listNodes` is necessary, because the output files may not display all nodes. The optional listLines restrict 
-   the result to a set of lines (start at 1, without the header)
+    The `listNodes` is necessary, because the output files may not display all nodes. The optional `listLines` restricts 
+    the result to a set of lines (start at 1, without the header).
 
 2. Create a probability distribution over population state at a given step:
     ```scala
@@ -271,7 +280,8 @@ with verbose for UPMaBoSS steps:
     ```
 3. Use the different methods of the class
    [`popStateDist`](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/popStateDist.html)
-    for data processing. The most general method is `probDist` that needs as argument a function from `PopNetState` to an
+    for data processing. The most general method is `probDist` that needs as argument a function from `PopNetState` to 
+    an
     option onto any type.
 
    
