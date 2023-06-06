@@ -147,8 +147,12 @@ You can open your model files (visible in the left panel).
 You can open a REPL console: 
    right click -> `Scala REPL...`. 
 
-You can run selected code is the REPL console is open: right click -> 
+You can run selected code if the REPL console is open: select code, right click -> 
    `Send Selection to Scala REPL`.
+You can run scala script file in REPL:
+```scala
+:load Script.sc
+```
 
 ## Running MaBoSS through ScMaBoSS:
 1. Parameters for the server:
