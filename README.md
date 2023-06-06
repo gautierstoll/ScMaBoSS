@@ -134,9 +134,11 @@ For creating a project,
 2. Like above, in your working directory, create a `lib/` sub-directory and 
 copy the `.jar` file of ScMaBoSS.
 3. Put in your working directory your model files (`.bnd`, `.cfg`, `.upp`).
-4. In IntelliJ, create a new project: `New... -> Project from Existing Sources... `, select your working 
+4. In a terminal in your working directory, run `sbt` then `exit` (this step does not seem necessary for all version 
+of IntelliJ).
+5. In IntelliJ, create a new project: `New... -> Project from Existing Sources... `, select your working 
 directory and follow the step of installation 
-(in particular, select `sbt` for `Import project from external model`)
+(in particular, select `sbt` for `Import project from external model`, select a java version in `"Project JDK"`)
 
 You can create scala script (`.sc` files): `New... -> Scala WorkSheet`. 
    
