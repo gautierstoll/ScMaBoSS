@@ -203,7 +203,8 @@ trait ResultProcessing {
               color = DiscreteColors(netStates.length - 1))).toList) // careful, need to add zero to errorTop/Bottom
       )(xlab = "Time", ylab = yLab, extraLegend =
         netStates.zipWithIndex.map(x => x._1.toString -> PointLegend(shape = Shape.rectangle(0, 0, 1, 1),
-          color = DiscreteColors(netStates.length - 1)(x._2.toDouble))), ylim = yLim, xWidth = RelFontSize(40d))
+          color = DiscreteColors(netStates.length - 1)(x._2.toDouble))), ylim = yLim, xWidth = RelFontSize(40d),
+        legendWidth = RelFontSize(netStates.map(_.toString.length).max + 3) )
     val pdfFile = new File(filename)
     pdfToFile(pdfFile, sequence(builtElement :: Nil, FreeLayout).build)
   }

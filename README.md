@@ -10,7 +10,7 @@ Documentation
 =============
 
 In [scaladoc](https://gautierstoll.github.io/ScMaBoSS/target/scala-2.12/api/ScMaBoSS/) format. Important 
-information particularly useful for scala non-specialist, is given in italic.
+information, particularly useful for scala non-specialist, is given in italic.
 
  Source files:
 - `InputMBSS.scala`: inputs for MaBoSS, including bnd and cfg
