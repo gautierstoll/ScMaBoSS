@@ -209,7 +209,7 @@ class BndMbss(val bnd : String) {
   /** Generate BndMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
-    * @return
+    * @return a bnd with external variables for each mutable node "\$High_NodeName, \$Low_NodeName"
     */
   def mutateBnd(mutNodes : List[String]) : BndMbss = {
     val mutNodeFields: String = "node " + nodeFields.map(field => {
@@ -285,7 +285,7 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   /** Generate CfgMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
-    * @return
+    * @return a cfg with external variables for each mutable node "\$High_NodeName, \$Low_NodeName"
     */
   def mutatedCfg(mutNodes: List[String]): CfgMbss = {
     new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
