@@ -209,9 +209,11 @@ class BndMbss(val bnd : String) {
   /** Generate BndMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
+    * @param maxRate rate of forced transition induced by mutation, default (-1) is mutNodes length
     * @return a bnd with external variables for each mutable node "\$High_NodeName, \$Low_NodeName"
     */
-  def mutateBnd(mutNodes : List[String]) : BndMbss = {
+  def mutateBnd(mutNodes : List[String],maxRate : Int = -1) : BndMbss = {
+    val maxRateInBnd : Int = if (maxRate == -1) mutNodes.length else maxRate
     val mutNodeFields: String = "node " + nodeFields.map(field => {
       val node = "[^\\s]+".r.findFirstIn(field) match {
         case Some(node) => node;
@@ -228,11 +230,11 @@ class BndMbss(val bnd : String) {
           case  Some(c) => "rate_down\\s*=([^;]+);".r.
             replaceAllIn(rup_field, "rate_down = ( \\$Low_" + node +
               " ? @max_rate : ( \\$High_" + node + " ? 0.0 : ($1 ) ) );\n" +
-              "  max_rate = " + mutNodes.length.toString + ";")
+              "  max_rate = " + maxRateInBnd.toString + ";")
           case None =>
           "\\}".r.replaceAllIn(rup_field, "  rate_down = ( \\$Low_" + node +
             " ? @max_rate : ( \\$High_" + node + " ? 0.0 : (@logic ? 0.0 : 1.0 ) ) );\n" +
-            "  max_rate = " + mutNodes.length.toString + ";\n}")
+            "  max_rate = " + maxRateInBnd.toString + ";\n}")
         }
       } else field
     }).mkString("node ")
@@ -285,10 +287,11 @@ class CfgMbss(val bndMbss : BndMbss,val cfg : String) {
   /** Generate CfgMbss with mutations controlled by external variables
     *
     * @param mutNodes node that can be mutated
+    * @param maxRate rate of forced transition induced by mutation, default (-1) is mutNodes length
     * @return a cfg with external variables for each mutable node "\$High_NodeName, \$Low_NodeName"
     */
-  def mutatedCfg(mutNodes: List[String]): CfgMbss = {
-    new CfgMbss(bndMbss.mutateBnd(mutNodes),cfg + "\n" + mutNodes.map(node => {
+  def mutatedCfg(mutNodes: List[String],maxRate : Int = -1): CfgMbss = {
+    new CfgMbss(bndMbss.mutateBnd(mutNodes,maxRate),cfg + "\n" + mutNodes.map(node => {
       "$High_" + node + " = 0;\n" + "$Low_" + node + " = 0;"}).mkString("\n"))}
 
   /** Generate CfgMbss with updated external variables
