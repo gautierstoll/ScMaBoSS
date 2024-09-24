@@ -18,7 +18,7 @@ import scala.concurrent.{Await, ExecutionContext, Future, Promise, duration}
 import scala.util.{Success, Failure}
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
-import ScMaBoSS.{CfgMbss, ClientData, Hints, ResultData}
+import ScMaBoSS._
 
 import scala.sys.process
 

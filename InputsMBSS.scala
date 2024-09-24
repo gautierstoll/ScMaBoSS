@@ -5,7 +5,7 @@ import java.nio.file.{Files, Paths}
 import scala.util.matching.Regex
 import java.io._
 import scala.collection.immutable._
-import jdk.nashorn.internal.runtime.regexp.RegExp
+// import jdk.nashorn.internal.runtime.regexp.RegExp
 
 import scala.annotation.tailrec
 import scala.io.Source
